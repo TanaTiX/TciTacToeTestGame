@@ -1,24 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ClassesLibrary
+﻿namespace ClassesLibrary
 {
-	public enum CELL_CONTENT {EMPTY, CROSS, ZERO};
-	public class Cell
+	public enum CellContent {Empty, Cross, Zero};
+	public class CellDto
 	{
-		private CELL_CONTENT _cell;
-		private int _x;
-		private int _y;
-		public Cell(int x, int y, CELL_CONTENT cell = CELL_CONTENT.EMPTY)
+		//private CellContent _cell;
+		//private int _x;
+		//private int _y;
+		public CellDto(int x, int y, CellContent cell = CellContent.Empty)
 		{
-			_x = x;
-			_y = y;
-			_cell = cell;
+			X = x;
+			Y = y;
+			CellType = cell;
 		}
-		public CELL_CONTENT CellType { get; }//пока только геттер
+		public CellContent CellType { get; }//пока только геттер
 		public int X { get; }
 		public int Y { get; }
 	}

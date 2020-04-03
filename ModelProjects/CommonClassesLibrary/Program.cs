@@ -10,7 +10,7 @@ namespace CommonClassesLibrary
 	class Program
 	{
 		public delegate void GameOver(object sender, bool isWin);
-		public delegate void Move(object sender, Cell cell);
+		public delegate void Move(object sender, CellDto cell);
 		static void Main(string[] args)
 		{
 			Console.ReadKey();
