@@ -46,7 +46,73 @@ namespace ModelLibrary
             // Здесь надо проверить выигрыш или проирыш
             // и если есть, то создать событие
             // GameOverEvent?.Invoke(this, true или false);
-            //немного в проектах запутался
+            GameOverEvent?.Invoke(this, (TestHorizontal(cell) == true || TestVertical(cell) == true || TestDiagonal(cell) == true));
+        }
+
+        private bool TestVertical(CellDto cell)//чую, что эти методы можно свести к однмоу
+        {
+            int count = 0;
+            CellDto target;
+
+            for (int i = -2; i < 2; i++)//цифровые значения лучше поместить в константы?
+            {
+                target = GetCellByPosiotion(cell.X, cell.Y + i);
+                if (target != null && target.CellType == cell.CellType)
+                {
+                    count++;
+                }
+            }
+            if (count >= 3)
+            {
+                return true;
+            }
+            return false;
+        }
+        private bool TestHorizontal(CellDto cell)
+        {
+            int count = 0;
+            CellDto target;
+            
+            for (int i = -2; i < 2; i++)//цифровые значения лучше поместить в константы?
+            {
+                target = GetCellByPosiotion(cell.X + i, cell.Y);
+                if(target!=null && target.CellType == cell.CellType)
+                {
+                    count++;
+                }
+            }
+            if (count >= 3)
+            {
+                return true;
+            }
+            return false;
+        }
+        private bool TestDiagonal(CellDto cell)
+        {
+            int count = 0;
+            CellDto target;
+
+            for (int i = -2; i < 2; i++)//цифровые значения лучше поместить в константы?
+            {
+                target = GetCellByPosiotion(cell.X + i, cell.Y + i);
+                if (target != null && target.CellType == cell.CellType)
+                {
+                    count++;
+                }
+            }
+            if (count >= 3)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private CellDto GetCellByPosiotion(int x, int y) {
+            if(x<0 || x> ColumnsCount || y<0 || y > RowsCount)
+            {
+                return null;
+            }
+            return Cells[x][y];
         }
     }
 }
