@@ -7,11 +7,13 @@ namespace ModelLibrary
     {
         public int RowsCount { get; }
         public int ColumnsCount { get; }
+        public int LineLength { get; }
 
-        public Model(int rowsCount, int columnsCount)
+        public Model(int rowsCount, int columnsCount, int lineLength = 3)
         {
             RowsCount = rowsCount;
             ColumnsCount = columnsCount;
+            LineLength = lineLength;
             Cells = new CellDto[RowsCount][];
 
             for (int row = 0; row < RowsCount; row++)
@@ -43,68 +45,49 @@ namespace ModelLibrary
 
         private void WinCheck(CellDto cell)
         {
-            // Здесь надо проверить выигрыш или проирыш
-            // и если есть, то создать событие
-            // GameOverEvent?.Invoke(this, true или false);
-            GameOverEvent?.Invoke(this, (TestHorizontal(cell) == true || TestVertical(cell) == true || TestDiagonal(cell) == true));
+            GameOverEvent?.Invoke(this, (TestHorizontal(cell) == true || TestVertical(cell) == true || TestDiagonal(cell) == true || TestDiagonal2(cell) == true));
         }
-
-        private bool TestVertical(CellDto cell)//чую, что эти методы можно свести к однмоу
+        private bool TestLine(CellDto cell, int elementsCount, bool useShiftX, bool useShiftY, bool direction)
         {
             int count = 0;
             CellDto target;
-
-            for (int i = -2; i < 2; i++)//цифровые значения лучше поместить в константы?
+            int shiftX = (useShiftX == true) ? 1 : 0;
+            int shiftY = (useShiftY == true) ? 1 : 0;
+            int directionK = (direction == true) ? 1 : -1;
+            int shift = LineLength - 1;
+            for (int i = -shift; i < shift; i++)
             {
-                target = GetCellByPosiotion(cell.X, cell.Y + i);
+                target = GetCellByPosiotion(cell.X + (directionK * shiftX * i), cell.Y + (directionK * shiftY * i));
                 if (target != null && target.CellType == cell.CellType)
                 {
                     count++;
                 }
+                else
+                {
+                    count = 0;
+                }
             }
-            if (count >= 3)
+            if (count >= elementsCount)
             {
                 return true;
             }
             return false;
+        }
+        private bool TestVertical(CellDto cell)//чую, что эти методы можно свести к однмоу
+        {
+            return TestLine(cell, 3, false, true, false);
         }
         private bool TestHorizontal(CellDto cell)
         {
-            int count = 0;
-            CellDto target;
-            
-            for (int i = -2; i < 2; i++)//цифровые значения лучше поместить в константы?
-            {
-                target = GetCellByPosiotion(cell.X + i, cell.Y);
-                if(target!=null && target.CellType == cell.CellType)
-                {
-                    count++;
-                }
-            }
-            if (count >= 3)
-            {
-                return true;
-            }
-            return false;
+            return TestLine(cell, 3, true, false, false);
         }
         private bool TestDiagonal(CellDto cell)
         {
-            int count = 0;
-            CellDto target;
-
-            for (int i = -2; i < 2; i++)//цифровые значения лучше поместить в константы?
-            {
-                target = GetCellByPosiotion(cell.X + i, cell.Y + i);
-                if (target != null && target.CellType == cell.CellType)
-                {
-                    count++;
-                }
-            }
-            if (count >= 3)
-            {
-                return true;
-            }
-            return false;
+            return TestLine(cell, 3, true, true, false);
+        }
+        private bool TestDiagonal2(CellDto cell)
+        {
+            return TestLine(cell, 3, true, true, true);
         }
 
         private CellDto GetCellByPosiotion(int x, int y) {

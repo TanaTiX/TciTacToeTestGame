@@ -10,5 +10,6 @@
 
         int RowsCount { get; }
         int ColumnsCount { get; }
+        int LineLength { get; }
     }
 }
