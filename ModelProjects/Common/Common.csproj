@@ -44,6 +44,7 @@
     <Compile Include="Cell.cs" />
     <Compile Include="CellContent.cs" />
     <Compile Include="Handlers.cs" />
+    <Compile Include="IModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
