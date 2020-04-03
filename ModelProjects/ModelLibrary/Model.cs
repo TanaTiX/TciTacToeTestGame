@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ModelLibrary
 {
-    public class Model
+    public class Model:IModel
     {
     }
 }
