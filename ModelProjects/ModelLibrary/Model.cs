@@ -35,6 +35,10 @@ namespace ModelLibrary
 
         public void Move(CellDto cell)
         {
+            if(cell.CellType == CellContent.Empty)
+            {
+                throw new Exception("Произведена попытка хода пустой клеткой");
+            }
             if (CanMove(cell))
             {
                 Cells[cell.X][cell.Y] = cell;
