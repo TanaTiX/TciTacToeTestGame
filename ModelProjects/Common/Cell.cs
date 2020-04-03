@@ -1,6 +1,5 @@
-﻿namespace ClassesLibrary
+﻿namespace Common
 {
-	public enum CellContent {Empty, Cross, Zero};
 	public class CellDto
 	{
 		//private CellContent _cell;

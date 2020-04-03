@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Общие сведения об этой сборке предоставляются следующим набором
 // набора атрибутов. Измените значения этих атрибутов для изменения сведений,
 // связанные с этой сборкой.
-[assembly: AssemblyTitle("CommonClassesLibrary")]
+[assembly: AssemblyTitle("DebugConsole")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("CommonClassesLibrary")]
+[assembly: AssemblyProduct("DebugConsole")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Следующий GUID представляет идентификатор typelib, если этот проект доступен из модели COM
-[assembly: Guid("0994dce5-3a75-4389-bace-06c41cbcce31")]
+[assembly: Guid("52019187-f56a-440c-9f46-2fbb8e9b11f4")]
 
 // Сведения о версии сборки состоят из указанных ниже четырех значений:
 //

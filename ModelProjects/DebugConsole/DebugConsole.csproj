@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FCCF06FA-C1B8-4B72-91FC-BE5441E2C28D}</ProjectGuid>
+    <ProjectGuid>{52019187-F56A-440C-9F46-2FBB8E9B11F4}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>ClassesLibrary</RootNamespace>
-    <AssemblyName>ClassesLibrary</AssemblyName>
+    <RootNamespace>DebugConsole</RootNamespace>
+    <AssemblyName>DebugConsole</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -43,7 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cell.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
