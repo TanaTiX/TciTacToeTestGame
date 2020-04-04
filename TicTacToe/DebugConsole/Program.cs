@@ -14,35 +14,51 @@ namespace DebugConsole
 		static void Main(string[] args)
 		{
 			Clear();
-			Console.WriteLine("test");
-			var line = Console.ReadLine();
-			if (line == "clear")
+
+			Console.WriteLine("Введите икс или ноль и координаты клетки без пробелов и нажмите энтер");
+
+			while (true)
 			{
-				Clear();
+				var line = Console.ReadLine();
+				if (line == "clear")
+				{
+					Clear();
+				}
+				else
+				{
+					try
+					{
+						CellContent content = CellContent.Empty;
+						char type = line[0];
+
+						if (type == 'x')
+						{
+							content = CellContent.Cross;
+						}else if (type == 'y')
+						{
+							content = CellContent.Zero;
+						}
+						else
+						{
+							throw new Exception("Введено недопустимое значение поля клетки");
+						}
+
+						int x = Int32.Parse(line[1].ToString());
+						int y = Int32.Parse(line[2].ToString());
+
+						CellDto cell = new CellDto(x, y, content);
+						model.Move(cell);
+					}
+					catch (Exception ex)
+					{
+
+						Console.WriteLine(ex.Message);
+					}
+
+					
+				}
 			}
-			else
-			{
-				string[] arr = line.Split(',');
-				foreach (string item in arr)
-				{
-					item.Trim();
-				}
-				int x = Int32.Parse(arr[1]);
-				int y = Int32.Parse(arr[2]);
-				CellContent content = CellContent.Empty;
-				string type = arr[0];
-				if (type == "x")
-				{
-					content = CellContent.Cross;
-				}
-				if(type == "y")
-				{
-					content = CellContent.Zero;
-				}
-				CellDto cell = new CellDto(x, y, content);
-				model.Move(cell);
-				
-			}
+			
 		}
 		static void Clear()
 		{
