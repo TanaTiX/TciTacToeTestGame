@@ -1,4 +1,4 @@
 ﻿namespace Common
 {
-    public enum CellContent {Empty, Cross, Zero};
+	public enum CellContent {Empty, Cross, Zero};
 }
