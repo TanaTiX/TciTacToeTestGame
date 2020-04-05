@@ -1,5 +1,6 @@
 ﻿using Common;
 using System;
+using Utils;
 using System.Linq;
 
 namespace ModelLibrary
@@ -11,12 +12,20 @@ namespace ModelLibrary
 		public int LineLength { get; }
 
 		
-		private int ShiftForCalculateCompleteLine;
+		private readonly int ShiftForCalculateCompleteLine;//сдвиг относительно проверяемой ячейки
+		private int TotalFreeCells;
+
+		private readonly CellDto[][] Cells;
+
+		public event GameOverHandler GameOverWinEvent;
+		public event GameOverDrawHandler GameOverDrawEvent;
+		public event MoveHandler MoveEvent;
 
 		public Model(int rowsCount, int columnsCount, int lineLength = 3)
 		{
 			RowsCount = rowsCount;
 			ColumnsCount = columnsCount;
+			TotalFreeCells = RowsCount * ColumnsCount;
 			LineLength = lineLength;
 			ShiftForCalculateCompleteLine = LineLength - 1;
 			Cells = new CellDto[RowsCount][];
@@ -30,117 +39,108 @@ namespace ModelLibrary
 
 		}
 
-		private readonly CellDto[][] Cells;
-
-		public event GameOverHandler GameOverEvent;
-		public event MoveHandler MoveEvent;
+		
 
 		public bool CanMove(CellDto cell)
-			=> Cells[cell.X][cell.Y].CellType == CellContent.Empty;
+			=> Cells[cell.Y][cell.X].CellType == CellContent.Empty;
 
 		public void Move(CellDto cell)
 		{
-			if(cell.CellType == CellContent.Empty)
+			//Utils.Utils.Log("x", cell.X, "y", cell.Y);
+			if (cell.CellType == CellContent.Empty)
 			{
 				throw new Exception("Произведена попытка хода пустой клеткой");
 			}
 			if (CanMove(cell))
 			{
+				TotalFreeCells--;
 				Cells[cell.Y][cell.X] = cell;
 				MoveEvent?.Invoke(this, cell);
-				WinCheck(cell);
+				bool isWin = WinCheck(cell);
+				if(isWin == false && TotalFreeCells == 0)
+				{
+					GameOverDrawEvent?.Invoke(this);
+				}
 			}
 		}
 
-		private void WinCheck(CellDto cell)
+		private bool WinCheck(CellDto cell)
 		{
-			bool isWin = (	TestHorizontal(cell) == true/* ||
-							TestVertical(cell) == true ||
-							TestDiagonal(cell) == true ||
-							TestDiagonal2(cell) == true*/);
+			bool isWin = (
+				TestLine(cell, LineLength,	false,	true,	false)	||	//vertical
+				TestLine(cell, LineLength,	true,	false,	false)	||	//horizontal
+				TestLine(cell, LineLength,	true,	true,	false)	||	//diagonal-1
+				TestLine(cell, LineLength,	true,	true,	true)		//diagonal-2
+				);
+			
 			if(isWin == true)
 			{
-				GameOverEvent?.Invoke(this);
+				GameOverWinEvent?.Invoke(this);
+				return true;
 			}
+			return false;
 		}
 		private bool TestLine(CellDto cell, int elementsCount, bool useShiftX, bool useShiftY, bool direction)
 		{
-			Log("start test line************************************");
-			int count = 0;
-			CellDto target;
+			//Utils.Utils.Log("start test line************************************", useShiftX, useShiftY, direction);
+			int shiftFromX = 0;//точка начала проверки по оси X
+			int shiftFromY = 0;//точка начала проверки по оси Y
+			int k = 1;//коэффициент для рассчета в случае проверки совпадений по 2й диагонали
+			int countCoinCidencesInLine = 0;//количество совпадений в линии
 			
-			int shiftX = (useShiftX == true) ? 1 : 0;
-			int shiftY = (useShiftY == true) ? 1 : 0;
-			int directionK = (direction == true) ? -1 : 1;
-			//int shift = LineLength - 1;//вынести 2 в приватное свойство
-			int shiftFrom = 0;
-			int shiftTo = 0;
-			if (useShiftX == true)
+			int countLinesComplete = 0;
+			if (useShiftX == true)//смещение по оси X
 			{
-				shiftFrom = cell.X - ShiftForCalculateCompleteLine;
-				shiftTo = cell.X + LineLength;
-			}
-			if (useShiftY == true)
-			{
-				shiftFrom = cell.Y - ShiftForCalculateCompleteLine;
-				shiftTo = cell.Y + LineLength;
-			}
-			int countLines = 0;
-			//Log("ft", shiftFrom, shiftTo);
-			for (int i = shiftFrom; i < shiftTo; i++)
-			{
-				Log(shiftFrom, shiftTo, i, shiftX, shiftY);
-				Log("test> ", (directionK * shiftX * i), (directionK * shiftY * i));
-				//target = GetCellByPosiotion(cell.X + (directionK * shiftX * i), cell.Y + (directionK * shiftY * i));
-				target = GetCellByPosiotion(directionK * shiftX * i, directionK * shiftY * i);
-				if (target != null && target.CellType == cell.CellType)
+				if (direction == true)//рассчет по диагонали с правой стороны
 				{
-					Log("++");
-					count++;
-					if(count >= elementsCount)
-					{
-						countLines++;
-					}
+					shiftFromX = cell.X + ShiftForCalculateCompleteLine;
+					k = -1;
 				}
 				else
 				{
-					count = 0;
+					shiftFromX = cell.X - ShiftForCalculateCompleteLine;
 				}
 			}
-			Log("count lines", countLines);
-			if (countLines > 0)//переделать на возврат количества линий
+			if(useShiftY == true)
+			{
+				shiftFromY = cell.Y - ShiftForCalculateCompleteLine;
+			}
+			int length = ShiftForCalculateCompleteLine * 2 + 1;
+
+			CellDto targetCell;
+			int x;
+			int y;
+			for (int i = 0; i < length; i++)
+			{
+				x = (useShiftX) ? shiftFromX + (k * i) : cell.X;
+				y = (useShiftY) ? shiftFromY + i : cell.Y;
+				targetCell = GetCellByPosiotion(x, y);
+				Utils.Utils.Log("test cell (x, y):", x, y);//не могу понять, почему не получается сокращенный вариант
+				if (targetCell != null && targetCell.CellType == cell.CellType)
+				{
+					countCoinCidencesInLine++;
+					if(countCoinCidencesInLine >= LineLength)
+					{
+						countLinesComplete++;
+					}
+				}else
+				{
+					countCoinCidencesInLine = 0;
+				}
+			}
+			if (countLinesComplete > 0)
 			{
 				return true;
 			}
 			return false;
 		}
-		private bool TestVertical(CellDto cell)//чую, что эти методы можно свести к однмоу
-		{
-			//Console.WriteLine("vertical " + TestLine(cell, LineLength, false, true, false));
-			return TestLine(cell, LineLength, false, true, false);
-		}
-		private bool TestHorizontal(CellDto cell)
-		{
-			//Console.WriteLine("horizontal " + TestLine(cell, 3, true, false, false));
-			return TestLine(cell, LineLength, true, false, false);
-		}
-		private bool TestDiagonal(CellDto cell)
-		{
-			//Console.WriteLine("diagonal " + TestLine(cell, 3, true, true, false));
-			return TestLine(cell, LineLength, true, true, false);
-		}
-		private bool TestDiagonal2(CellDto cell)
-		{
-			//Console.WriteLine("diagonal2 " + TestLine(cell, 3, true, true, true));
-			return TestLine(cell, LineLength, true, true, true);
-		}
-
+		
 		private CellDto GetCellByPosiotion(int x, int y) {
 			if(x < 0 || x >= ColumnsCount || y < 0 || y >= RowsCount)
 			{
 				return null;
 			}
-			return Cells[x][y];
+			return Cells[y][x];
 		}
 
 		public CellDto[][] PublicCells
@@ -150,15 +150,6 @@ namespace ModelLibrary
 			}
 		}
 
-		private static void Log(params object[] args)//куда-то переместить для удобства
-		{
-			var res = "";
-			for (int i = 0; i < args.Length - 1; i++)
-			{
-				res += args[i].ToString() + " ";
-			}
-			res += args[args.Length - 1];
-			Console.WriteLine(res);
-		}
+		
 	}
 }

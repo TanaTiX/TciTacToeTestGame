@@ -88,13 +88,23 @@ namespace DebugConsole
 		static void Clear()
 		{
 			model = new Model(3, 3, 3);
-			model.GameOverEvent += OnGameOver;
+			model.GameOverWinEvent += OnGameOverWin;
+			model.GameOverDrawEvent += OnGameOverDraw;
 		}
 
-		private static void OnGameOver(object sender)
+		private static void OnGameOverDraw(object sender)
+		{
+			model.GameOverWinEvent -= OnGameOverWin;
+			model.GameOverDrawEvent -= OnGameOverDraw;
+			Console.WriteLine("Игра завершена вничью");
+			Clear();
+		}
+
+		private static void OnGameOverWin(object sender)
 		{
 			
-			model.GameOverEvent -= OnGameOver;
+			model.GameOverWinEvent -= OnGameOverWin;
+			model.GameOverDrawEvent -= OnGameOverDraw;
 			Console.WriteLine("Game over");
 			Clear();
 		}

@@ -2,7 +2,8 @@
 {
 	public interface IModel
 	{
-		event GameOverHandler GameOverEvent;
+		event GameOverHandler GameOverWinEvent;
+		event GameOverDrawHandler GameOverDrawEvent;
 		event MoveHandler MoveEvent;
 
 		bool CanMove(CellDto cell);
