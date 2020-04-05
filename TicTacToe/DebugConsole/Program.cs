@@ -20,8 +20,9 @@ namespace DebugConsole
 			while (true)
 			{
 				var line = Console.ReadLine();
-				if (line == "clear")
+				if (line.ToLower() == "clear")
 				{
+					Console.Clear();
 					Clear();
 				}
 				else
@@ -34,7 +35,7 @@ namespace DebugConsole
 						if (type == 'x')
 						{
 							content = CellContent.Cross;
-						}else if (type == 'y')
+						}else if (type == '0')
 						{
 							content = CellContent.Zero;
 						}
@@ -48,6 +49,30 @@ namespace DebugConsole
 
 						CellDto cell = new CellDto(x, y, content);
 						model.Move(cell);
+						var state = model.PublicCells;
+						for (int i = 0; i < state.Length; i++)
+						{
+							string res = "";
+							string symbol;
+							CellDto[] row = state[i];
+							for (int j = 0; j < row.Count(); j++)
+							{
+								CellContent cellContent = row[j].CellType;
+								symbol = "-";
+								if (cellContent == CellContent.Cross)
+								{
+									symbol = "X";
+								}
+								if(cellContent == CellContent.Zero)
+								{
+									symbol = "0";
+								}
+
+								res += symbol;
+								
+							}
+							Console.WriteLine(res);
+						}
 					}
 					catch (Exception ex)
 					{
@@ -63,6 +88,15 @@ namespace DebugConsole
 		static void Clear()
 		{
 			model = new Model(3, 3, 3);
+			model.GameOverEvent += OnGameOver;
+		}
+
+		private static void OnGameOver(object sender)
+		{
+			
+			model.GameOverEvent -= OnGameOver;
+			Console.WriteLine("Game over");
+			Clear();
 		}
 	}
 }

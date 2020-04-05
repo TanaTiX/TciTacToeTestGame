@@ -1,5 +1,6 @@
 ﻿using Common;
 using System;
+using System.Linq;
 
 namespace ModelLibrary
 {
@@ -9,11 +10,15 @@ namespace ModelLibrary
 		public int ColumnsCount { get; }
 		public int LineLength { get; }
 
+		
+		private int ShiftForCalculateCompleteLine;
+
 		public Model(int rowsCount, int columnsCount, int lineLength = 3)
 		{
 			RowsCount = rowsCount;
 			ColumnsCount = columnsCount;
 			LineLength = lineLength;
+			ShiftForCalculateCompleteLine = LineLength - 1;
 			Cells = new CellDto[RowsCount][];
 
 			for (int row = 0; row < RowsCount; row++)
@@ -25,7 +30,7 @@ namespace ModelLibrary
 
 		}
 
-		private readonly  CellDto[][] Cells;
+		private readonly CellDto[][] Cells;
 
 		public event GameOverHandler GameOverEvent;
 		public event MoveHandler MoveEvent;
@@ -41,7 +46,7 @@ namespace ModelLibrary
 			}
 			if (CanMove(cell))
 			{
-				Cells[cell.X][cell.Y] = cell;
+				Cells[cell.Y][cell.X] = cell;
 				MoveEvent?.Invoke(this, cell);
 				WinCheck(cell);
 			}
@@ -49,29 +54,61 @@ namespace ModelLibrary
 
 		private void WinCheck(CellDto cell)
 		{
-			GameOverEvent?.Invoke(this, (TestHorizontal(cell) == true || TestVertical(cell) == true || TestDiagonal(cell) == true || TestDiagonal2(cell) == true));
+			bool isWin = (	TestHorizontal(cell) == true/* ||
+							TestVertical(cell) == true ||
+							TestDiagonal(cell) == true ||
+							TestDiagonal2(cell) == true*/);
+			if(isWin == true)
+			{
+				GameOverEvent?.Invoke(this);
+			}
 		}
 		private bool TestLine(CellDto cell, int elementsCount, bool useShiftX, bool useShiftY, bool direction)
 		{
+			Log("start test line************************************");
 			int count = 0;
 			CellDto target;
+			
 			int shiftX = (useShiftX == true) ? 1 : 0;
 			int shiftY = (useShiftY == true) ? 1 : 0;
-			int directionK = (direction == true) ? 1 : -1;
-			int shift = LineLength - 1;
-			for (int i = -shift; i < shift; i++)
+			int directionK = (direction == true) ? -1 : 1;
+			//int shift = LineLength - 1;//вынести 2 в приватное свойство
+			int shiftFrom = 0;
+			int shiftTo = 0;
+			if (useShiftX == true)
 			{
-				target = GetCellByPosiotion(cell.X + (directionK * shiftX * i), cell.Y + (directionK * shiftY * i));
+				shiftFrom = cell.X - ShiftForCalculateCompleteLine;
+				shiftTo = cell.X + LineLength;
+			}
+			if (useShiftY == true)
+			{
+				shiftFrom = cell.Y - ShiftForCalculateCompleteLine;
+				shiftTo = cell.Y + LineLength;
+			}
+			int countLines = 0;
+			//Log("ft", shiftFrom, shiftTo);
+			for (int i = shiftFrom; i < shiftTo; i++)
+			{
+				Log(shiftFrom, shiftTo, i, shiftX, shiftY);
+				Log("test> ", (directionK * shiftX * i), (directionK * shiftY * i));
+				//target = GetCellByPosiotion(cell.X + (directionK * shiftX * i), cell.Y + (directionK * shiftY * i));
+				target = GetCellByPosiotion(directionK * shiftX * i, directionK * shiftY * i);
 				if (target != null && target.CellType == cell.CellType)
 				{
+					Log("++");
 					count++;
+					if(count >= elementsCount)
+					{
+						countLines++;
+					}
 				}
 				else
 				{
 					count = 0;
 				}
 			}
-			if (count >= elementsCount)
+			Log("count lines", countLines);
+			if (countLines > 0)//переделать на возврат количества линий
 			{
 				return true;
 			}
@@ -79,27 +116,49 @@ namespace ModelLibrary
 		}
 		private bool TestVertical(CellDto cell)//чую, что эти методы можно свести к однмоу
 		{
-			return TestLine(cell, 3, false, true, false);
+			//Console.WriteLine("vertical " + TestLine(cell, LineLength, false, true, false));
+			return TestLine(cell, LineLength, false, true, false);
 		}
 		private bool TestHorizontal(CellDto cell)
 		{
-			return TestLine(cell, 3, true, false, false);
+			//Console.WriteLine("horizontal " + TestLine(cell, 3, true, false, false));
+			return TestLine(cell, LineLength, true, false, false);
 		}
 		private bool TestDiagonal(CellDto cell)
 		{
-			return TestLine(cell, 3, true, true, false);
+			//Console.WriteLine("diagonal " + TestLine(cell, 3, true, true, false));
+			return TestLine(cell, LineLength, true, true, false);
 		}
 		private bool TestDiagonal2(CellDto cell)
 		{
-			return TestLine(cell, 3, true, true, true);
+			//Console.WriteLine("diagonal2 " + TestLine(cell, 3, true, true, true));
+			return TestLine(cell, LineLength, true, true, true);
 		}
 
 		private CellDto GetCellByPosiotion(int x, int y) {
-			if(x<0 || x> ColumnsCount || y<0 || y > RowsCount)
+			if(x < 0 || x >= ColumnsCount || y < 0 || y >= RowsCount)
 			{
 				return null;
 			}
 			return Cells[x][y];
+		}
+
+		public CellDto[][] PublicCells
+		{
+			get {
+				return Cells.Select(a => a.ToArray()).ToArray();//нашел в сети, не совем понимаю, как это работает
+			}
+		}
+
+		private static void Log(params object[] args)//куда-то переместить для удобства
+		{
+			var res = "";
+			for (int i = 0; i < args.Length - 1; i++)
+			{
+				res += args[i].ToString() + " ";
+			}
+			res += args[args.Length - 1];
+			Console.WriteLine(res);
 		}
 	}
 }

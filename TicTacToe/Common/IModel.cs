@@ -11,5 +11,7 @@
 		int RowsCount { get; }
 		int ColumnsCount { get; }
 		int LineLength { get; }
+
+		CellDto[][] PublicCells { get; }
 	}
 }
