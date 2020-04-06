@@ -187,10 +187,41 @@ namespace ModelLibrary
 		private void SetStatus(GameStatuses status)
 		{
 			if (GameStatus == status) return;
+			switch (status)
+			{
+				case GameStatuses.Zero:
+					throw new Exception("Невозможная последовательность смены состояния игры");
+				case GameStatuses.New:
+					if(GameStatus == GameStatuses.Game)
+						throw new Exception("Невозможная последовательность смены состояния игры");					
+					break;
+				case GameStatuses.Game:
+					if(GameStatus != GameStatuses.New)
+						throw new Exception("Невозможная последовательность смены состояния игры");
+					break;
+				case GameStatuses.Win:
+					if (GameStatus != GameStatuses.Game)
+						throw new Exception("Невозможная последовательность смены состояния игры");
+					break;
+				case GameStatuses.Draw:
+					if (GameStatus != GameStatuses.Game)
+						throw new Exception("Невозможная последовательность смены состояния игры");
+					break;
+				case GameStatuses.Cancel:
+					if (GameStatus != GameStatuses.New)
+						throw new Exception("Невозможная последовательность смены состояния игры");
+					break;
+				default:
+					break;
+			}
 			GameStatus = status;
 			ChangeStatusEvent?.Invoke(this, status);
-			Utils.Log("status in model", status);
+			Utils.Log("status changed in model", status);
 		}
 
+		public void CancelGame()
+		{
+			SetStatus(GameStatuses.Win);
+		}
 	}
 }

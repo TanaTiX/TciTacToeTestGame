@@ -13,5 +13,9 @@ namespace DebugConsole
 		{
 
 		}
+		public CellView(CellDto cell):base(cell.X, cell.Y, cell.CellType)
+		{
+			
+		}
 	}
 }

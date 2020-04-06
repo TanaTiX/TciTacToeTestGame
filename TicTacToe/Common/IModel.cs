@@ -19,5 +19,7 @@ namespace Common
 
 		ReadOnlyCollection<ReadOnlyCollection<CellDto>> Cells { get; }
 		GameStatuses GameStatus { get; }
+
+		void CancelGame();
 	}
 }

@@ -14,6 +14,9 @@ namespace DebugConsole
 	{
 		private static IModel model;
 		private static UserType _currentUser;
+		private const int rowsCount = 3;
+		private const int colsCount = 3;
+		private static CellView[][] cells;
 		static void Main(string[] args)
 		{
 			ShowInfo();
@@ -32,6 +35,9 @@ namespace DebugConsole
 					case "new 0":
 						StartNewGame(UserType.UserX);
 						break;
+					case "cancel":
+						Cancel();
+						break;
 
 					default:
 						{
@@ -49,27 +55,32 @@ namespace DebugConsole
 			}
 			
 		}
+		private static void Cancel()
+		{
+			if (model != null)
+			{
+				if(model.GameStatus == GameStatuses.New || model.GameStatus == GameStatuses.Zero)
+				{
+					model = null;
+					Utils.Log("Игра отменена");
+				}
+				else
+				{
+					Utils.Log("В случае отмены вам будет засчитано поражение. Если вы все равно хотите прекратить игру, то нажмите Y");
+					string answer = Console.ReadLine().ToLower().Trim();
+					if(answer == "y")
+					{
+						Console.WriteLine("Вы сдались, засчитано поражение");
+						model.CancelGame();
+					}
 
+				}
+			}
+		}
 		private static void Move(string command)
 		{
 			try
 			{
-				/*CellContent content = CellContent.Empty;
-				char type = command[0];
-
-				if (type == 'x')
-				{
-					content = CellContent.Cross;
-				}
-				else if (type == '0')
-				{
-					content = CellContent.Zero;
-				}
-				else
-				{
-					throw new Exception("Введено недопустимое значение поля клетки");
-				}
-*/
 				int x = Int32.Parse(command[0].ToString());
 				int y = Int32.Parse(command[1].ToString());
 
@@ -81,12 +92,16 @@ namespace DebugConsole
 					Utils.Log("Ход не совершен");
 					return;
 				}
-				var state = model.Cells;
-				for (int i = 0; i < state.Count; i++)
+				else
+				{
+					CellView cellView = new CellView(cell);
+					cells[y][x] = cellView;
+				}
+				for (int i = 0; i < cells.Length; i++)
 				{
 					string res = "";
 					string symbol;
-					ReadOnlyCollection<CellDto> row = state[i];
+					CellView[] row = cells[i];
 					for (int j = 0; j < row.Count(); j++)
 					{
 						CellContent cellContent = row[j].CellType;
@@ -105,6 +120,8 @@ namespace DebugConsole
 					}
 					Console.WriteLine(res);
 				}
+				Console.WriteLine("************************** - ход совершен");
+				
 				_currentUser = (_currentUser == UserType.User0) ? UserType.UserX : UserType.User0;
 			}
 			catch (Exception ex)
@@ -123,10 +140,24 @@ namespace DebugConsole
 		}
 		private static void StartNewGame(UserType user)
 		{
+			if(model!=null && model.GameStatus == GameStatuses.Game)
+			{
+				Utils.Log("Введена не корректная последовательность команд, игра не начата");
+				return;
+			}
+			
 			_currentUser = (user == UserType.UserX) ? UserType.User0 : UserType.UserX;
+
+			cells = new CellView[rowsCount][];
+
+			for (int row = 0; row < rowsCount; row++)
+			{
+				cells[row] = new CellView[colsCount];
+				for (int column = 0; column < colsCount; column++)
+					cells[row][column] = new CellView(row, column, CellContent.Empty);
+			}
+
 			model = new Model(3, 3, user, 3);
-			//model.GameOverWinEvent += OnGameOverWin;
-			//model.GameOverDrawEvent += OnGameOverDraw;
 			model.ChangeStatusEvent += OnChangeGameStatus;
 		}
 
@@ -151,32 +182,15 @@ namespace DebugConsole
 					Utils.Log("Ничья");
 					break;
 				case GameStatuses.Cancel:
-					Utils.Log("Игра отменана");
+					Utils.Log("Игра отменена");
 					break;
 				default:
 					break;
 			}
 		}
 
-		private static void OnGameOverDraw(object sender)
-		{
-			ClearListeners();
-			Console.WriteLine("Игра завершена вничью");
-			//Clear();
-		}
-
-		private static void OnGameOverWin(object sender)
-		{
-
-			
-			Console.WriteLine("Game over");
-			//Clear();
-		}
-
 		private static void ClearListeners()
 		{
-			//model.GameOverWinEvent -= OnGameOverWin;
-			//model.GameOverDrawEvent -= OnGameOverDraw;
 			model.ChangeStatusEvent -= OnChangeGameStatus;
 		}
 	}
