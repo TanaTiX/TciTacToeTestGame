@@ -99,43 +99,46 @@ namespace ModelLibrary
 			}
 			return false;
 		}
-		private bool TestLine(CellDto cell, int elementsCount, bool useShiftX, bool useShiftY, bool direction)
+
+		/// <summary>
+		/// Проверка на появление новой завершенной линии относительно свежедобавленного элемента
+		/// </summary>
+		/// <param name="cell">ячейка, относительно которой осуществляется проверка</param>
+		/// <param name="elementsCount">количество подряд идущих однотипных элементов в ряду, необходимых для зачисления новой линии</param>
+		/// <param name="useShiftX">использование при проверке сдвига по оси X</param>
+		/// <param name="useShiftY">использование при проверке сдвига по оси Y</param>
+		/// <param name="directionForDiagonalTest">должно быть true при проверке диагонали, идущей с верхнего правого конца относительно выбранной ячейки к левому нижнему концу</param>
+		/// <returns>Возвращает true в случае появления хоть одной новой заполненной линии</returns>
+		private bool TestLine(CellDto cell, int elementsCount, bool useShiftX, bool useShiftY, bool directionForDiagonalTest)
 		{
-			//Utils.Utils.Log("start test line************************************", useShiftX, useShiftY, direction);
+			//Utils.Utils.Log("start test line************************************", useShiftX, useShiftY, directionForDiagonalTest);
 			int shiftFromX = 0;//точка начала проверки по оси X
-			int shiftFromY = 0;//точка начала проверки по оси Y
-			int k = 1;//коэффициент для рассчета в случае проверки совпадений по 2й диагонали
+			int shiftFromY = (useShiftY == true) ? cell.Y - ShiftForCalculateCompleteLine : 0;//точка начала проверки по оси Y - вычисляется сразу т.к. параметр directionForDiagonalTest не влияет на рассчеты по оси Y
+			int diagonalFactor = 1;//коэффициент для рассчета в случае проверки совпадений по 2й диагонали
 			int countCoinCidencesInLine = 0;//количество совпадений в линии
 
 			int countLinesComplete = 0;
 			if (useShiftX == true)//смещение по оси X
 			{
-				if (direction == true)//рассчет по диагонали с правой стороны
+				if (directionForDiagonalTest == true)//рассчет по диагонали с правой стороны
 				{
 					shiftFromX = cell.X + ShiftForCalculateCompleteLine;
-					k = -1;
+					diagonalFactor = -1;
 				}
 				else
 				{
 					shiftFromX = cell.X - ShiftForCalculateCompleteLine;
 				}
 			}
-			if (useShiftY == true)
-			{
-				shiftFromY = cell.Y - ShiftForCalculateCompleteLine;
-			}
-			int length = ShiftForCalculateCompleteLine * 2 + 1;
+			int length = ShiftForCalculateCompleteLine * 2 + 1;//количество определяемых ячеек - длина возможной линии в обе стороны (с учетом текущей ячейки)
 
-			CellDto targetCell;
-			int x;
-			int y;
 			for (int i = 0; i < length; i++)
 			{
-				x = (useShiftX) ? shiftFromX + (k * i) : cell.X;
-				y = (useShiftY) ? shiftFromY + i : cell.Y;
-				targetCell = GetCellByPosiotion(x, y);
-				Utils.Utils.Log("test cell (x, y):", x, y);//не могу понять, почему не получается сокращенный вариант
-				if (targetCell != null && targetCell.CellType == cell.CellType)
+				int x = (useShiftX) ? shiftFromX + (diagonalFactor * i) : cell.X;//координаты проверяемой ячейки по оси X
+				int y = (useShiftY) ? shiftFromY + i : cell.Y;//координаты проверяемой ячейки по оси Y
+				CellDto targetCell = GetCellByPosiotion(x, y);
+				//Utils.Utils.Log("test cell (x, y):", x, y);//не могу понять, почему не получается сокращенный вариант
+				if (targetCell != null && targetCell.CellType == cell.CellType)//если ячейка существует и типы совпадают...
 				{
 					countCoinCidencesInLine++;
 					if (countCoinCidencesInLine >= LineLength)
@@ -148,11 +151,7 @@ namespace ModelLibrary
 					countCoinCidencesInLine = 0;
 				}
 			}
-			if (countLinesComplete > 0)
-			{
-				return true;
-			}
-			return false;
+			return countLinesComplete > 0;
 		}
 
 		private CellDto GetCellByPosiotion(int x, int y)

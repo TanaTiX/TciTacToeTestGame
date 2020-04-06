@@ -2,6 +2,7 @@
 using ModelLibrary;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -54,7 +55,7 @@ namespace DebugConsole
 						{
 							string res = "";
 							string symbol;
-							var row = state[i];
+							ReadOnlyCollection<CellDto> row = state[i];
 							for (int j = 0; j < row.Count(); j++)
 							{
 								CellContent cellContent = row[j].CellType;
