@@ -1,8 +1,8 @@
 ﻿using Common;
 using System;
-using Utils;
 using System.Linq;
 using System.Collections.ObjectModel;
+using CommonUtils;
 
 namespace ModelLibrary
 {
@@ -65,7 +65,7 @@ namespace ModelLibrary
 
 		public void Move(CellDto cell)
 		{
-			//Utils.Utils.Log("x", cell.X, "y", cell.Y);
+			//Utils.Log("x", cell.X, "y", cell.Y);
 			if (cell.CellType == CellContent.Empty)
 			{
 				throw new Exception("Произведена попытка хода пустой клеткой");
@@ -111,7 +111,7 @@ namespace ModelLibrary
 		/// <returns>Возвращает true в случае появления хоть одной новой заполненной линии</returns>
 		private bool TestLine(CellDto cell, int elementsCount, bool useShiftX, bool useShiftY, bool directionForDiagonalTest)
 		{
-			//Utils.Utils.Log("start test line************************************", useShiftX, useShiftY, directionForDiagonalTest);
+			//Utils.Log("start test line************************************", useShiftX, useShiftY, directionForDiagonalTest);
 			int shiftFromX = 0;//точка начала проверки по оси X
 			int shiftFromY = (useShiftY == true) ? cell.Y - ShiftForCalculateCompleteLine : 0;//точка начала проверки по оси Y - вычисляется сразу т.к. параметр directionForDiagonalTest не влияет на рассчеты по оси Y
 			int diagonalFactor = 1;//коэффициент для рассчета в случае проверки совпадений по 2й диагонали
@@ -137,7 +137,7 @@ namespace ModelLibrary
 				int x = (useShiftX) ? shiftFromX + (diagonalFactor * i) : cell.X;//координаты проверяемой ячейки по оси X
 				int y = (useShiftY) ? shiftFromY + i : cell.Y;//координаты проверяемой ячейки по оси Y
 				CellDto targetCell = GetCellByPosiotion(x, y);
-				//Utils.Utils.Log("test cell (x, y):", x, y);//не могу понять, почему не получается сокращенный вариант
+				Utils.Log("test cell (x, y):", x, y);//не могу понять, почему не получается сокращенный вариант
 				if (targetCell != null && targetCell.CellType == cell.CellType)//если ячейка существует и типы совпадают...
 				{
 					countCoinCidencesInLine++;
