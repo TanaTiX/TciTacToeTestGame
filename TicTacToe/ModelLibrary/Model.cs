@@ -11,25 +11,34 @@ namespace ModelLibrary
 		public int RowsCount { get; }
 		public int ColumnsCount { get; }
 		public int LineLength { get; }
+		public GameStatuses GameStatus { get; private set; }
 
 
 		private readonly int ShiftForCalculateCompleteLine;//сдвиг относительно проверяемой ячейки
 		private int TotalFreeCells;
 
-		public event GameOverHandler GameOverWinEvent;
-		public event GameOverDrawHandler GameOverDrawEvent;
+		//public event GameOverHandler GameOverWinEvent;
+		//public event GameOverDrawHandler GameOverDrawEvent;
 		public event MoveHandler MoveEvent;
+		public event ChangeStatusHandler ChangeStatusEvent;
 
 		private readonly ReadOnlyCollection<CellDto[]> cells;
 		public ReadOnlyCollection<ReadOnlyCollection<CellDto>> Cells { get; }
-		//{
-		//	get {
-		//		return Cells.Select(a => a.ToArray()).ToArray();//нашел в сети, не совем понимаю, как это работает
-		//	}
-		//}
 
-		public Model(int rowsCount, int columnsCount, int lineLength = 3)
+		private UserType _currentUser;
+		public UserType CurrentUser => _currentUser;
+
+		/// <summary>
+		/// Конструктор модели
+		/// </summary>
+		/// <param name="rowsCount">Колиичество строк</param>
+		/// <param name="columnsCount">Количество колонок</param>
+		/// <param name="secondUser">Игрок, который считается походившим. Следующий ход должен быть другим игроком.</param>
+		/// <param name="lineLength">Минимальная длина линии из однородных элементов, необходимая для учета ее завершенности</param>
+		public Model(int rowsCount, int columnsCount, UserType secondUser, int lineLength = 3)
 		{
+			if (secondUser == UserType.Unknown) throw new Exception("Не допустимое значение 1-го игрока");
+			_currentUser = secondUser;
 			RowsCount = rowsCount;
 			ColumnsCount = columnsCount;
 			TotalFreeCells = RowsCount * ColumnsCount;
@@ -56,31 +65,42 @@ namespace ModelLibrary
 			/// массивом каждой строки. И изменяя значения в исходном массиве мы их меняем 
 			/// и в публичном. Но "из вне" эти значения поменять не могут.
 			Cells = Array.AsReadOnly(cells.Select(_row => Array.AsReadOnly(_row)).ToArray());
+			SetStatus(GameStatuses.New);
 		}
 
 
 
-		public bool CanMove(CellDto cell)
-			=> cells[cell.Y][cell.X].CellType == CellContent.Empty;
+		public bool CanMove(CellDto cell, UserType user)
+		{
+			if(user == _currentUser)
+			{
+				throw new Exception("Ход вне очереди");//По хорошему все эти и аналогичные сообщения нужно вынестти в отдельный список, но пока не буду заморачиваться
+			}
+			return cells[cell.Y][cell.X].CellType == CellContent.Empty;
+		}
 
-		public void Move(CellDto cell)
+		public bool Move(CellDto cell, UserType user)
 		{
 			//Utils.Log("x", cell.X, "y", cell.Y);
 			if (cell.CellType == CellContent.Empty)
 			{
 				throw new Exception("Произведена попытка хода пустой клеткой");
 			}
-			if (CanMove(cell))
+			if (CanMove(cell, user))
 			{
+				SetStatus(GameStatuses.Game);
 				TotalFreeCells--;
 				cells[cell.Y][cell.X] = cell;
 				MoveEvent?.Invoke(this, cell);
 				bool isWin = WinCheck(cell);
+				_currentUser = user;
 				if (isWin == false && TotalFreeCells == 0)
 				{
-					GameOverDrawEvent?.Invoke(this);
+					SetStatus(GameStatuses.Draw);
+					//GameOverDrawEvent?.Invoke(this);
 				}
 			}
+			return true;
 		}
 
 		private bool WinCheck(CellDto cell)
@@ -94,7 +114,8 @@ namespace ModelLibrary
 
 			if (isWin == true)
 			{
-				GameOverWinEvent?.Invoke(this);
+				SetStatus(GameStatuses.Win);
+				//GameOverWinEvent?.Invoke(this);
 				return true;
 			}
 			return false;
@@ -113,14 +134,14 @@ namespace ModelLibrary
 		{
 			//Utils.Log("start test line************************************", useShiftX, useShiftY, directionForDiagonalTest);
 			int shiftFromX = 0;//точка начала проверки по оси X
-			int shiftFromY = (useShiftY == true) ? cell.Y - ShiftForCalculateCompleteLine : 0;//точка начала проверки по оси Y - вычисляется сразу т.к. параметр directionForDiagonalTest не влияет на рассчеты по оси Y
-			int diagonalFactor = 1;//коэффициент для рассчета в случае проверки совпадений по 2й диагонали
+			int shiftFromY = (useShiftY == true) ? cell.Y - ShiftForCalculateCompleteLine : 0;//точка начала проверки по оси Y - вычисляется сразу т.к. параметр directionForDiagonalTest не влияет на расчеты по оси Y
+			int diagonalFactor = 1;//коэффициент для расчета в случае проверки совпадений по 2й диагонали
 			int countCoinCidencesInLine = 0;//количество совпадений в линии
 
 			int countLinesComplete = 0;
 			if (useShiftX == true)//смещение по оси X
 			{
-				if (directionForDiagonalTest == true)//рассчет по диагонали с правой стороны
+				if (directionForDiagonalTest == true)//расчет по диагонали с правой стороны
 				{
 					shiftFromX = cell.X + ShiftForCalculateCompleteLine;
 					diagonalFactor = -1;
@@ -137,7 +158,7 @@ namespace ModelLibrary
 				int x = (useShiftX) ? shiftFromX + (diagonalFactor * i) : cell.X;//координаты проверяемой ячейки по оси X
 				int y = (useShiftY) ? shiftFromY + i : cell.Y;//координаты проверяемой ячейки по оси Y
 				CellDto targetCell = GetCellByPosiotion(x, y);
-				Utils.Log("test cell (x, y):", x, y);//не могу понять, почему не получается сокращенный вариант
+				//Utils.Log("test cell (x, y):", x, y);
 				if (targetCell != null && targetCell.CellType == cell.CellType)//если ячейка существует и типы совпадают...
 				{
 					countCoinCidencesInLine++;
@@ -161,6 +182,14 @@ namespace ModelLibrary
 				return null;
 			}
 			return cells[y][x];
+		}
+
+		private void SetStatus(GameStatuses status)
+		{
+			if (GameStatus == status) return;
+			GameStatus = status;
+			ChangeStatusEvent?.Invoke(this, status);
+			Utils.Log("status in model", status);
 		}
 
 	}
