@@ -1,4 +1,6 @@
-﻿namespace Common
+﻿using System.Collections.ObjectModel;
+
+namespace Common
 {
 	public interface IModel
 	{
@@ -13,6 +15,6 @@
 		int ColumnsCount { get; }
 		int LineLength { get; }
 
-		CellDto[][] PublicCells { get; }
+		ReadOnlyCollection<ReadOnlyCollection<CellDto>> Cells { get; }
 	}
 }

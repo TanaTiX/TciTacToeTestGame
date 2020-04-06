@@ -49,12 +49,12 @@ namespace DebugConsole
 
 						CellDto cell = new CellDto(x, y, content);
 						model.Move(cell);
-						var state = model.PublicCells;
-						for (int i = 0; i < state.Length; i++)
+						var state = model.Cells;
+						for (int i = 0; i < state.Count; i++)
 						{
 							string res = "";
 							string symbol;
-							CellDto[] row = state[i];
+							var row = state[i];
 							for (int j = 0; j < row.Count(); j++)
 							{
 								CellContent cellContent = row[j].CellType;
