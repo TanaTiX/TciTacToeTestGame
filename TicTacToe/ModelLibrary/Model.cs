@@ -25,8 +25,8 @@ namespace ModelLibrary
 		private readonly ReadOnlyCollection<CellDto[]> cells;
 		public ReadOnlyCollection<ReadOnlyCollection<CellDto>> Cells { get; }
 
-		private UserType _currentUser;
-		public UserType CurrentUser => _currentUser;
+		//private UserType _currentUser;
+		public UserType CurrentUser { get; private set; }
 
 		/// <summary>
 		/// Конструктор модели
@@ -38,7 +38,7 @@ namespace ModelLibrary
 		public Model(int rowsCount, int columnsCount, UserType secondUser, int lineLength = 3)
 		{
 			if (secondUser == UserType.Unknown) throw new Exception("Не допустимое значение 1-го игрока");
-			_currentUser = secondUser;
+			CurrentUser = secondUser;
 			RowsCount = rowsCount;
 			ColumnsCount = columnsCount;
 			TotalFreeCells = RowsCount * ColumnsCount;
@@ -72,7 +72,7 @@ namespace ModelLibrary
 
 		public bool CanMove(CellDto cell, UserType user)
 		{
-			if(user == _currentUser)
+			if(user == CurrentUser)
 			{
 				throw new Exception("Ход вне очереди");//По хорошему все эти и аналогичные сообщения нужно вынестти в отдельный список, но пока не буду заморачиваться
 			}
@@ -91,9 +91,10 @@ namespace ModelLibrary
 				SetStatus(GameStatuses.Game);
 				TotalFreeCells--;
 				cells[cell.Y][cell.X] = cell;
+				CurrentUser = user;
 				MoveEvent?.Invoke(this, cell);
 				bool isWin = WinCheck(cell);
-				_currentUser = user;
+				//CurrentUser = user; Перенесём перед вызовом события
 				if (isWin == false && TotalFreeCells == 0)
 				{
 					SetStatus(GameStatuses.Draw);

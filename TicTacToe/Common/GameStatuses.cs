@@ -1,12 +1,18 @@
 ﻿namespace Common
 {
-	/// <summary>
-	/// Zero - нулевая точка, значение по умолчанию
-	/// New - новая игра, 1й ход не сделан
-	/// Game - идет игра
-	/// Win - кто-то победил/проиграл
-	/// Draw - ничья
-	/// Cancel - отмена игры
-	/// </summary>
-	public enum GameStatuses { Zero, New, Game, Win, Draw, Cancel };
+	/// <summary>Перечисления статусов игры</summary>
+	public enum GameStatuses 
+	{
+		/// <summary>Нулевая точка, значение по умолчанию</summary>
+		Zero,
+		/// <summary>Новая игра, 1й ход не сделан</summary>
+		New,
+		/// <summary>Идет игра</summary>
+		Game,
+		/// <summary>Кто-то победил/проиграл</summary>
+		Win, 
+		/// <summary>Ничья</summary>
+		Draw, 
+		/// <summary>Отмена игры</summary>
+		Cancel };
 }
