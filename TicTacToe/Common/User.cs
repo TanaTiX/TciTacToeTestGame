@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Common
 {
-	class User
+	public class User
 	{
+
 	}
 }
