@@ -6,8 +6,33 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\Images\" />
+    <None Remove="Resources\Images\cross.svg" />
+    <None Remove="Resources\Images\no.svg" />
+    <None Remove="Resources\Images\yes.svg" />
+    <None Remove="Resources\Images\zero.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\Images\cross.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\no.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\yes.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\zero.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Resources\Sounds\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
   </ItemGroup>
 
 </Project>

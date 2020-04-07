@@ -44,6 +44,7 @@
     <Compile Include="Cell.cs" />
     <Compile Include="IGameEndVM.cs" />
     <Compile Include="IGameVM.cs" />
+    <Compile Include="ImagesCollection.cs" />
     <Compile Include="IStatisticVM.cs" />
     <Compile Include="IFirstScreenVM.cs" />
     <Compile Include="GameStatuses.cs" />

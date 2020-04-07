@@ -2,7 +2,33 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup />
   <ItemGroup>
-    <Page Update="UserControl1.xaml">
+    <Compile Update="EndGameUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="GameUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="SettingsUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="StatisticUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="EndGameUC.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="FirstScreenUC.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="GameUC.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="SettingsUC.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="StatisticUC.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

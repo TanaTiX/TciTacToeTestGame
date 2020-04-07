@@ -11,7 +11,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DebugConsole", "DebugConsol
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonUtils", "CommonUtils\CommonUtils.csproj", "{19BF447A-8260-40AE-BAE9-DD343CF9596B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "View", "View\View.csproj", "{F518E244-5A3D-42C1-9C61-946D968DC3C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "View", "View\View.csproj", "{F518E244-5A3D-42C1-9C61-946D968DC3C3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{19BF447A-8260-40AE-BAE9-DD343CF9596B} = {19BF447A-8260-40AE-BAE9-DD343CF9596B}
+		{E66A3B93-4774-4F21-A7D2-5BE8959D87E0} = {E66A3B93-4774-4F21-A7D2-5BE8959D87E0}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
