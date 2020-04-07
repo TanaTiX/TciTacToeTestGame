@@ -3,9 +3,10 @@ using System.Windows.Input;
 
 namespace Common
 {
-	public class IFirstScreen
+	public interface IFirstScreen
 	{
-		ObservableCollection<User> users;
+		/// <summary>Список игроков</summary>
+		ObservableCollection<User> users { get; }
 
 	}
 }

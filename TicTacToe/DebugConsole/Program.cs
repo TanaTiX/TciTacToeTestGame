@@ -20,7 +20,7 @@ namespace DebugConsole
 		static void Main(string[] args)
 		{
 			ShowInfo();
-
+			
 			while (true)
 			{
 				var command = Console.ReadLine().ToLower().Trim();
