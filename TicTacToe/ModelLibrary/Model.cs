@@ -28,9 +28,7 @@ namespace ModelLibrary
 		//private UserType _currentUser;
 		public UserType CurrentUser { get; private set; }
 
-		/// <summary>
-		/// Конструктор модели
-		/// </summary>
+		/// <summary>Конструктор модели</summary>
 		/// <param name="rowsCount">Колиичество строк</param>
 		/// <param name="columnsCount">Количество колонок</param>
 		/// <param name="secondUser">Игрок, который считается походившим. Следующий ход должен быть другим игроком.</param>
@@ -125,9 +123,7 @@ namespace ModelLibrary
 			return false;
 		}
 
-		/// <summary>
-		/// Проверка на появление новой завершенной линии относительно свежедобавленного элемента
-		/// </summary>
+		/// <summary>Проверка на появление новой завершенной линии относительно свежедобавленного элемента</summary>
 		/// <param name="cell">ячейка, относительно которой осуществляется проверка</param>
 		/// <param name="elementsCount">количество подряд идущих однотипных элементов в ряду, необходимых для зачисления новой линии</param>
 		/// <param name="useShiftX">использование при проверке сдвига по оси X</param>
