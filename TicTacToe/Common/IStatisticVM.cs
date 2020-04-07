@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace Common
 {
-	public interface IFirstScreen
+	public interface IStatisticVM
 	{
 		/// <summary>Список игроков</summary>
 		ObservableCollection<User> users { get; }
