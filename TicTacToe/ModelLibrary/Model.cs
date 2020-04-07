@@ -97,8 +97,11 @@ namespace ModelLibrary
 				if (isWin == false && TotalFreeCells == 0)
 				{
 					SetStatus(GameStatuses.Draw);
-					//GameOverDrawEvent?.Invoke(this);
 				}
+			}
+			else
+			{
+				throw new Exception("Данный ход не возможен. Игрок: " + user + ", x: " + cell.X + ", y: " + cell.Y);
 			}
 			return true;
 		}
@@ -216,7 +219,7 @@ namespace ModelLibrary
 			}
 			GameStatus = status;
 			ChangeStatusEvent?.Invoke(this, status);
-			Utils.Log("status changed in model", status);
+			Utils.Log("status changed in model:", status);
 		}
 
 		public void CancelGame()

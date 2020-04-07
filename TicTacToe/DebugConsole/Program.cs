@@ -38,7 +38,9 @@ namespace DebugConsole
 					case "cancel":
 						Cancel();
 						break;
-
+					case "help":
+						ShowInfo();
+						break;
 					default:
 						{
 							if(model != null)
@@ -54,6 +56,16 @@ namespace DebugConsole
 				}
 			}
 			
+		}
+		private static void ShowInfo()
+		{
+			Console.WriteLine("ПОМОЩЬ");
+			Console.WriteLine("Введите new и через пробел икс или ноль для начала новой игры. Икс или ноль определяет то, кто будет ходить первым");
+			Console.WriteLine("Что бы сделать ход введите координаты клетки без пробелов и нажмите энтер. Возможно только при наличии не оконченной игры");
+			Console.WriteLine("clear - очистка консоли от текста");
+			Console.WriteLine("new - создание новой игры");
+			Console.WriteLine("cancel - для отмены игры. Отменить игру можно только если она не началась. Иначе будет засчитано поражение.");
+			Console.WriteLine("help - для вывода справки");
 		}
 		private static void Cancel()
 		{
@@ -75,6 +87,10 @@ namespace DebugConsole
 					}
 
 				}
+			}
+			else
+			{
+				Utils.Log("Игра не создана, отменять нечего");
 			}
 		}
 		private static void Move(string command)
@@ -131,13 +147,7 @@ namespace DebugConsole
 			}
 		}
 
-		private static void ShowInfo()
-		{
-			Console.WriteLine("Введите new и через пробел икс или ноль для начала новой игры. Икс или ноль определяет то, кто будет ходить первым");
-			Console.WriteLine("Введите координаты клетки без пробелов и нажмите энтер");
-			Console.WriteLine("clear - очистка консоли от текста");
-			Console.WriteLine("new - создание новой игры");
-		}
+		
 		private static void StartNewGame(UserType user)
 		{
 			if(model!=null && model.GameStatus == GameStatuses.Game)
@@ -176,7 +186,7 @@ namespace DebugConsole
 					Utils.Log("Можно ходить");
 					break;
 				case GameStatuses.Win:
-					Utils.Log("Победа!");
+					Utils.Log("Победа!", _currentUser);
 					break;
 				case GameStatuses.Draw:
 					Utils.Log("Ничья");
