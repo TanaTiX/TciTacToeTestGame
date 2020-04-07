@@ -6,9 +6,6 @@ namespace Common
 	/// <remarks>Интерфей Модели игры в крестики-нолики произвольного размера поля</remarks>
 	public interface IModel
 	{
-		//event GameOverHandler GameOverWinEvent;
-		//event GameOverDrawHandler GameOverDrawEvent;
-
 		/// <summary>Собыие хода</summary>
 		/// <remarks>Происходит при измении любой ячейки</remarks>
 		event MoveHandler MoveEvent;
@@ -45,7 +42,7 @@ namespace Common
 		/// <summary>Статус игры</summary>
 		GameStatuses GameStatus { get; }
 
-		/// <summary>Закончить игру</summary>
+		/// <summary>Отменить игру</summary>
 		void CancelGame();
 	}
 }
