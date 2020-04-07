@@ -9,5 +9,8 @@ namespace Common
 
 		/// <summary>Команда смены отображаемых фишек, которыми играет пользователь</summary>
 		ICommand ChangeUserPieceCommand { get; }
+
+		/// <summary>Вернуться на 1ю панель</summary>
+		ICommand ExitSettingsCommand { get; }
 	}
 }
