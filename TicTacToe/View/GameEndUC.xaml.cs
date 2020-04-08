@@ -18,9 +18,9 @@ namespace View
 	/// <summary>
 	/// Логика взаимодействия для GameEnd.xaml
 	/// </summary>
-	public partial class GameEnd : UserControl
+	public partial class GameEndUC : UserControl
 	{
-		public GameEnd()
+		public GameEndUC()
 		{
 			InitializeComponent();
 		}
