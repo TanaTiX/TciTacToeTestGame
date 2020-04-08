@@ -9,6 +9,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-		<Button>Что-то</Button>
+		<Button Command="{Binding StartNewGameCommand}">Что-то</Button>
     </Grid>
 </UserControl>
