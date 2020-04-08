@@ -10,12 +10,15 @@
 	<d:UserControl.DataContext>
 		<local:StatisticVM />
 	</d:UserControl.DataContext>
-	<DataGrid ItemsSource="{Binding Users}">
-		<DataGrid.Columns>
-			<DataGridTextColumn Header="Игрок" Binding="{Binding Name}"/>
-			<DataGridTextColumn Header="Игр" Binding="{Binding Total}"/>
-			<DataGridTextColumn Header="Выигрышей" Binding="{Binding Win}"/>
-			<DataGridTextColumn Header="Проигрышей" Binding="{Binding Lose}"/>
-		</DataGrid.Columns>
-	</DataGrid>
+	<StackPanel>
+		<DataGrid ItemsSource="{Binding Users}">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="Игрок" Binding="{Binding Name}"/>
+				<DataGridTextColumn Header="Игр" Binding="{Binding Total}"/>
+				<DataGridTextColumn Header="Выигрышей" Binding="{Binding Win}"/>
+				<DataGridTextColumn Header="Проигрышей" Binding="{Binding Lose}"/>
+			</DataGrid.Columns>
+		</DataGrid>
+		<Button Content="Закрыть статистику" Command="{Binding ExitStatisticCommand}" Height="auto"></Button>
+	</StackPanel>
 </UserControl>
