@@ -8,7 +8,7 @@ namespace Common
 {
 	public static class ImagesCollection
 	{
-		public static string Directoryn = @"/Images/";
+		public static string Directory = @"/Images/";
 		public static Dictionary<string, string> Pieces = new Dictionary<string, string>()
 		{
 			{"crossStandrart", @"cross.svg" },
