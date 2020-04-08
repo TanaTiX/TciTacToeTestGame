@@ -7,9 +7,12 @@
 			 xmlns:comm="clr-namespace:Common;assembly=Common"
 			 d:DataContext="{x:Type comm:IGameVM}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="700" d:DesignWidth="600">
     <Grid>
-		<Image Source="Resources/Images/cross.png"></Image>
-            
+		<!--<Image Source="Resources/Images/cross.png"></Image>-->
+		<DataGrid Grid.Row="{Binding RowsCount}" Grid.Column="{Binding ColumnsCount}" ItemsSource="{Binding Cells}" BorderThickness="2" BorderBrush="Black">
+			
+			
+		</DataGrid>
     </Grid>
 </UserControl>

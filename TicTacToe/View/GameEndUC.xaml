@@ -7,8 +7,24 @@
 			 xmlns:comm="clr-namespace:Common;assembly=Common"
 			 d:DataContext="{x:Type comm:IGameEndVM}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="700" d:DesignWidth="600">
     <Grid>
-            
-    </Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="40"/>
+			<RowDefinition Height="127*"/>
+			<RowDefinition Height="40"/>
+			<RowDefinition Height="40"/>
+		</Grid.RowDefinitions>
+		<TextBlock Grid.Row="0" Background="DarkSeaGreen" TextAlignment="Center">Игра окончена</TextBlock>
+		<Grid Grid.Row="1">
+			<Grid.RowDefinitions>
+				<RowDefinition/>
+				<RowDefinition/>
+			</Grid.RowDefinitions>
+			<TextBlock Grid.Row="0" Background="DarkSeaGreen" Text="Игра окончена, победил Вася"></TextBlock>
+			<Image Grid.Row="1"></Image>
+		</Grid>
+		<Button Grid.Row="2" Command="{Binding RevengeCommand, Mode=OneWay}">Реванш</Button>
+		<Button Grid.Row="3" Command="{Binding ShowFirstScreenCommand, Mode=OneWay}">Основное меню</Button>
+	</Grid>
 </UserControl>

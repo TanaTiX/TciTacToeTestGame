@@ -11,9 +11,7 @@ namespace Common
 		/// <summary>Команда восстановления ранее не оконченной игры</summary>
 		ICommand RepairGameCommand { get; }
 
-		/// <summary>Команда отмены игры, которую предлагается восстановить</summary>
-		ICommand CancelGameCommand { get; }
-
+		
 		/// <summary>Команда об отображении панели с настройками</summary>
 		ICommand ShowSettingsCommand { get; }
 
