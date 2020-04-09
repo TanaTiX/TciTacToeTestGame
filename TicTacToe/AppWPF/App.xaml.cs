@@ -7,6 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using View;
 
 namespace AppWPF
@@ -16,28 +17,58 @@ namespace AppWPF
 	/// </summary>
 	public partial class App : Application
 	{
-		private readonly Window window = new Window();
-		private readonly FirstScreenUC firstScreenUC;
-		private readonly StatisticUC statisticUC;
+		/// <summary>Экземпляр главного окна</summary>
+		/// <remarks>Экземпляр создаётся один раз на всё время жизни приложения.
+		/// При закрытии окна происходит закрытие приложения.</remarks>
+		private readonly Window window = new Window()
+		{
+			SizeToContent=SizeToContent.WidthAndHeight,
+			WindowStartupLocation=WindowStartupLocation.CenterScreen
+		};
+
+		/// <summary>Экземпляр Первого экрана</summary>
+		/// <remarks>Экземпляр создаётся один раз на всё время жизни приложения</remarks>
+		private readonly FirstScreenUC firstScreenUC = new FirstScreenUC();
+
+		/// <summary>Экземпляр экрана Статистики</summary>
+		/// <remarks>Экземпляр создаётся один раз на всё время жизни приложения</remarks>
+		private readonly StatisticUC statisticUC = new StatisticUC();
+
+		/// <summary>Словарь соответвия Контролов отображаемым типам</summary>
+		private readonly Dictionary<Type, UserControl> controls 
+			= new Dictionary<Type, UserControl>();
+
 		private void OnStartUp(object sender, StartupEventArgs e)
 		{
-			window.Width = 600;
-			window.Height = 700;
-			GetType(typeof(FirstScreenVM));
-		}
-		private void GetType(Type type)
-		{
-			
+			///<remarks>Подсоединение обработчика закрытия окна</remarks>
+			window.Closed += Window_Closed;
 
-			switch (type)
-			{
-				case typeof(IFirstScreenVM):
-					window.Content = new FirstScreenVM();
-					break;
-				default:
-					break;
-			}
+			///<remarks>Заполнение словаря соответствий</remarks>
+			controls.Add(typeof(IFirstScreenVM), firstScreenUC);
+			controls.Add(typeof(IStatisticVM), statisticUC);
+
+
+			//window.Width = 600;
+			//window.Height = 700;
+			ChangeWindowContent(typeof(FirstScreenVM));
+
 			window.Show();
+		}
+
+		private void Window_Closed(object sender, EventArgs e)
+		{
+			///<remarks>Закрываем приложение</remarks>
+			Shutdown();
+		}
+
+		/// <summary>Метод изменяющий Представление по задданому типу</summary>
+		/// <param name="type">Тип который нужно представлять в окне</param>
+		private void ChangeWindowContent(Type type)
+		{
+			///<remarks>Проверяем наличие ключа в словаре.
+			///Если есть ключ, то в контент окна записываем его значение</remarks>
+			if (controls.TryGetValue(type, out UserControl control))
+				window.Content = control;
 		}
 	}
 }
