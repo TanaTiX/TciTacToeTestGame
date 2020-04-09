@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3E05531A-1039-4A84-8FBD-56403237FEDA}</ProjectGuid>
+    <ProjectGuid>{ADE3A67D-9BCF-4C56-8486-9F3B7BE37A87}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>AppWPF</RootNamespace>
     <AssemblyName>AppWPF</AssemblyName>
@@ -55,16 +55,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -93,6 +85,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{33ED3377-DCEC-4334-9BB9-6D35BD6102D7}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\View\View.csproj">
+      <Project>{4594E831-A72C-4569-A0AD-BE8460F450DD}</Project>
+      <Name>View</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
