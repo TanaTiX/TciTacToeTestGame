@@ -18,5 +18,8 @@ namespace Common
 		/// <summary>Команда об отображении панели со статистикой пользователей</summary>
 		ICommand ShowStatisticCommand { get; }
 
+		///<summary>Свойство, отражающее наличие несохраненной игры</summary>
+		bool IsRevenge { get; }
+
 	}
 }

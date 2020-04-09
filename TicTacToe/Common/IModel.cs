@@ -47,6 +47,7 @@ namespace Common
 
 		/// <summary>Сохранить игру</summary>
 		void Save();
+
 		/// <summary>Загрузить настройки и ранее сохраненную игру (при наличии)</summary>
 		void Load();
 	}

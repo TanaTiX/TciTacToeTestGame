@@ -12,7 +12,7 @@
 	</d:UserControl.DataContext>
 	<StackPanel>
 		<TextBlock Background="DarkSeaGreen" TextAlignment="Center" Height="40">Статистика</TextBlock>
-		<DataGrid ItemsSource="{Binding Users}" AutoGenerateColumns="False" Height="620" VerticalScrollBarVisibility="Auto">
+		<DataGrid ItemsSource="{Binding Users}" AutoGenerateColumns="False" Height="620" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
 			<DataGrid.Columns>
 				<DataGridTextColumn Header="Игрок" Binding="{Binding Name}" Width="auto"/>
 				<DataGridTextColumn Header="Игр" Binding="{Binding Total}" Width="100*"/>
