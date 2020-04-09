@@ -13,5 +13,9 @@ namespace View
 		public ICommand ShowFirstScreenCommand { get; }
 
 		public ICommand RevengeCommand { get; }
+
+		public User Winner => new User { Name = "Вася", Lose = 5, Total = 22, Win = 15 };
+
+		public User Loser => new User { Name = "Пупкин", Lose = 11, Total = 13, Win = 1 };
 	}
 }
