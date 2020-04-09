@@ -22,7 +22,7 @@ namespace AppWPF
 		/// При закрытии окна происходит закрытие приложения.</remarks>
 		private readonly Window window = new Window()
 		{
-			SizeToContent=SizeToContent.WidthAndHeight,
+			//SizeToContent=SizeToContent.WidthAndHeight,
 			WindowStartupLocation=WindowStartupLocation.CenterScreen
 		};
 
@@ -48,8 +48,8 @@ namespace AppWPF
 			controls.Add(typeof(IStatisticVM), statisticUC);
 
 
-			//window.Width = 600;
-			//window.Height = 700;
+			window.Width = 600;
+			window.Height = 700;
 			ChangeWindowContent(typeof(FirstScreenVM));
 
 			window.Show();
