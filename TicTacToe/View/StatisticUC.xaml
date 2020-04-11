@@ -4,15 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:View"
-             mc:Ignorable="d" 
-             d:DesignHeight="700" d:DesignWidth="600"
+             mc:Ignorable="d"
              xmlns:comm="clr-namespace:Common;assembly=Common">
-	<d:UserControl.DataContext>
+	<UserControl.DataContext>
 		<local:StatisticVM />
-	</d:UserControl.DataContext>
-	<StackPanel>
-		<TextBlock Background="DarkSeaGreen" TextAlignment="Center" Height="40">Статистика</TextBlock>
-		<DataGrid ItemsSource="{Binding Users}" AutoGenerateColumns="False" Height="620" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+	</UserControl.DataContext>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="100*"/>
+			<RowDefinition Height="auto"/>
+		</Grid.RowDefinitions>
+		<TextBlock Grid.Row="0" Background="DarkSeaGreen" TextAlignment="Center" Height="40">Статистика</TextBlock>
+		<DataGrid Grid.Row="1" ItemsSource="{Binding Users}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" CanUserAddRows="False" IsReadOnly="True">
 			<DataGrid.Columns>
 				<DataGridTextColumn Header="Игрок" Binding="{Binding Name}" Width="auto"/>
 				<DataGridTextColumn Header="Игр" Binding="{Binding Total}" Width="100*"/>
@@ -20,6 +24,6 @@
 				<DataGridTextColumn Header="Проигрышей" Binding="{Binding Lose}" Width="100*"/>
 			</DataGrid.Columns>
 		</DataGrid>
-		<Button Content="Закрыть статистику" Command="{Binding ExitStatisticCommand}" Height="40"></Button>
-	</StackPanel>
+		<Button Grid.Row="2" Content="Закрыть статистику" Command="{Binding ExitStatisticCommand}" Height="40"></Button>
+	</Grid>
 </UserControl>

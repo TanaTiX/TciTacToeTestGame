@@ -5,14 +5,20 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:View"
 			 xmlns:comm="clr-namespace:Common;assembly=Common"
-			 d:DataContext="{x:Type comm:IGameVM}"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="700" d:DesignWidth="600">
+	<UserControl.DataContext>
+		<local:GameVM />
+	</UserControl.DataContext>
     <Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="100*"/>
+			<RowDefinition Height="auto"/>
+		</Grid.RowDefinitions>
 		<!--<Image Source="Resources/Images/cross.png"></Image>-->
-		<DataGrid Grid.Row="{Binding RowsCount}" Grid.Column="{Binding ColumnsCount}" ItemsSource="{Binding Cells}" BorderThickness="2" BorderBrush="Black">
-			
+			<DataGrid Grid.Row="0" Background="Azure" ItemsSource="{Binding Cells}" BorderBrush="Black" AutoGenerateColumns="False" HeadersVisibility="None">
 			
 		</DataGrid>
+		<Button Grid.Row="1">sdgr</Button>
     </Grid>
 </UserControl>

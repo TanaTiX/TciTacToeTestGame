@@ -8,15 +8,76 @@
 			 d:DataContext="{x:Type comm:ISettingsVM}"
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="600">
+	
+	
+		
+			
+			
+	<UserControl.Resources>
+		<local:BoolToVisibilityConverter x:Key="InputToVisibility"/>
+		<Style TargetType="{x:Type TextBox}" x:Key="PropmptingTextBox">
+			<Setter Property="BorderBrush" Value="Black"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type TextBox}">
+						<Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+							<Grid>
+								<TextBlock Text="Type your name...">
+									<TextBlock.Visibility>
+										<MultiBinding Converter="{StaticResource InputToVisibility}">
+											<Binding ElementName="inputText" Path="IsFocused"/>
+											<Binding ElementName="inputText" Path="Text"/>
+										</MultiBinding>
+									</TextBlock.Visibility>
+								</TextBlock>
+								<TextBox x:Name="inputText" Background="Transparent"/>
+							</Grid>
+						</Border>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
+		<DataTemplate x:Key="UserSettings" DataType="{x:Type local:SettingsUC}" x:Name="test">
+			<!--<Setter Property="vvv" Value="555" TargetName="yyy"/>-->
+			
+			<DataGridCell Background="#c0c0c0">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="auto"></RowDefinition>
+						<RowDefinition Height="auto"></RowDefinition>
+						<RowDefinition></RowDefinition>
+					</Grid.RowDefinitions>
+					<Label Grid.Row="0" HorizontalContentAlignment="Center" Content="{Binding Name, XPath=UserSettings}"></Label>
+					<!--<Label Grid.Row="0" HorizontalContentAlignment="Center" Content="Пользователь № такой-то"></Label>-->
+					<TextBox Grid.Row="1" Style="{StaticResource PropmptingTextBox}"/>
+					
+					
+					
+				</Grid>
+				
+				
+			</DataGridCell>
+		</DataTemplate>
+	</UserControl.Resources>
+	
+	
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="40"></RowDefinition>
 			<RowDefinition></RowDefinition>
 			<RowDefinition Height="40"></RowDefinition>
 		</Grid.RowDefinitions>
-		<TextBlock Grid.Row="0" Background="DarkSeaGreen" HorizontalAlignment="Stretch" TextAlignment="Center" Height="auto">Настройки</TextBlock>
+		<TextBlock Grid.Row="0" Background="Gold" HorizontalAlignment="Stretch" TextAlignment="Center" Height="auto">Настройки</TextBlock>
 		<Grid Grid.Row="1">
 			<Grid.ColumnDefinitions>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+			</Grid.ColumnDefinitions>
+			<DataGridCell Grid.Column="0" ContentTemplate="{StaticResource ResourceKey=UserSettings}"/>
+			<DataGridCell Grid.Column="1" ContentTemplate="{StaticResource ResourceKey=UserSettings}"/>
+			<!--<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="auto"/>
 				<ColumnDefinition/>
 			</Grid.ColumnDefinitions>
@@ -28,8 +89,9 @@
 			<TextBox Grid.Row="0" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Это поле должно быть заполнено</TextBox>
 			
 			<Label Grid.Row="1" Grid.Column="0" Background="DarkSeaGreen" VerticalContentAlignment="Center">Фишка:</Label>
-			<ListBox Grid.Row="1" Grid.Column="1" SelectionMode="Single"></ListBox>
+			<ListBox Grid.Row="1" Grid.Column="1" SelectionMode="Single"></ListBox>-->
 		</Grid>
 		<Button Grid.Row="2" Command="{Binding ExitSettingsCommand}">Выход</Button>
+
 	</Grid>
 </UserControl>

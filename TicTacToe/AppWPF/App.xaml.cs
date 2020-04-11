@@ -22,8 +22,8 @@ namespace AppWPF
 		/// При закрытии окна происходит закрытие приложения.</remarks>
 		private readonly Window window = new Window()
 		{
-			//SizeToContent=SizeToContent.WidthAndHeight,
-			WindowStartupLocation=WindowStartupLocation.CenterScreen
+			WindowStartupLocation = WindowStartupLocation.CenterScreen,
+			ResizeMode = ResizeMode.NoResize
 		};
 
 		/// <summary>Экземпляр Первого экрана</summary>
@@ -33,6 +33,20 @@ namespace AppWPF
 		/// <summary>Экземпляр экрана Статистики</summary>
 		/// <remarks>Экземпляр создаётся один раз на всё время жизни приложения</remarks>
 		private readonly StatisticUC statisticUC = new StatisticUC();
+		
+		/// <summary>Экземпляр экрана Настроек</summary>
+		/// <remarks>Экземпляр создаётся один раз на всё время жизни приложения</remarks>
+		private readonly SettingsUC settingsUC = new SettingsUC();
+		
+		/// <summary>Экземпляр экрана собственно игры</summary>
+		/// <remarks>Экземпляр создаётся один раз на всё время жизни приложения</remarks>
+		private readonly GameUC gameUC = new GameUC();
+
+		/// <summary>Экземпляр экрана собственно игры</summary>
+		/// <remarks>Экземпляр создаётся один раз на всё время жизни приложения</remarks>
+		private readonly GameEndUC gameEndUC = new GameEndUC();
+
+
 
 		/// <summary>Словарь соответвия Контролов отображаемым типам</summary>
 		private readonly Dictionary<Type, UserControl> controls 
@@ -46,11 +60,14 @@ namespace AppWPF
 			///<remarks>Заполнение словаря соответствий</remarks>
 			controls.Add(typeof(IFirstScreenVM), firstScreenUC);
 			controls.Add(typeof(IStatisticVM), statisticUC);
+			controls.Add(typeof(ISettingsVM), settingsUC);
+			controls.Add(typeof(IGameVM), gameUC);
+			controls.Add(typeof(IGameEndVM), gameEndUC);
 
-
+			
 			window.Width = 600;
 			window.Height = 700;
-			ChangeWindowContent(typeof(FirstScreenVM));
+			ChangeWindowContent(typeof(ISettingsVM));
 
 			window.Show();
 		}

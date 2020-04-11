@@ -48,6 +48,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BoolToVisibilityConverter.cs" />
     <Compile Include="FirstScreenUC.xaml.cs">
       <DependentUpon>FirstScreenUC.xaml</DependentUpon>
     </Compile>
@@ -59,6 +60,7 @@
     <Compile Include="GameUC.xaml.cs">
       <DependentUpon>GameUC.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GameVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
