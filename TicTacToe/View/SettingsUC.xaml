@@ -5,8 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:View"
 			 xmlns:comm="clr-namespace:Common;assembly=Common"
-			 d:DataContext="{x:Type comm:ISettingsVM}"
-             mc:Ignorable="d" 
+			 DataContext="{x:Type comm:ISettingsVM}"
+             mc:Ignorable="d"
              d:DesignHeight="700" d:DesignWidth="600">
 	
 	
@@ -23,7 +23,7 @@
 					<ControlTemplate TargetType="{x:Type TextBox}">
 						<Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
 							<Grid>
-								<TextBlock Text="Type your name...">
+								<TextBlock Text="Введите Nick-Name">
 									<TextBlock.Visibility>
 										<MultiBinding Converter="{StaticResource InputToVisibility}">
 											<Binding ElementName="inputText" Path="IsFocused"/>
@@ -40,7 +40,7 @@
 		</Style>
 
 		<DataTemplate x:Key="UserSettings" DataType="{x:Type local:SettingsUC}" x:Name="test">
-			<!--<Setter Property="vvv" Value="555" TargetName="yyy"/>-->
+			
 			
 			<DataGridCell Background="#c0c0c0">
 				<Grid>
@@ -48,13 +48,25 @@
 						<RowDefinition Height="auto"></RowDefinition>
 						<RowDefinition Height="auto"></RowDefinition>
 						<RowDefinition></RowDefinition>
+						<RowDefinition Height="auto"></RowDefinition>
 					</Grid.RowDefinitions>
-					<Label Grid.Row="0" HorizontalContentAlignment="Center" Content="{Binding Name, XPath=UserSettings}"></Label>
-					<!--<Label Grid.Row="0" HorizontalContentAlignment="Center" Content="Пользователь № такой-то"></Label>-->
-					<TextBox Grid.Row="1" Style="{StaticResource PropmptingTextBox}"/>
 					
-					
-					
+					<TextBox Grid.Row="0" FontWeight="Bold" FontSize="40" Style="{StaticResource PropmptingTextBox}"/>
+
+					<Image Grid.Row="1" Source="Resources\Images\arrow.png"/>
+					<ListBox Grid.Row="2" HorizontalAlignment="Center" Width="300" >
+						<Image Width="200" Height="200" Source="Resources\Images\cross.png"></Image>
+						<Image Width="200" Height="200" Source="Resources\Images\no.png"></Image>
+						<Image Width="200" Height="200" Source="Resources\Images\yes.png"></Image>
+						<Image Width="200" Height="200" Source="Resources\Images\zero.png"></Image>
+					</ListBox>
+
+					<Image Grid.Row="3" Source="arrow.png">
+						<Image.LayoutTransform>
+							<RotateTransform Angle="180"/>
+						</Image.LayoutTransform>
+					</Image>
+
 				</Grid>
 				
 				
@@ -66,11 +78,16 @@
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="40"></RowDefinition>
+			<RowDefinition Height="auto"></RowDefinition>
 			<RowDefinition></RowDefinition>
 			<RowDefinition Height="40"></RowDefinition>
 		</Grid.RowDefinitions>
 		<TextBlock Grid.Row="0" Background="Gold" HorizontalAlignment="Stretch" TextAlignment="Center" Height="auto">Настройки</TextBlock>
-		<Grid Grid.Row="1">
+		<StackPanel Grid.Row="1" Orientation="Horizontal" Width="600"><!--Хорошо бы переделать-->
+			<Label Width="300" Background="AliceBlue" HorizontalContentAlignment="Center" Content="Пользователь № 1"></Label>
+			<Label Width="300" Background="AliceBlue" HorizontalContentAlignment="Center" Content="Пользователь № 2"></Label>
+		</StackPanel>
+		<Grid Grid.Row="2">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition/>
 				<ColumnDefinition/>
@@ -91,7 +108,7 @@
 			<Label Grid.Row="1" Grid.Column="0" Background="DarkSeaGreen" VerticalContentAlignment="Center">Фишка:</Label>
 			<ListBox Grid.Row="1" Grid.Column="1" SelectionMode="Single"></ListBox>-->
 		</Grid>
-		<Button Grid.Row="2" Command="{Binding ExitSettingsCommand}">Выход</Button>
+		<Button Grid.Row="3" Command="{Binding ExitSettingsCommand}">Сохранить настройки и выйти</Button>
 
 	</Grid>
 </UserControl>

@@ -120,6 +120,14 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Resource Include="Resources\Images\zero.png" />
+    <Resource Include="Resources\Images\yes.png" />
+    <Resource Include="Resources\Images\cross.png" />
+    <Resource Include="Resources\Images\no.png" />
+    <Resource Include="Resources\Images\arrow.png" />
+    <Content Include="Resources\Images\arrow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Images\cross.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
