@@ -47,7 +47,7 @@
 			<!--<Image Margin="0, 63, 0, 63" Width="200" Height="200" Source="Resources\Images\cross.png"></Image>
 			<Image Margin="0, 63, 0, 63" Width="200" Height="200" Source="Resources\Images\no.png"></Image>
 			<Image Margin="0, 63, 0, 63" Width="200" Height="200" Source="Resources\Images\yes.png"></Image>
-			<Image Margin="0, 63, 0, 63" Width="200" Height="200" Source="Resources\Images\zero.png"></Image>-->
+			<Image Margin="0, 63, 0, 63" Width="200" Height="200" Source="Resources\Images\zero.png"></Image> -->
 		</ListBox>
 		<Button Grid.Row="3">
 			<Image Source="Resources\Images\arrow.png">
