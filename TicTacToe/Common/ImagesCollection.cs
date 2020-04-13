@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Common
 {
-	public static class ImagesCollection
+	public class ImagesCollection
 	{
-		public static string Directory = @"/Images/";
-		public static Dictionary<string, string> Pieces = new Dictionary<string, string>()
+		//public static string Directory = @"Resources/Images/";
+		public Dictionary<string, object> Pieces = new Dictionary<string, object>()
 		{
-			{"crossStandrart", @"cross.svg" },
-			{"zeroStandrart", @"zero.svg" },
-			{"crossYes", @"yes.svg" },
-			{"zeroNo", @"no.svg" }
+			{"crossStandrart", @"Resources/Images/cross.png" },
+			{"zeroStandrart", @"Resources/Images/zero.png" },
+			{"crossYes", @"Resources/Images/yes.png" },
+			{"zeroNo", @"Resources/Images/no.png" }
 		};
 		
 	}

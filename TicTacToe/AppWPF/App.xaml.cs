@@ -36,7 +36,7 @@ namespace AppWPF
 		
 		/// <summary>Экземпляр экрана Настроек</summary>
 		/// <remarks>Экземпляр создаётся один раз на всё время жизни приложения</remarks>
-		private readonly SettingsUC settingsUC = new SettingsUC();
+		private readonly SettingsUC settingsUC = new SettingsUC(new ImagesCollection());
 		
 		/// <summary>Экземпляр экрана собственно игры</summary>
 		/// <remarks>Экземпляр создаётся один раз на всё время жизни приложения</remarks>

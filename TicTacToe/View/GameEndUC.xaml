@@ -15,14 +15,14 @@
 			<RowDefinition Height="40"/>
 			<RowDefinition Height="40"/>
 		</Grid.RowDefinitions>
-		<TextBlock Grid.Row="0" Background="DarkSeaGreen" TextAlignment="Center">Игра окончена</TextBlock>
-		<Grid Grid.Row="1">
-			<Grid.RowDefinitions>
-				<RowDefinition/>
-				<RowDefinition/>
-			</Grid.RowDefinitions>
-			<TextBlock Grid.Row="0" Background="DarkSeaGreen" Text="Игра окончена, победил Вася"></TextBlock>
-			<Image Grid.Row="1"></Image>
+		<TextBlock Grid.Row="0" Background="DarkSeaGreen" FontSize="35" TextAlignment="Center">Игра окончена</TextBlock>
+		<Grid Grid.Row="1" Background="Aqua">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+			</Grid.ColumnDefinitions>
+			<TextBlock Grid.Column="0" Background="DarkSeaGreen" VerticalAlignment="Center" TextAlignment="Center" FontSize="30" Text="Победитель: Вася"></TextBlock>
+			<Image Grid.Column="1" Source="Resources/Images/cross.png"></Image>
 		</Grid>
 		<Button Grid.Row="2" Command="{Binding RevengeCommand, Mode=OneWay}">Реванш</Button>
 		<Button Grid.Row="3" Command="{Binding ShowFirstScreenCommand, Mode=OneWay}">Основное меню</Button>

@@ -1,5 +1,4 @@
-﻿using Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,14 +16,12 @@ using System.Windows.Shapes;
 namespace View
 {
 	/// <summary>
-	/// Логика взаимодействия для SettingsUC.xaml
+	/// Логика взаимодействия для UserSettingsUC.xaml
 	/// </summary>
-	public partial class SettingsUC : UserControl
+	public partial class UserSettingsUC : UserControl
 	{
-		private ImagesCollection _imagesCollection;
-		public SettingsUC(ImagesCollection imagesCollection)
+		public UserSettingsUC()
 		{
-			_imagesCollection = imagesCollection;
 			InitializeComponent();
 		}
 	}
