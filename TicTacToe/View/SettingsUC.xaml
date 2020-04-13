@@ -23,7 +23,7 @@
 					<ControlTemplate TargetType="{x:Type TextBox}">
 						<Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
 							<Grid>
-								<TextBlock Text="Введите Nick-Name">
+								<TextBlock TextAlignment="Center" Text="Ваше имя...">
 									<TextBlock.Visibility>
 										<MultiBinding Converter="{StaticResource InputToVisibility}">
 											<Binding ElementName="inputText" Path="IsFocused"/>
@@ -31,7 +31,7 @@
 										</MultiBinding>
 									</TextBlock.Visibility>
 								</TextBlock>
-								<TextBox x:Name="inputText" Background="Transparent"/>
+								<TextBox x:Name="inputText" TextAlignment="Center" Background="Transparent"/>
 							</Grid>
 						</Border>
 					</ControlTemplate>
@@ -40,8 +40,8 @@
 		</Style>
 
 		<DataTemplate x:Key="UserSettings" DataType="{x:Type local:SettingsUC}" x:Name="test">
-			
-			
+
+
 			<DataGridCell Background="#c0c0c0">
 				<Grid>
 					<Grid.RowDefinitions>
@@ -52,21 +52,22 @@
 					</Grid.RowDefinitions>
 					
 					<TextBox Grid.Row="0" FontWeight="Bold" FontSize="40" Style="{StaticResource PropmptingTextBox}"/>
-
-					<Image Grid.Row="1" Source="Resources\Images\arrow.png"/>
-					<ListBox Grid.Row="2" HorizontalAlignment="Center" Width="300" >
-						<Image Width="200" Height="200" Source="Resources\Images\cross.png"></Image>
-						<Image Width="200" Height="200" Source="Resources\Images\no.png"></Image>
-						<Image Width="200" Height="200" Source="Resources\Images\yes.png"></Image>
-						<Image Width="200" Height="200" Source="Resources\Images\zero.png"></Image>
+					<Button Grid.Row="1">
+						<Image  Source="Resources\Images\arrow.png"/>
+					</Button>
+					<ListBox Grid.Row="2" HorizontalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+						<Image Margin="0, 63, 0, 63" Width="200" Height="200" Source="Resources\Images\cross.png"></Image>
+						<Image Margin="0, 63, 0, 63" Width="200" Height="200" Source="Resources\Images\no.png"></Image>
+						<Image Margin="0, 63, 0, 63" Width="200" Height="200" Source="Resources\Images\yes.png"></Image>
+						<Image Margin="0, 63, 0, 63" Width="200" Height="200" Source="Resources\Images\zero.png"></Image>
 					</ListBox>
-
-					<Image Grid.Row="3" Source="arrow.png">
-						<Image.LayoutTransform>
-							<RotateTransform Angle="180"/>
-						</Image.LayoutTransform>
-					</Image>
-
+					<Button Grid.Row="3">
+						<Image Source="Resources\Images\arrow.png">
+							<Image.LayoutTransform>
+								<RotateTransform Angle="180"/>
+							</Image.LayoutTransform>
+						</Image>
+					</Button>
 				</Grid>
 				
 				
