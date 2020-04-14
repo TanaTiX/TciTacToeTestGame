@@ -1,0 +1,11 @@
+﻿<Application x:Class="CalculatorHistory.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:CalculatorHistory"
+             xmlns:common="clr-namespace:Common"
+             StartupUri="MainWindow.xaml"
+             Startup="Application_Startup">
+    <Application.Resources>
+        <common:DictionaryKeyToValueConverter x:Key="DictionaryKeyToValueConverter"/>
+    </Application.Resources>
+</Application>

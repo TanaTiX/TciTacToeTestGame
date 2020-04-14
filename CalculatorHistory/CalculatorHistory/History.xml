@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DataRoot>
+  <OperatorsType>
+    <OperatorType Title="Addition" Symbol="+"/>
+    <OperatorType Title="Subtraction" Symbol="-"/>
+    <OperatorType Title="Multiplication" Symbol="*"/>
+    <OperatorType Title="Division" Symbol="/"/>
+  </OperatorsType>
+  <History>
+    <Action Left="10.0" Operator="Addition" Right="15.1" Result="25.1"/>
+    <Action Left="11.0" Operator="Subtraction" Right="15.1" Result="-4.1"/>
+    <Action Left="1000" Operator="Multiplication" Right="1510" Result="1510000"/>
+    <Action Left="100" Operator="Division" Right="5" Result="20"/>
+  </History>
+</DataRoot>
