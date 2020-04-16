@@ -26,9 +26,5 @@ namespace View
 		}
 
 
-		private void OnUpButtonClick(object sender, RoutedEventArgs e)
-		{
-			MessageBox.Show("test " + e);
-		}
 	}
 }

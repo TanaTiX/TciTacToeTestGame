@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace ViewModel
 {
@@ -16,5 +18,17 @@ namespace ViewModel
 			{"crossYes", @"Resources/Images/yes.png" },
 			{"zeroNo", @"Resources/Images/no.png" }
 		};
+
+		public RelayCommand ChangePieceIndexCommand { get; private set; }
+
+		public MainViewModel()
+		{
+			ChangePieceIndexCommand = new RelayCommand(ShowTestCommand);
+		}
+
+		public void ShowTestCommand()
+		{
+			MessageBox.Show("test");
+		}
 	}
 }
