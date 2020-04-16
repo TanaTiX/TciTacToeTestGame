@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,7 +45,6 @@
     <Compile Include="Cell.cs" />
     <Compile Include="IGameEndVM.cs" />
     <Compile Include="IGameVM.cs" />
-    <Compile Include="ImagesCollection.cs" />
     <Compile Include="IStatisticVM.cs" />
     <Compile Include="IFirstScreenVM.cs" />
     <Compile Include="GameStatuses.cs" />

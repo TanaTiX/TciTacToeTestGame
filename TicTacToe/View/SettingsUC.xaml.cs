@@ -21,10 +21,8 @@ namespace View
 	/// </summary>
 	public partial class SettingsUC : UserControl
 	{
-		private ImagesCollection _imagesCollection;
-		public SettingsUC(ImagesCollection imagesCollection)
+		public SettingsUC()
 		{
-			_imagesCollection = imagesCollection;
 			InitializeComponent();
 		}
 	}

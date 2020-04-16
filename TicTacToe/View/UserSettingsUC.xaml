@@ -4,8 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:View"
+			 xmlns:vm="clr-namespace:ViewModel;assembly=ViewModel"
+			 xmlns:com="clr-namespace:Common;assembly=Common"
              mc:Ignorable="d" Height="700">
+	
+	
 	<UserControl.Resources>
+		<vm:MainViewModel x:Key="MainViewModel"/>
 		<local:BoolToVisibilityConverter x:Key="InputToVisibility"/>
 		<Style TargetType="{x:Type TextBox}" x:Key="PropmptingTextBox">
 			<Setter Property="BorderBrush" Value="Black"/>
@@ -35,20 +40,17 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="auto"></RowDefinition>
 			<RowDefinition Height="auto"></RowDefinition>
-			<RowDefinition></RowDefinition>
+			<RowDefinition Height="auto"></RowDefinition>
 			<RowDefinition Height="auto"></RowDefinition>
 		</Grid.RowDefinitions>
-
 		<TextBox Grid.Row="0" FontWeight="Bold" FontSize="40" Style="{StaticResource PropmptingTextBox}"/>
-		<Button Grid.Row="1">
+		<Button Grid.Row="1" Click="OnUpButtonClick">
 			<Image  Source="Resources\Images\arrow.png"/>
 		</Button>
-		<ListBox Grid.Row="2" HorizontalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled">
-			<!--<Image Margin="0, 63, 0, 63" Width="200" Height="200" Source="Resources\Images\cross.png"></Image>
-			<Image Margin="0, 63, 0, 63" Width="200" Height="200" Source="Resources\Images\no.png"></Image>
-			<Image Margin="0, 63, 0, 63" Width="200" Height="200" Source="Resources\Images\yes.png"></Image>
-			<Image Margin="0, 63, 0, 63" Width="200" Height="200" Source="Resources\Images\zero.png"></Image> -->
-		</ListBox>
+		<Grid Grid.Row="2" Background="AliceBlue">
+			<Image Width="200" Height="200" Source="Resources\Images\cross.png"/>
+		</Grid>
+		
 		<Button Grid.Row="3">
 			<Image Source="Resources\Images\arrow.png">
 				<Image.LayoutTransform>
