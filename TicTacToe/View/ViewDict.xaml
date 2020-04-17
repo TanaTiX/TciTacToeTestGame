@@ -1,0 +1,57 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:View">
+    <local:SizeToTriangleConverte x:Key="SizeToTriangleConverte"/>
+    <ControlTemplate x:Key="ListScroll.ButtonTemplate">
+        <Grid x:Name="PART_Grid">
+            <Path Fill="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}" Stroke="{Binding BorderBrush, RelativeSource={RelativeSource TemplatedParent}}" StrokeThickness="{Binding BorderThickness, RelativeSource={RelativeSource TemplatedParent}}">
+                <Path.Data>
+                    <PathGeometry>
+                        <PathFigure IsClosed="True">
+                            <PathFigure.StartPoint>
+                                <MultiBinding Converter="{StaticResource SizeToTriangleConverte}" ConverterParameter="0">
+                                    <Binding ElementName="PART_Grid" Path="ActualWidth"/>
+                                    <Binding ElementName="PART_Grid" Path="ActualHeight"/>
+                                </MultiBinding>
+                            </PathFigure.StartPoint>
+                            <LineSegment>
+                                <LineSegment.Point>
+                                    <MultiBinding Converter="{StaticResource SizeToTriangleConverte}" ConverterParameter="1">
+                                        <Binding ElementName="PART_Grid" Path="ActualWidth"/>
+                                        <Binding ElementName="PART_Grid" Path="ActualHeight"/>
+                                    </MultiBinding>
+                                </LineSegment.Point>
+                            </LineSegment>
+                            <LineSegment>
+                                <LineSegment.Point>
+                                    <MultiBinding Converter="{StaticResource SizeToTriangleConverte}" ConverterParameter="2">
+                                        <Binding ElementName="PART_Grid" Path="ActualWidth"/>
+                                        <Binding ElementName="PART_Grid" Path="ActualHeight"/>
+                                    </MultiBinding>
+                                </LineSegment.Point>
+                            </LineSegment>
+                        </PathFigure>
+                    </PathGeometry>
+                </Path.Data>
+            </Path>
+            <ContentPresenter>
+                
+            </ContentPresenter>
+        </Grid>
+    </ControlTemplate>
+    <Style x:Key="{x:Type local:ListScroll}" TargetType="local:ListScroll">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

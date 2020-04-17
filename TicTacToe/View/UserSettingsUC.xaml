@@ -1,17 +1,28 @@
-﻿<UserControl x:Class="View.UserSettingsUC"
+﻿<local:ListScroll x:Name="PART_MainUC" x:Class="View.UserSettingsUC"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:View"
 			 xmlns:vm="clr-namespace:ViewModel;assembly=ViewModel"
-			 xmlns:com="clr-namespace:Common;assembly=Common"
-			 DataContext="MainViewModel"
+			 xmlns:com="clr-namespace:Common;assembly=Common" xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             DataContext="MainViewModel" SelectedIndex="1"
              mc:Ignorable="d" Height="700">
-
-
+    
+    <!--ItemsSource и SelectedIndex задан только на время разработки
+    Перед исполнением надо закоментировать
+    Изменяя SelectedIndex - можно менять выводимый элемент коллекции-->
+    <local:ListScroll.ItemsSource>
+        <x:Array Type="sys:String">
+            <sys:String>Resources/Images/cross.png</sys:String>
+            <sys:String>Resources/Images/zero.png</sys:String>
+            <sys:String>Resources/Images/no.png</sys:String>
+            <sys:String>Resources/Images/yes.png</sys:String>
+        </x:Array>
+    </local:ListScroll.ItemsSource>
+    
 	<UserControl.Resources>
-		<vm:MainViewModel x:Key="MainViewModel"/>
+		<!--<vm:MainViewModel x:Key="MainViewModel"/>
 		<local:BoolToVisibilityConverter x:Key="InputToVisibility"/>
 		<Style TargetType="{x:Type TextBox}" x:Key="PropmptingTextBox">
 			<Setter Property="BorderBrush" Value="Black"/>
@@ -35,7 +46,7 @@
 					</ControlTemplate>
 				</Setter.Value>
 			</Setter>
-		</Style>
+		</Style>-->
 	</UserControl.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
@@ -44,20 +55,29 @@
 			<RowDefinition Height="auto"></RowDefinition>
 			<RowDefinition Height="auto"></RowDefinition>
 		</Grid.RowDefinitions>
-		<TextBox Grid.Row="0" FontWeight="Bold" FontSize="40" Style="{StaticResource PropmptingTextBox}"/>
-		<Button Grid.Row="1" Command="{Binding ChangePieceIndexCommand}">
+        <Viewbox>
+            <TextBox  FontWeight="Bold" FontSize="40" Text="{Binding Title, ElementName=PART_MainUC}"/>
+        </Viewbox>
+        <Button Grid.Row="1"
+                Command="{Binding NextIndexCommand, ElementName=PART_MainUC, Mode=OneWay}"
+                CommandParameter="-1">
 			<Image Source="Resources\Images\arrow.png"/>
 		</Button>
 		<Grid Grid.Row="2" Background="AliceBlue">
-			<Image Width="200" Height="200" Source="Resources\Images\cross.png"/>
-		</Grid>
-		
-		<Button Grid.Row="3">
-			<Image Source="Resources\Images\arrow.png">
+			<Image Width="200" Height="200" Source="{Binding SelectedItem, ElementName=PART_MainUC}" />
+            
+            <!--TextBlock для отладки-->
+            <TextBlock Text="{Binding SelectedIndex, ElementName=PART_MainUC}" FontSize="30" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        </Grid>
+
+        <Button Grid.Row="3"
+                Command="{Binding NextIndexCommand, ElementName=PART_MainUC, Mode=OneWay}"
+                CommandParameter="1">
+            <Image Source="Resources\Images\arrow.png">
 				<Image.LayoutTransform>
 					<RotateTransform Angle="180"/>
 				</Image.LayoutTransform>
 			</Image>
 		</Button>
 	</Grid>
-</UserControl>
+</local:ListScroll>

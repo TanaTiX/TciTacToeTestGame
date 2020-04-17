@@ -26,7 +26,7 @@ namespace ViewModel
 			ChangePieceIndexCommand = new RelayCommand(ShowTestCommand);
 		}
 
-		public void ShowTestCommand()
+		public void ShowTestCommand(object parameter)
 		{
 			MessageBox.Show("test");
 		}

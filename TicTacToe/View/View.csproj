@@ -61,6 +61,7 @@
       <DependentUpon>GameUC.xaml</DependentUpon>
     </Compile>
     <Compile Include="GameVM.cs" />
+    <Compile Include="ListScroll.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -74,13 +75,18 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="RelayCommand.cs" />
     <Compile Include="SettingsUC.xaml.cs">
       <DependentUpon>SettingsUC.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SizeToTriangleConverte.cs" />
     <Compile Include="StatisticUC.xaml.cs">
       <DependentUpon>StatisticUC.xaml</DependentUpon>
     </Compile>
     <Compile Include="StatisticVM.cs" />
+    <Compile Include="UserControl1.xaml.cs">
+      <DependentUpon>UserControl1.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserSettingsUC.xaml.cs">
       <DependentUpon>UserSettingsUC.xaml</DependentUpon>
     </Compile>
@@ -124,33 +130,35 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="UserControl1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserSettingsUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ViewDict.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Resource Include="Resources\Images\zero.png" />
-    <Resource Include="Resources\Images\yes.png" />
-    <Resource Include="Resources\Images\cross.png" />
-    <Resource Include="Resources\Images\no.png" />
-    <Resource Include="Resources\Images\arrow.png" />
-    <Content Include="Resources\Images\arrow.png">
+    <Resource Include="Resources\Images\arrow.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Images\cross.png">
+    </Resource>
+    <Resource Include="Resources\Images\cross.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Images\no.png">
+    </Resource>
+    <Resource Include="Resources\Images\no.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Images\yes.png">
+    </Resource>
+    <Resource Include="Resources\Images\yes.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Images\zero.png">
+    </Resource>
+    <Resource Include="Resources\Images\zero.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

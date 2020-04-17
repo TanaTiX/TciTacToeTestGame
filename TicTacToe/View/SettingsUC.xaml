@@ -17,20 +17,21 @@
 			<RowDefinition Height="40"></RowDefinition>
 		</Grid.RowDefinitions>
 		<TextBlock Grid.Row="0" Background="Gold" HorizontalAlignment="Stretch" TextAlignment="Center" Height="auto">Настройки</TextBlock>
-		<StackPanel Grid.Row="1" Orientation="Horizontal" Width="600">
-			<!--Хорошо бы переделать-->
+		<!--<StackPanel Grid.Row="1" Orientation="Horizontal" Width="600">
+			Хорошо бы переделать
 			<Label Width="300" Background="AliceBlue" HorizontalContentAlignment="Center" Content="Пользователь № 1"></Label>
 			<Label Width="300" Background="AliceBlue" HorizontalContentAlignment="Center" Content="Пользователь № 2"></Label>
-		</StackPanel>
+		</StackPanel>-->
 		<Grid Grid.Row="2">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition/>
 				<ColumnDefinition/>
 			</Grid.ColumnDefinitions>
 
-			<local:UserSettingsUC Grid.Column="0"/>
-			<local:UserSettingsUC Grid.Column="1"/>
-		</Grid>
+			<local:UserSettingsUC Grid.Column="0" Title="Пользователь № 1"/>
+			<local:UserSettingsUC Grid.Column="1" Title="Пользователь № 2"/>
+            <!--<local:UserControl1/>-->
+        </Grid>
 		<Button Grid.Row="3" Command="{Binding ExitSettingsCommand}">Сохранить настройки и выйти</Button>
 
 	</Grid>
