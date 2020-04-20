@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Gu.Wpf.DataGrid2D, Version=0.2.3.0, Culture=neutral, PublicKeyToken=34988ea4e73235be, processorArchitecture=MSIL">
+      <HintPath>..\packages\Gu.Wpf.DataGrid2D.0.2.3\lib\net45\Gu.Wpf.DataGrid2D.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -84,9 +87,6 @@
       <DependentUpon>StatisticUC.xaml</DependentUpon>
     </Compile>
     <Compile Include="StatisticVM.cs" />
-    <Compile Include="UserControl1.xaml.cs">
-      <DependentUpon>UserControl1.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserSettingsUC.xaml.cs">
       <DependentUpon>UserSettingsUC.xaml</DependentUpon>
     </Compile>
@@ -94,6 +94,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -103,6 +104,10 @@
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{33ed3377-dcec-4334-9bb9-6d35bd6102d7}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ModelLibrary\ModelLibrary.csproj">
+      <Project>{e66a3b93-4774-4f21-a7d2-5be8959d87e0}</Project>
+      <Name>ModelLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="..\ViewModel\ViewModel.csproj">
       <Project>{9e41bcfc-f7b3-41c9-9050-a81dba5cd9a0}</Project>
@@ -129,10 +134,6 @@
     <Page Include="StatisticUC.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UserControl1.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserSettingsUC.xaml">
       <SubType>Designer</SubType>

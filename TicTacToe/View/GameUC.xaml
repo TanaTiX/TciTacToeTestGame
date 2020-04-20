@@ -5,20 +5,55 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:View"
 			 xmlns:comm="clr-namespace:Common;assembly=Common"
+			 xmlns:model="ModelLibrary"
+			 xmlns:dataGrid2D="http://gu.se/DataGrid2D"
              mc:Ignorable="d"
              d:DesignHeight="700" d:DesignWidth="600">
 	<UserControl.DataContext>
 		<local:GameVM />
 	</UserControl.DataContext>
-    <Grid>
+	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="100*"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition/>
 			<RowDefinition Height="auto"/>
 		</Grid.RowDefinitions>
-		<!--<Image Source="Resources/Images/cross.png"></Image>-->
-			<DataGrid Grid.Row="0" Background="Azure" ItemsSource="{Binding Cells}" BorderBrush="Black" AutoGenerateColumns="False" HeadersVisibility="None">
+		<TextBlock Grid.Row="0" HorizontalAlignment="Center">Вася vs Петя</TextBlock>
+
+		<Grid Grid.Row="1" Background="AliceBlue"
+			  Width="{Binding Height, RelativeSource={RelativeSource Self}}"
+			  Height="{Binding Width, RelativeSource={RelativeSource Self}}">
 			
-		</DataGrid>
-		<Button Grid.Row="1">sndgr</Button>
-    </Grid>
+			<DataGrid Background="LightPink" Margin="10"
+				x:Name="AutoColumns"
+				dataGrid2D:ItemsSource.Array2D="{Binding Path=Data2D}"
+				SelectionUnit="Cell"
+				IsReadOnly="True"
+				>
+				<dataGrid2D:Cell.Template>
+					<DataTemplate>
+						<Image Width="50" Height="50"/>
+					</DataTemplate>
+				</dataGrid2D:Cell.Template>
+				<dataGrid2D:Cell.EditingTemplate>
+					<DataTemplate>
+
+						<Image Width="10" Height="10" />
+					</DataTemplate>
+				</dataGrid2D:Cell.EditingTemplate>
+			</DataGrid>
+		</Grid>
+		<!--<DataGrid Grid.Row="1" HeadersVisibility="None" dataGrid2D:ItemsSource.Array2D="{Binding Data2D}">
+			<DataGrid.CellStyle>
+				<Style>
+					<Setter TargetName="Text2" Property="TextBlock.Text" Value="555"/>
+					<Style.Resources>
+						<TextBlock x:Name="Text2" Text="{Binding Text2}"/>
+					</Style.Resources>
+				</Style>
+			</DataGrid.CellStyle>
+		</DataGrid>-->
+
+		<Button Grid.Row="2">Сдаться</Button>
+	</Grid>
 </UserControl>
