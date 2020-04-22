@@ -38,11 +38,11 @@
 					</ItemsPanelTemplate>
 				</ItemsControl.ItemsPanel>
 				<ItemsControl.ItemTemplate>
-					<DataTemplate DataType="{x:Type comm:CellDto}">
+					<DataTemplate x:Name="CellTestInfo" DataType="{x:Type comm:CellDto}">
 						<TextBlock x:Name="TestTexy" Width="150" Height="150">
 							<TextBlock.Text>
 								<MultiBinding Converter="{StaticResource CellConverter}">
-									<Binding ElementName="TestText" Path="."/>
+									<Binding ElementName="CellTestInfo" Path="."/>
 								</MultiBinding>
 							</TextBlock.Text>
 						</TextBlock>
