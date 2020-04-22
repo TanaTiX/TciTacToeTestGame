@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace Common
 {
@@ -17,6 +18,6 @@ namespace Common
 		int ColumnsCount { get; }
 
 		/// <summary>Список ячеек игрвого поля</summary>
-		CellDto[] Cells { get; }
+		ObservableCollection<CellDto> Cells { get; }
 	}
 }
