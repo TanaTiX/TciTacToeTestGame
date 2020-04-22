@@ -42,7 +42,7 @@
 						<TextBlock x:Name="TestTexy" Width="150" Height="150">
 							<TextBlock.Text>
 								<MultiBinding Converter="{StaticResource CellConverter}">
-									<Binding ElementName="TestText" Path="Name"/>
+									<Binding ElementName="TestText" Path="."/>
 								</MultiBinding>
 							</TextBlock.Text>
 						</TextBlock>
