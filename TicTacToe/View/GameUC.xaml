@@ -9,6 +9,8 @@
 			 xmlns:dataGrid2D="http://gu.se/DataGrid2D"
              mc:Ignorable="d"
              d:DesignHeight="700" d:DesignWidth="600">
+	
+	
 	<UserControl.DataContext>
 		<local:GameVM />
 	</UserControl.DataContext>
@@ -20,39 +22,53 @@
 		</Grid.RowDefinitions>
 		<TextBlock Grid.Row="0" HorizontalAlignment="Center">Вася vs Петя</TextBlock>
 
-		<Grid Grid.Row="1" Background="AliceBlue"
+		<Grid Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Background="AliceBlue">
+			
+			<ItemsControl ItemsSource="{Binding Cells}">
+				<ItemsControl.Resources>
+					<local:CellToImageLinkConverter x:Key="CellConverter"/>
+				</ItemsControl.Resources>
+				<ItemsControl.ItemsPanel>
+					
+					<ItemsPanelTemplate>
+
+						<UniformGrid Background="AliceBlue" Columns="3" Rows="3">
+						
+						</UniformGrid>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate DataType="{x:Type comm:CellDto}">
+						<TextBlock x:Name="TestTexy" Width="150" Height="150">
+							<TextBlock.Text>
+								<MultiBinding Converter="{StaticResource CellConverter}">
+									<Binding ElementName="TestText" Path="Name"/>
+								</MultiBinding>
+							</TextBlock.Text>
+						</TextBlock>
+						<!--<TextBlock Width="150" Height="150" Text="{Binding Name}"/>-->
+						<!--<Image Source="Resources/Images/cross.png"/>-->
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</Grid>
+		<!--example-->
+		<!--<Grid Grid.Row="1" Background="AliceBlue"
 			  Width="{Binding Height, RelativeSource={RelativeSource Self}}"
 			  Height="{Binding Width, RelativeSource={RelativeSource Self}}">
-			
+
 			<DataGrid Background="LightPink" Margin="10"
 				x:Name="AutoColumns"
 				dataGrid2D:ItemsSource.Array2D="{Binding Path=Data2D}"
 				SelectionUnit="Cell"
-				IsReadOnly="True"
-				>
+				IsReadOnly="True">
 				<dataGrid2D:Cell.Template>
 					<DataTemplate>
-						<Image Width="50" Height="50"/>
+						<TextBlock Width="150" Height="150" Text="{Binding Path=.}"/>
 					</DataTemplate>
 				</dataGrid2D:Cell.Template>
-				<dataGrid2D:Cell.EditingTemplate>
-					<DataTemplate>
-
-						<Image Width="10" Height="10" />
-					</DataTemplate>
-				</dataGrid2D:Cell.EditingTemplate>
 			</DataGrid>
-		</Grid>
-		<!--<DataGrid Grid.Row="1" HeadersVisibility="None" dataGrid2D:ItemsSource.Array2D="{Binding Data2D}">
-			<DataGrid.CellStyle>
-				<Style>
-					<Setter TargetName="Text2" Property="TextBlock.Text" Value="555"/>
-					<Style.Resources>
-						<TextBlock x:Name="Text2" Text="{Binding Text2}"/>
-					</Style.Resources>
-				</Style>
-			</DataGrid.CellStyle>
-		</DataGrid>-->
+		</Grid>-->
 
 		<Button Grid.Row="2">Сдаться</Button>
 	</Grid>

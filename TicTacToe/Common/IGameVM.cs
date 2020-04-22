@@ -17,6 +17,6 @@ namespace Common
 		int ColumnsCount { get; }
 
 		/// <summary>Список ячеек игрвого поля</summary>
-		CellDto[][] Cells { get; }
+		CellDto[] Cells { get; }
 	}
 }
