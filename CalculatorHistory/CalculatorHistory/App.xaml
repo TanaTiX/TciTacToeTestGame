@@ -6,6 +6,12 @@
              StartupUri="MainWindow.xaml"
              Startup="Application_Startup">
     <Application.Resources>
-        <common:DictionaryKeyToValueConverter x:Key="DictionaryKeyToValueConverter"/>
+
+        <common:DictionaryKeyToValueConverter x:Key="DictionaryKeyToValueConverter">
+            <!--<BitmapImage x:Key="Addition" UriSource="Images\plus.png"/>
+            <BitmapImage x:Key="Subtraction" UriSource="Images\subt.png"/>-->
+            <BitmapImage x:Key="Multiplication" UriSource="Images\multi.png"/>
+            <BitmapImage x:Key="Division" UriSource="Images\div.png"/>
+        </common:DictionaryKeyToValueConverter>
     </Application.Resources>
 </Application>
