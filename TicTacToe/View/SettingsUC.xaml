@@ -8,12 +8,13 @@
 			 DataContext="{x:Type comm:ISettingsVM}"
              mc:Ignorable="d"
              d:DesignHeight="700" d:DesignWidth="600">
-
+	<UserControl.Resources>
+		<local:UserSettingsToBoolConverter x:Key="UserSettingsToBoolConverter"/>
+	</UserControl.Resources>
 	<Grid VerticalAlignment="Stretch">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="40"></RowDefinition>
 			<RowDefinition></RowDefinition>
-			<!--<RowDefinition></RowDefinition>-->
 			<RowDefinition Height="40"></RowDefinition>
 		</Grid.RowDefinitions>
 		
@@ -24,11 +25,18 @@
 				<ColumnDefinition/>
 			</Grid.ColumnDefinitions>
 
-			<local:UserSettingsUC Grid.Column="0" Title="Пользователь № 1"/>
-			<local:UserSettingsUC Grid.Column="1" Title="Пользователь № 2"/>
+			<local:UserSettingsUC x:Name="User1" Grid.Column="0" Title="Пользователь № 1"/>
+			<local:UserSettingsUC x:Name="User2" Grid.Column="1" Title="Пользователь № 2"/>
             <!--<local:UserControl1/>-->
         </Grid>
-		<Button Grid.Row="2" Command="{Binding ExitSettingsCommand}">Сохранить настройки и выйти</Button>
+		<Button Grid.Row="2" Command="{Binding ExitSettingsCommand}" Content="Сохранить настройки и выйти">
+			<Button.IsEnabled>
+				<MultiBinding Converter="{StaticResource UserSettingsToBoolConverter}" Mode="OneWay">
+					<Binding ElementName="User1" Path="SelectedIndex"/>
+					<Binding ElementName="User2" Path="SelectedIndex"/>
+				</MultiBinding>
+			</Button.IsEnabled>
+		</Button>
 
 	</Grid>
 </UserControl>

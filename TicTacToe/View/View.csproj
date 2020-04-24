@@ -85,6 +85,7 @@
       <DependentUpon>StatisticUC.xaml</DependentUpon>
     </Compile>
     <Compile Include="StatisticVM.cs" />
+    <Compile Include="UserSettingsToBoolConverter.cs" />
     <Compile Include="UserSettingsUC.xaml.cs">
       <DependentUpon>UserSettingsUC.xaml</DependentUpon>
     </Compile>
@@ -98,6 +99,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommonUtils\CommonUtils.csproj">
+      <Project>{19BF447A-8260-40AE-BAE9-DD343CF9596B}</Project>
+      <Name>CommonUtils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{33ed3377-dcec-4334-9bb9-6d35bd6102d7}</Project>
       <Name>Common</Name>

@@ -67,7 +67,7 @@ namespace AppWPF
 			
 			window.Width = 600;
 			window.Height = 700;
-			ChangeWindowContent(typeof(IGameVM));
+			ChangeWindowContent(typeof(ISettingsVM));
 
 			window.Show();
 		}
