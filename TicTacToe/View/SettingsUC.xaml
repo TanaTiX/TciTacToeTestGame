@@ -4,13 +4,25 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:View"
-			 xmlns:comm="clr-namespace:Common;assembly=Common"
-			 DataContext="{x:Type comm:ISettingsVM}"
+			 xmlns:comm="clr-namespace:Common;assembly=Common" xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d"
              d:DesignHeight="700" d:DesignWidth="600">
+			 <!--DataContext="{x:Type comm:ISettingsVM}"-->
 	<UserControl.Resources>
 		<local:UserSettingsSaveButtonConverter x:Key="UserSettingsSaveButtonConverter"/>
+		<x:Array Type="ImageSource" x:Key="Images">
+			<BitmapImage>Resources/Images/cross.png</BitmapImage>
+			<BitmapImage>Resources/Images/zero.png</BitmapImage>
+			<BitmapImage>Resources/Images/no.png</BitmapImage>
+			<BitmapImage>Resources/Images/yes.png</BitmapImage>
+		</x:Array>
+
 	</UserControl.Resources>
+	<d:UserControl.DataContext>
+		<local:SettingsVM PiecesCollection="{StaticResource Images}">
+			
+		</local:SettingsVM>
+	</d:UserControl.DataContext>
 	<Grid VerticalAlignment="Stretch">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="40"></RowDefinition>
@@ -25,18 +37,35 @@
 				<ColumnDefinition/>
 			</Grid.ColumnDefinitions>
 
-			<local:UserSettingsUC x:Name="User1" Grid.Column="0" Title="Пользователь № 1"/>
-			<local:UserSettingsUC x:Name="User2" Grid.Column="1" Title="Пользователь № 2"/>
+			<local:UserSettingsUC x:Name="User1" Grid.Column="0" Title="{Binding FirstGamer.UserName, Mode=TwoWay}"
+								  SelectedItem="{Binding FirstGamer.Image}"
+								  ItemsSource="{Binding PiecesCollection}"
+								  SelectedIndex="0"/>
+			<local:UserSettingsUC x:Name="User2" Grid.Column="1" Title="{Binding SecondGamer.UserName}"
+								  ItemsSource="{Binding PiecesCollection}"
+								  SelectedItem="{Binding SecondGamer.Image}"
+								  SelectedIndex="1"/>
             <!--<local:UserControl1/>-->
         </Grid>
-		<Button Grid.Row="2" Command="{Binding ExitSettingsCommand}" CommandParameter="">
-			<Button.Content>
+		<Button Grid.Row="2" Command="{Binding StartNewGameCommand, Mode=OneWay}" CommandParameter="">
+			<!--<Button.Content>
 				<MultiBinding Converter="{StaticResource UserSettingsSaveButtonConverter}" Mode="OneWay">
 					<Binding ElementName="User1" Path="SelectedItem"/>
 					<Binding ElementName="User2" Path="SelectedItem"/>
 				</MultiBinding>
-			</Button.Content>
+			</Button.Content>-->
+			<Button.Style>
+				<Style TargetType="Button">
+					<Setter Property="Content" Value="Сохранить настройки и выйти"/>
+					<Style.Triggers>
+						<Trigger Property="IsEnabled" Value="False">
+							<Setter Property="Content" Value="Необходимо выбрать 2 разных игровых знака и имени"/>
+						</Trigger>
+					</Style.Triggers>
+				</Style>
+			</Button.Style>
 		</Button>
-
+		<TextBlock HorizontalAlignment="Left" VerticalAlignment="Top"
+				   Text="{Binding FirstGamer.Image}"/>
 	</Grid>
 </UserControl>

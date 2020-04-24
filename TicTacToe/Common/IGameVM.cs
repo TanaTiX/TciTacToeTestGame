@@ -1,5 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Common
 {
@@ -19,5 +21,7 @@ namespace Common
 
 		/// <summary>Список ячеек игрвого поля</summary>
 		ObservableCollection<CellDto> Cells { get; }
+		/// <summary>Словарь рисунков для контекста ячееек</summary>
+		Dictionary<CellContent, ImageSource> Picturies { get; }
 	}
 }

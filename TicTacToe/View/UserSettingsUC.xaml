@@ -3,26 +3,26 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:View"
+             xmlns:local="clr-namespace:View" FontSize="25"
 			 xmlns:vm="clr-namespace:ViewModel;assembly=ViewModel"
 			 xmlns:com="clr-namespace:Common;assembly=Common" xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             DataContext="MainViewModel" SelectedIndex="1"
+             DataContext="MainViewModel" Background="AliceBlue"
              mc:Ignorable="d">
-    
+    <!--SelectedIndex="1"-->
     <!--ItemsSource и SelectedIndex задан только на время разработки
     Перед исполнением надо закоментировать
     Изменяя SelectedIndex - можно менять выводимый элемент коллекции-->
 	
-    <local:ListScroll.ItemsSource>
+    <!--<local:ListScroll.ItemsSource>
         <x:Array Type="sys:String">
             <sys:String>Resources/Images/cross.png</sys:String>
             <sys:String>Resources/Images/zero.png</sys:String>
             <sys:String>Resources/Images/no.png</sys:String>
             <sys:String>Resources/Images/yes.png</sys:String>
         </x:Array>
-    </local:ListScroll.ItemsSource>
+    </local:ListScroll.ItemsSource>-->
     
-	<UserControl.Resources>
+	<!--<UserControl.Resources>
 		<vm:MainViewModel x:Key="MainViewModel"/>
 		<local:BoolToVisibilityConverter x:Key="InputToVisibility"/>
 		<Style TargetType="{x:Type TextBox}" x:Key="PropmptingTextBox">
@@ -34,7 +34,7 @@
 					<ControlTemplate TargetType="{x:Type TextBox}">
 						<Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
 							<Grid>
-								<TextBlock x:Name="watermarkText" TextAlignment="Center" Text="Ваше имя..." Width="300">
+								<TextBlock x:Name="watermarkText" TextAlignment="Center" Text="Ваше имя..." Width="300" >
 									<TextBlock.Visibility>
 										<MultiBinding Converter="{StaticResource InputToVisibility}">
 											<Binding ElementName="inputText" Path="IsFocused"/>
@@ -51,7 +51,7 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
-	</UserControl.Resources>
+	</UserControl.Resources>-->
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="auto"></RowDefinition>
@@ -59,10 +59,26 @@
 			<RowDefinition Height="100*"></RowDefinition>
 			<RowDefinition Height="auto"></RowDefinition>
 		</Grid.RowDefinitions>
-        <Viewbox Grid.Row="0">
-			<TextBox Height="60" Style="{StaticResource PropmptingTextBox}" FontWeight="Bold" FontSize="40" BorderBrush="Transparent" BorderThickness="0" Text="{Binding Title, ElementName=PART_MainUC}"/>
+			<Border Background="White">
+				<Grid>
+					<TextBlock x:Name="watermarkText" TextAlignment="Center" Text="Ваше имя..." Opacity="0.25"/>
+					<TextBox x:Name="inputText" TextAlignment="Center" Background="Transparent" TextChanged="inputText_TextChanged" Text="{Binding Title, ElementName=PART_MainUC}" />
+				<x:Code>
+					<![CDATA[
+					private void inputText_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+					{
+						if (string.IsNullOrWhiteSpace(inputText.Text))
+							watermarkText.Visibility = System.Windows.Visibility.Visible;
+						else
+							watermarkText.Visibility = System.Windows.Visibility.Hidden;
+					}
+					]]>
+				</x:Code>
+				</Grid>
+			</Border>
+
+			<!--<TextBox Height="60" Style="{StaticResource PropmptingTextBox}" FontWeight="Bold" FontSize="40" BorderBrush="Transparent" BorderThickness="0" Text="{Binding Title, ElementName=PART_MainUC}"/>-->
             <!--<TextBox  FontWeight="Bold" FontSize="40" Text="{Binding Title, ElementName=PART_MainUC}"/>-->
-        </Viewbox>
         <Button Grid.Row="1"
                 Command="{Binding NextIndexCommand, ElementName=PART_MainUC, Mode=OneWay}"
                 CommandParameter="-1">

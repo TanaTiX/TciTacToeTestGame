@@ -96,7 +96,7 @@ namespace View
 		// Using a DependencyProperty as the backing store for SelectedIndex.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty SelectedIndexProperty =
 			DependencyProperty.Register(nameof(SelectedIndex), typeof(int), typeof(ListScroll),
-				new PropertyMetadata(-1, (d, e) => ((ListScroll)d).SelectedIndexChanged(e)));
+				new FrameworkPropertyMetadata(-1, (d, e) => ((ListScroll)d).SelectedIndexChanged(e)) { DefaultUpdateSourceTrigger=System.Windows.Data.UpdateSourceTrigger.PropertyChanged, BindsTwoWayByDefault=true});
 
 		private void SelectedIndexChanged(DependencyPropertyChangedEventArgs e)
 		{
@@ -116,7 +116,7 @@ namespace View
 		// Using a DependencyProperty as the backing store for SelectedItem.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty SelectedItemProperty =
 			DependencyProperty.Register(nameof(SelectedItem), typeof(object), typeof(ListScroll),
-				new PropertyMetadata(null, (d, e) => ((ListScroll)d).SelectedItemChanged(e)));
+				new FrameworkPropertyMetadata(null, (d, e) => ((ListScroll)d).SelectedItemChanged(e)){ DefaultUpdateSourceTrigger=System.Windows.Data.UpdateSourceTrigger.PropertyChanged, BindsTwoWayByDefault=true});
 
 		private void SelectedItemChanged(DependencyPropertyChangedEventArgs e)
 		{
@@ -246,7 +246,7 @@ namespace View
 
 		// Using a DependencyProperty as the backing store for Title.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty TitleProperty =
-			DependencyProperty.Register(nameof(Title), typeof(object), typeof(ListScroll), new PropertyMetadata(null));
+			DependencyProperty.Register(nameof(Title), typeof(object), typeof(ListScroll), new FrameworkPropertyMetadata(null) { DefaultUpdateSourceTrigger = System.Windows.Data.UpdateSourceTrigger.PropertyChanged, BindsTwoWayByDefault = true });
 
 
 	}

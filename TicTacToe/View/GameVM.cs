@@ -29,7 +29,7 @@ namespace View
 		//string[] data2D = { "Resources/Images/cross.png", "true", "false" , "true", "true", "false", "true", "true", "false" };
 
 
-		private string[] _data2D;
+		//private string[] _data2D;
 		//public string[] Data2D
 		//{
 		//	get { return _data2D; }

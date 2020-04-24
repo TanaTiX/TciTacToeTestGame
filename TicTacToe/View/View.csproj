@@ -80,6 +80,7 @@
     <Compile Include="SettingsUC.xaml.cs">
       <DependentUpon>SettingsUC.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SettingsVM.cs" />
     <Compile Include="SizeToTriangleConverte.cs" />
     <Compile Include="StatisticUC.xaml.cs">
       <DependentUpon>StatisticUC.xaml</DependentUpon>
