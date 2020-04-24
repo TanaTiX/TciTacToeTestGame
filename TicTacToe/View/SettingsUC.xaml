@@ -9,7 +9,7 @@
              mc:Ignorable="d"
              d:DesignHeight="700" d:DesignWidth="600">
 	<UserControl.Resources>
-		<local:UserSettingsToBoolConverter x:Key="UserSettingsToBoolConverter"/>
+		<local:UserSettingsSaveButtonConverter x:Key="UserSettingsSaveButtonConverter"/>
 	</UserControl.Resources>
 	<Grid VerticalAlignment="Stretch">
 		<Grid.RowDefinitions>
@@ -29,13 +29,13 @@
 			<local:UserSettingsUC x:Name="User2" Grid.Column="1" Title="Пользователь № 2"/>
             <!--<local:UserControl1/>-->
         </Grid>
-		<Button Grid.Row="2" Command="{Binding ExitSettingsCommand}" Content="Сохранить настройки и выйти">
-			<Button.IsEnabled>
-				<MultiBinding Converter="{StaticResource UserSettingsToBoolConverter}" Mode="OneWay">
-					<Binding ElementName="User1" Path="SelectedIndex"/>
-					<Binding ElementName="User2" Path="SelectedIndex"/>
+		<Button Grid.Row="2" Command="{Binding ExitSettingsCommand}" CommandParameter="">
+			<Button.Content>
+				<MultiBinding Converter="{StaticResource UserSettingsSaveButtonConverter}" Mode="OneWay">
+					<Binding ElementName="User1" Path="SelectedItem"/>
+					<Binding ElementName="User2" Path="SelectedItem"/>
 				</MultiBinding>
-			</Button.IsEnabled>
+			</Button.Content>
 		</Button>
 
 	</Grid>

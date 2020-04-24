@@ -85,7 +85,7 @@
       <DependentUpon>StatisticUC.xaml</DependentUpon>
     </Compile>
     <Compile Include="StatisticVM.cs" />
-    <Compile Include="UserSettingsToBoolConverter.cs" />
+    <Compile Include="UserSettingsSaveButtonConverter.cs" />
     <Compile Include="UserSettingsUC.xaml.cs">
       <DependentUpon>UserSettingsUC.xaml</DependentUpon>
     </Compile>

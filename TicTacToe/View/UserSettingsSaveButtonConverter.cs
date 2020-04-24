@@ -10,12 +10,18 @@ using System.Windows;
 
 namespace View
 {
-	public class UserSettingsToBoolConverter : IMultiValueConverter
+	public class UserSettingsSaveButtonConverter : IMultiValueConverter
 	{
 		public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
 		{
-			Utils.Log(values);//test
-			return values[0] != values[1];
+			if(values[0].ToString() != values[1].ToString())
+			{
+				return "Сохранить настройки и выйти";
+			}
+			else
+			{
+				return "Необходимо выбрать 2 разных игровых знака";
+			}
 		}
 
 		public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
