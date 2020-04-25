@@ -18,11 +18,12 @@ namespace WpfControlLibrary
     /// <summary>
     /// Логика взаимодействия для UserControl1.xaml
     /// </summary>
-    public partial class UserControl1 : UserControl
+    public partial class UserControlTest : UserControl
     {
-        public UserControl1()
+        public UserControlTest()
         {
             InitializeComponent();
+          
         }
     }
 }
