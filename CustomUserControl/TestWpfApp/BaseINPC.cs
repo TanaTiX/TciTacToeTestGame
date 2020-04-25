@@ -11,10 +11,13 @@ namespace TestWpfApp
 		protected void Set<T>(ref T fieldProperty, T valueProperty, [CallerMemberName]string propertyName = "")
 		{
 			if (
-					(fieldProperty==null && valueProperty != null)
+					(fieldProperty == null && valueProperty != null)
 					|| (fieldProperty != null && !fieldProperty.Equals(valueProperty))
 				)
+			{
+				fieldProperty = valueProperty;
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 	}
 }

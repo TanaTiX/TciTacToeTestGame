@@ -20,9 +20,22 @@ namespace TestWpfApp
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		ViewModel viewModel;
 		public MainWindow()
 		{
 			InitializeComponent();
+			viewModel = (ViewModel)DataContext;
+			viewModel.PropertyChanged += ViewModel_PropertyChanged;
+		}
+
+		private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			MessageBox.Show($"New Text=\"{viewModel.Text}\"");
+		}
+
+		private void StackPanel_Loaded(object sender, RoutedEventArgs e)
+		{
+			viewModel.Text = "Текст после загрузки";
 		}
 	}
 }

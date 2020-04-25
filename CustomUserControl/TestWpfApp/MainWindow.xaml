@@ -9,7 +9,7 @@
     <Window.DataContext>
         <local:ViewModel Text="Пробный Текст" />
     </Window.DataContext>
-    <StackPanel>
+    <StackPanel Loaded="StackPanel_Loaded">
         <ucLib:UserControlTest Tag="{Binding Text}" />
     </StackPanel>
 </Window>
