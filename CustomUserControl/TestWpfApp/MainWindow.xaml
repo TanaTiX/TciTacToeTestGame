@@ -7,9 +7,13 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.DataContext>
-        <local:ViewModel Text="Пробный Текст" />
+        <local:ViewModel Text="Пробный Текст" TextSecond="Пробный Второй Текст"/>
     </Window.DataContext>
-    <StackPanel Loaded="StackPanel_Loaded">
-        <ucLib:UserControlTest Tag="{Binding Text}" />
+    <StackPanel>
+        <ucLib:UserControlTest Tag="{Binding Text}" Title="{Binding TextSecond}"/>
+        <TextBox x:Name="textBox1"/>
+        <Button Content="Изменить Первый текст" Command="{Binding ChangeText, Mode=OneWay}" CommandParameter="{Binding Text, ElementName=textBox1}"/>
+        <TextBox x:Name="textBox"/>
+        <Button Content="Изменить Второй текст" Command="{Binding ChangeTextSecond, Mode=OneWay}" CommandParameter="{Binding Text, ElementName=textBox}"/>
     </StackPanel>
 </Window>
