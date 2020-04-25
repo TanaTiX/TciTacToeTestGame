@@ -1,7 +1,6 @@
-﻿<view:ListScroll  
+﻿<view:ListScroll x:Class="WpfControlLibrary.UserControlTest"
     xmlns:view="clr-namespace:View;assembly=View" 
     x:Name="PART_MainUC"
-    x:Class="WpfControlLibrary.UserControlTest"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 

@@ -1,6 +1,6 @@
-﻿<view:ListScroll x:Name="PART_MainUC"
-    x:Class="WpfControlLibrary.UserSettingsUC"
+﻿<view:ListScroll
     xmlns:view="clr-namespace:View;assembly=View"
+    x:Name="PART_MainUC" x:Class="WpfControlLibrary.UserSettingsUC"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -8,24 +8,25 @@
     xmlns:local="clr-namespace:WpfControlLibrary" FontSize="25"
 	xmlns:vm="clr-namespace:ViewModel;assembly=ViewModel"
 	xmlns:com="clr-namespace:Common;assembly=Common" xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    DataContext="MainViewModel" Background="AliceBlue"
+     Background="AliceBlue"
     mc:Ignorable="d" Title="213213"
     d:DesignHeight="450" d:DesignWidth="150"
     SelectedIndex="1">
+    <!--DataContext="MainViewModel"-->
     
     <!--SelectedIndex="1"-->
     <!--ItemsSource и SelectedIndex задан только на время разработки
     Перед исполнением надо закоментировать
     Изменяя SelectedIndex - можно менять выводимый элемент коллекции-->
 
-    <!--<view:ListScroll.ItemsSource>
+    <view:ListScroll.ItemsSource>
         <x:Array Type="sys:String">
             <sys:String>Resources/Images/cross.png</sys:String>
             <sys:String>Resources/Images/zero.png</sys:String>
             <sys:String>Resources/Images/no.png</sys:String>
             <sys:String>Resources/Images/yes.png</sys:String>
         </x:Array>
-    </view:ListScroll.ItemsSource>-->
+    </view:ListScroll.ItemsSource>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -34,11 +35,11 @@
             <RowDefinition></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <!--<Border Background="White">
+        <Border Background="White">
             <Grid>
-                <TextBlock x:Name="watermarkText" TextAlignment="Center" Text="Ваше имя..." Opacity="0.12"/>-->
-                <TextBlock x:Name="inputText" TextAlignment="Center" Background="Transparent" Text="{Binding Title, ElementName=PART_MainUC}" />
-                <!--<x:Code>
+                <TextBlock x:Name="watermarkText" TextAlignment="Center" Text="Ваше имя..." Opacity="0.12"/>
+                <TextBox x:Name="inputText" TextAlignment="Center" Background="Transparent" TextChanged="inputText_TextChanged" Text="{Binding Title, ElementName=PART_MainUC}" />
+                <x:Code>
                     <![CDATA[
 					private void inputText_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
 					{
@@ -48,11 +49,11 @@
 							watermarkText.Visibility = System.Windows.Visibility.Hidden;
 					}
 					]]>
-                </x:Code>-->
-            <!--</Grid>
-        </Border>-->
+                </x:Code>
+            </Grid>
+        </Border>
 
-        <!--<Button Grid.Row="1"
+        <Button Grid.Row="1"
                 Command="{Binding NextIndexCommand, ElementName=PART_MainUC, Mode=OneWay}"
                 CommandParameter="-1">
             <Image Source="Resources\Images\arrow.png"/>
@@ -67,6 +68,6 @@
                     <RotateTransform Angle="180"/>
                 </Image.LayoutTransform>
             </Image>
-        </Button>-->
+        </Button>
     </Grid>
 </view:ListScroll>

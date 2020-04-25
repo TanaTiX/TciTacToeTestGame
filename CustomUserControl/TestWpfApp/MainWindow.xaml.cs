@@ -30,7 +30,10 @@ namespace TestWpfApp
 
 		private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
-			MessageBox.Show($"New Text=\"{viewModel.Text}\"");
+			if (e.PropertyName == nameof(ViewModel.Text))
+				MessageBox.Show($"New Text=\"{viewModel.Text}\"");
+			else if (e.PropertyName == nameof(ViewModel.TextSecond))
+				MessageBox.Show($"New TextSecond=\"{viewModel.TextSecond}\"");
 		}
 
 		private void StackPanel_Loaded(object sender, RoutedEventArgs e)
