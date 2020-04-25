@@ -32,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\TicTacToe\View\bin\Debug\Common.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -46,11 +50,17 @@
     <Reference Include="View">
       <HintPath>..\..\TicTacToe\View\bin\Debug\View.dll</HintPath>
     </Reference>
+    <Reference Include="ViewModel">
+      <HintPath>..\..\TicTacToe\View\bin\Debug\ViewModel.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UserSettingsUC.xaml.cs">
+      <DependentUpon>UserSettingsUC.xaml</DependentUpon>
+    </Compile>
     <Page Include="UserControlTest.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -59,6 +69,10 @@
       <DependentUpon>UserControlTest.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UserSettingsUC.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -82,6 +96,13 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\arrow.png" />
+    <Resource Include="Resources\Images\cross.png" />
+    <Resource Include="Resources\Images\no.png" />
+    <Resource Include="Resources\Images\yes.png" />
+    <Resource Include="Resources\Images\zero.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -11,7 +11,7 @@
     </Window.DataContext>
     <StackPanel>
         <ucLib:UserControlTest Tag="{Binding Text}" Title="{Binding TextSecond}"/>
-        <view:UserSettingsUC Tag="{Binding Text}" Title="{Binding TextSecond}"/>
+        <ucLib:UserSettingsUC Tag="{Binding Text}" Title="{Binding TextSecond}"/>
         <TextBox x:Name="textBox1"/>
         <Button Content="Изменить Первый текст" Command="{Binding ChangeText, Mode=OneWay}" CommandParameter="{Binding Text, ElementName=textBox1}"/>
         <TextBox x:Name="textBox"/>
