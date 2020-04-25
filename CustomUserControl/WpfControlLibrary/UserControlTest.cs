@@ -12,13 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using View;
 
 namespace WpfControlLibrary
 {
     /// <summary>
     /// Логика взаимодействия для UserControl1.xaml
     /// </summary>
-    public partial class UserControlTest : UserControl
+    public partial class UserControlTest : ListScroll
     {
         public UserControlTest()
         {

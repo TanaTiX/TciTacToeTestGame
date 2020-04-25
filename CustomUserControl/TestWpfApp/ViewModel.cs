@@ -1,7 +1,9 @@
 ﻿namespace TestWpfApp
 {
-	public class ViewModel
+	public class ViewModel : BaseINPC
 	{
-		public string Text { get; set; }
+		private string _text;
+
+		public string Text { get => _text; set => Set(ref _text, value); }
 	}
 }
