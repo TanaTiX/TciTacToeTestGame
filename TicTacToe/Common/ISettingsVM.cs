@@ -5,7 +5,7 @@ using System.Windows.Media;
 
 namespace Common
 {
-	public interface ISettingsVM
+	public interface ISettingsVM : IGamersVM
 	{
 		
 
@@ -15,14 +15,6 @@ namespace Common
 		/// начало новой игры
 		/// </summary>
 		ICommand StartNewGameCommand { get; }
-		/// <summary>
-		/// 1й пользователь
-		/// </summary>
-		Gamer FirstGamer { get; }
-		/// <summary>
-		/// 2й пользователь
-		/// </summary>
-		Gamer SecondGamer { get; }
 		/// <summary>
 		/// список фишек для отображения
 		/// </summary>

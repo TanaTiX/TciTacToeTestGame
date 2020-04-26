@@ -91,6 +91,10 @@
       <Project>{33ED3377-DCEC-4334-9BB9-6D35BD6102D7}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ViewModel\ViewModel.csproj">
+      <Project>{9E41BCFC-F7B3-41C9-9050-A81DBA5CD9A0}</Project>
+      <Name>ViewModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\View\View.csproj">
       <Project>{4594E831-A72C-4569-A0AD-BE8460F450DD}</Project>
       <Name>View</Name>

@@ -8,7 +8,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using View;
+using ViewModel;
 
 namespace AppWPF
 {
@@ -67,11 +69,27 @@ namespace AppWPF
 			
 			window.Width = 600;
 			window.Height = 700;
-			ChangeWindowContent(typeof(ISettingsVM));
+			ChangeWindowContent(typeof(IFirstScreenVM));
 
+			MainViewModel viewModel = new MainViewModel(ChangeWindowContent);
+
+			ImageSource[] images =
+			{
+				(ImageSource)imageSourceConverter.ConvertFrom(new Uri("pack://application:,,,/View;component/Resources/Images/cross.png")),
+				(ImageSource)imageSourceConverter.ConvertFrom(new Uri("pack://application:,,,/View;component/Resources/Images/zero.png")),
+				(ImageSource)imageSourceConverter.ConvertFrom(new Uri("pack://application:,,,/View;component/Resources/Images/yes.png")),
+				(ImageSource)imageSourceConverter.ConvertFrom(new Uri("pack://application:,,,/View;component/Resources/Images/no.png"))
+			};
+
+			viewModel.FirstGamer.Image = images[0];
+			viewModel.SecondGamer.Image = images[1];
+			viewModel.PiecesCollection = images;
+
+			window.DataContext = viewModel;
 			window.Show();
 		}
 
+		public static readonly ImageSourceConverter imageSourceConverter = new ImageSourceConverter();
 		private void Window_Closed(object sender, EventArgs e)
 		{
 			///<remarks>Закрываем приложение</remarks>

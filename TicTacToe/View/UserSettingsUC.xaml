@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:View" FontSize="25"
 			 xmlns:vm="clr-namespace:ViewModel;assembly=ViewModel"
 			 xmlns:com="clr-namespace:Common;assembly=Common" xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             DataContext="MainViewModel" Background="AliceBlue"
+             Background="AliceBlue"
              mc:Ignorable="d">
     <!--SelectedIndex="1"-->
     <!--ItemsSource и SelectedIndex задан только на время разработки
@@ -62,7 +62,8 @@
 			<Border Background="White">
 				<Grid>
 					<TextBlock x:Name="watermarkText" TextAlignment="Center" Text="Ваше имя..." Opacity="0.25"/>
-					<TextBox x:Name="inputText" TextAlignment="Center" Background="Transparent" TextChanged="inputText_TextChanged" Text="{Binding Title, ElementName=PART_MainUC}" />
+					<TextBox x:Name="inputText" TextAlignment="Center" Background="Transparent" TextChanged="inputText_TextChanged" 
+							 Text="{Binding Title, ElementName=PART_MainUC, UpdateSourceTrigger=PropertyChanged}" />
 				<x:Code>
 					<![CDATA[
 					private void inputText_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)

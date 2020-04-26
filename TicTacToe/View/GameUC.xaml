@@ -8,18 +8,27 @@
 			 xmlns:model="ModelLibrary"
 			 xmlns:dataGrid2D="http://gu.se/DataGrid2D"
              mc:Ignorable="d"
+			 Background="AliceBlue"
              d:DesignHeight="700" d:DesignWidth="600">
 
 
-    <UserControl.DataContext>
+    <d:UserControl.DataContext>
         <local:GameVM >
             <local:GameVM.Picturies>
                 <x:Null x:Key="{x:Static comm:CellContent.Empty}"/>
                 <BitmapImage x:Key="{x:Static comm:CellContent.Cross}" UriSource="Resources/Images/cross.png"/>
                 <BitmapImage x:Key="{x:Static comm:CellContent.Zero}" UriSource="Resources/Images/zero.png"/>
             </local:GameVM.Picturies>
-        </local:GameVM>
-    </UserControl.DataContext>
+			<local:GameVM.FirstGamer>
+				<comm:Gamer UserName="Пользователь 1" Image="Resources/Images/no.png"/>
+			</local:GameVM.FirstGamer>
+			<local:GameVM.SecondGamer>
+				<comm:Gamer UserName="Пользователь 2" Image="Resources/Images/yes.png"/>
+				
+			</local:GameVM.SecondGamer>
+		</local:GameVM>
+		
+    </d:UserControl.DataContext>
     <UserControl.Resources>
         <comm:DictionaryKeyToValueConverter x:Key="DictionaryKeyToValueConverter"/>
     </UserControl.Resources>
@@ -30,9 +39,14 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" HorizontalAlignment="Center">Вася vs Петя</TextBlock>
-
-        <Grid Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Background="AliceBlue">
+		<Viewbox Margin="5">
+        <TextBlock Grid.Row="0" HorizontalAlignment="Center">
+			<Run Text="{Binding FirstGamer.UserName}"/>
+			<Run Text="vs"/>
+			<Run Text="{Binding SecondGamer.UserName}"/>
+		</TextBlock>
+		</Viewbox>
+		<Grid Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Background="AliceBlue">
 
             <ItemsControl ItemsSource="{Binding Cells}">
                 <!--<ItemsControl.Resources>
@@ -50,7 +64,7 @@
                     <DataTemplate x:Name="CellTestInfo" DataType="{x:Type comm:CellDto}">
                         <Grid>
                             <Button Command="{Binding DataContext.MoveCommand, ElementName=PART_MainUC}" 
-                                    CommandParameter="{Binding}">
+                                    CommandParameter="{Binding}" Margin="2" BorderThickness="5">
                             <Image Margin="10">
                                 <Image.Source>
                                     <MultiBinding Converter="{StaticResource DictionaryKeyToValueConverter}">
@@ -60,11 +74,11 @@
                                 </Image.Source>
                                 </Image>
                             </Button>
-                            <TextBlock FontSize="30" Foreground="Red" HorizontalAlignment="Left" VerticalAlignment="Top">
+                            <!--<TextBlock FontSize="30" Foreground="Red" HorizontalAlignment="Left" VerticalAlignment="Top">
                                 <Run Text="{Binding X, Mode=OneWay}"/>
                                 <LineBreak/>
                                 <Run Text="{Binding Y, Mode=OneWay}"/>
-                            </TextBlock>
+                            </TextBlock>-->
                         </Grid>
                         <!--<TextBlock x:Name="TestTexy" Width="150" Height="150">
                             <TextBlock.Text>
@@ -97,6 +111,6 @@
 			</DataGrid>
 		</Grid>-->
 
-        <Button Grid.Row="2">Сдаться</Button>
+        <Button Grid.Row="2" Command="{Binding LoseCommand, Mode=OneWay}" >Сдаться</Button>
     </Grid>
 </UserControl>

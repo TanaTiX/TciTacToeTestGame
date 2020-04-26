@@ -20,9 +20,11 @@ namespace Common
         private readonly CanExecuteHandler _canExecute;
         private readonly ExecuteHandler _onExecute;
         private readonly EventHandler _requerySuggested;
+		private Action moveMethod;
+		private Func<bool> moveCanMethod;
 
-        /// <summary>Событие извещающее об изменении состояния команды</summary>
-        public event EventHandler CanExecuteChanged;
+		/// <summary>Событие извещающее об изменении состояния команды</summary>
+		public event EventHandler CanExecuteChanged;
 
         /// <summary>Конструктор команды</summary>
         /// <param name="execute">Выполняемый метод команды</param>
@@ -36,7 +38,13 @@ namespace Common
             CommandManager.RequerySuggested += _requerySuggested;
         }
 
-        public void Invalidate()
+		public RelayCommand(Action moveMethod, Func<bool> moveCanMethod)
+		{
+			this.moveMethod = moveMethod;
+			this.moveCanMethod = moveCanMethod;
+		}
+
+		public void Invalidate()
             => Application.Current.Dispatcher.BeginInvoke(new Action(() =>
             {
                 CanExecuteChanged?.Invoke(this, EventArgs.Empty);

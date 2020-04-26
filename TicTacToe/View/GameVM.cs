@@ -58,6 +58,10 @@ namespace View
 		public ObservableCollection<CellDto> Cells { get; }
 			= new ObservableCollection<CellDto>();
 
+		public Gamer FirstGamer { get; set; }
+
+		public Gamer SecondGamer { get; set; }
+
 		private static readonly CellContent[] contens = Enum.GetValues(typeof(CellContent)).Cast<CellContent>().ToArray();
 		private static readonly Random random = new Random();
 		public GameVM()

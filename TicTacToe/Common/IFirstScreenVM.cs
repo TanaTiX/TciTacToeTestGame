@@ -6,7 +6,7 @@ namespace Common
 	public interface IFirstScreenVM
 	{
 		/// <summary>Команда начала новой игры - должно открываться новое коно</summary>
-		ICommand SrartNewGameCommand { get; }
+		ICommand StartNewGameCommand { get; }
 
 		/// <summary>Команда восстановления ранее не оконченной игры</summary>
 		ICommand RepairGameCommand { get; }

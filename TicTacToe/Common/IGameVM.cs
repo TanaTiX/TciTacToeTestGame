@@ -5,7 +5,7 @@ using System.Windows.Media;
 
 namespace Common
 {
-	public interface IGameVM
+	public interface IGameVM :IGamersVM
 	{
 		/// <summary>Команда хода игрока</summary>
 		ICommand MoveCommand { get; }

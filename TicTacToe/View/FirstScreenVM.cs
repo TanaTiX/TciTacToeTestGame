@@ -10,7 +10,7 @@ namespace View
 {
 	public class FirstScreenVM : IFirstScreenVM
 	{
-		public ICommand SrartNewGameCommand { get; }
+		public ICommand StartNewGameCommand { get; }
 
 		public ICommand RepairGameCommand { get; }
 

@@ -49,6 +49,7 @@
     <Compile Include="DictionaryKeyToValueConverter.cs" />
     <Compile Include="Gamer.cs" />
     <Compile Include="IGameEndVM.cs" />
+    <Compile Include="IGamersVM.cs" />
     <Compile Include="IGameVM.cs" />
     <Compile Include="IStatisticVM.cs" />
     <Compile Include="IFirstScreenVM.cs" />

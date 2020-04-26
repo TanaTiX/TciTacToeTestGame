@@ -27,10 +27,13 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="40"></RowDefinition>
 			<RowDefinition></RowDefinition>
-			<RowDefinition Height="40"></RowDefinition>
+			<RowDefinition Height="Auto"></RowDefinition>
+			<RowDefinition Height="auto"></RowDefinition>
 		</Grid.RowDefinitions>
-		
+		<Viewbox>
 		<TextBlock Grid.Row="0" Background="Gold" HorizontalAlignment="Stretch" TextAlignment="Center" Height="auto">Настройки</TextBlock>
+			
+		</Viewbox>
 		<Grid Grid.Row="1">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition/>
@@ -45,15 +48,8 @@
 								  ItemsSource="{Binding PiecesCollection}"
 								  SelectedItem="{Binding SecondGamer.Image}"
 								  SelectedIndex="1"/>
-            <!--<local:UserControl1/>-->
         </Grid>
-		<Button Grid.Row="2" Command="{Binding StartNewGameCommand, Mode=OneWay}" CommandParameter="">
-			<!--<Button.Content>
-				<MultiBinding Converter="{StaticResource UserSettingsSaveButtonConverter}" Mode="OneWay">
-					<Binding ElementName="User1" Path="SelectedItem"/>
-					<Binding ElementName="User2" Path="SelectedItem"/>
-				</MultiBinding>
-			</Button.Content>-->
+		<Button Grid.Row="2" Command="{Binding StartNewGameCommand, Mode=OneWay}" CommandParameter="" Padding="20,5">
 			<Button.Style>
 				<Style TargetType="Button">
 					<Setter Property="Content" Value="Сохранить настройки и выйти"/>
@@ -65,7 +61,7 @@
 				</Style>
 			</Button.Style>
 		</Button>
-		<TextBlock HorizontalAlignment="Left" VerticalAlignment="Top"
-				   Text="{Binding FirstGamer.Image}"/>
+		<Button Grid.Row="3" Content="Выйти в основное меню" Command="{Binding ExitSettingsCommand, Mode=OneWay}"
+				Padding="20,5"/>
 	</Grid>
 </UserControl>

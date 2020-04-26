@@ -24,17 +24,17 @@ namespace View
 		public SettingsUC()
 		{
 			InitializeComponent();
-			if (!(DataContext is ISettingsVM viewModel))
-			{
-				 viewModel= new SettingsVM()
-				{
-					PiecesCollection = (IEnumerable<ImageSource>)Resources["Images"]
-				};
+			//if (!(DataContext is ISettingsVM viewModel))
+			//{
+			//	 viewModel= new SettingsVM()
+			//	{
+			//		PiecesCollection = (IEnumerable<ImageSource>)Resources["Images"]
+			//	};
 
-				viewModel.FirstGamer.UserName = "11111111111111";
-				User1.ItemsSource = viewModel.PiecesCollection;
-				DataContext = viewModel;
-			}
+			//	//viewModel.FirstGamer.UserName = "11111111111111";
+			//	//User1.ItemsSource = viewModel.PiecesCollection;
+			//	DataContext = viewModel;
+			//}
 		}
 	}
 }
