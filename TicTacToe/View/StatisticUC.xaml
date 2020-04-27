@@ -6,9 +6,9 @@
              xmlns:local="clr-namespace:View"
              mc:Ignorable="d"
              xmlns:comm="clr-namespace:Common;assembly=Common">
-	<UserControl.DataContext>
+	<d:UserControl.DataContext>
 		<local:StatisticVM />
-	</UserControl.DataContext>
+	</d:UserControl.DataContext>
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="auto"/>
@@ -24,6 +24,6 @@
 				<DataGridTextColumn Header="Проигрышей" Binding="{Binding Lose}" Width="100*"/>
 			</DataGrid.Columns>
 		</DataGrid>
-		<Button Grid.Row="2" Content="Закрыть статистику" Command="{Binding ExitStatisticCommand}" Height="40"></Button>
+		<Button Grid.Row="2" Content="Закрыть статистику" Command="{Binding ShowFirstScreenCommand, Mode=OneWay}" Height="40"></Button>
 	</Grid>
 </UserControl>

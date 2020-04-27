@@ -20,6 +20,6 @@ namespace View
 			new User(){ Name = "Ivengo", Total=564,  Win=564, Lose=0 }
 		};
 
-		public ICommand ExitStatisticCommand { get; }
+		public ICommand ShowFirstScreenCommand { get; }
 	}
 }

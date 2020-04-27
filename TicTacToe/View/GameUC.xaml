@@ -40,13 +40,13 @@
         </Grid.RowDefinitions>
 
 		<Viewbox Margin="5">
-        <TextBlock Grid.Row="0" HorizontalAlignment="Center">
+        <TextBlock Grid.Row="0" HorizontalAlignment="Center" MaxHeight="40">
 			<Run Text="{Binding FirstGamer.UserName}"/>
 			<Run Text="vs"/>
 			<Run Text="{Binding SecondGamer.UserName}"/>
 		</TextBlock>
 		</Viewbox>
-		<Grid Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Background="AliceBlue">
+		<Grid Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Background="AliceBlue" Width="{Binding Height, RelativeSource={RelativeSource Self}, Mode=TwoWay}" Height="{Binding Width, RelativeSource={RelativeSource Self}, Mode=TwoWay}">
 
             <ItemsControl ItemsSource="{Binding Cells}">
                 <!--<ItemsControl.Resources>

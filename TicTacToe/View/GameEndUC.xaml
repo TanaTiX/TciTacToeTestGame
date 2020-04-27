@@ -5,26 +5,54 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:View"
 			 xmlns:comm="clr-namespace:Common;assembly=Common"
-			 d:DataContext="{x:Type comm:IGameEndVM}"
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="600">
+	<d:UserControl.DataContext>
+		<local:GameEndVM/>
+	</d:UserControl.DataContext>
+	
     <Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="40"/>
-			<RowDefinition Height="127*"/>
+			<RowDefinition Height="80"/>
+			<RowDefinition Height="100*"/>
 			<RowDefinition Height="40"/>
 			<RowDefinition Height="40"/>
 		</Grid.RowDefinitions>
-		<TextBlock Grid.Row="0" Background="DarkSeaGreen" FontSize="35" TextAlignment="Center">Игра окончена</TextBlock>
+		<Viewbox>
+			<TextBlock Grid.Row="0" Background="DarkSeaGreen" FontSize="35" TextAlignment="Center">Игра окончена</TextBlock>
+		</Viewbox>
 		<Grid Grid.Row="1" Background="Aqua">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition/>
 				<ColumnDefinition/>
 			</Grid.ColumnDefinitions>
-			<TextBlock Grid.Column="0" Background="DarkSeaGreen" VerticalAlignment="Center" TextAlignment="Center" FontSize="30" Text="Победитель: Вася"></TextBlock>
-			<Image Grid.Column="1" Source="Resources/Images/cross.png"></Image>
+			<Grid Grid.Column="0">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="auto"/>
+						<RowDefinition Height="auto"/>
+						<RowDefinition/>
+					</Grid.RowDefinitions>
+					<TextBlock Grid.Row="0" Background="DarkSeaGreen" VerticalAlignment="Center" TextAlignment="Center" FontSize="40" Text="Победитель"></TextBlock>
+					<TextBlock Grid.Row="1" Background="DarkSeaGreen" VerticalAlignment="Center" TextAlignment="Center" FontSize="30" FontWeight="Bold" Text="{Binding Winner.UserName}"></TextBlock>
+					<Image Grid.Row="2" Source="Resources/Images/cross.png"/>
+				</Grid>
+			</Grid>
+			<Grid Grid.Column="2">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="auto"/>
+						<RowDefinition Height="auto"/>
+						<RowDefinition/>
+					</Grid.RowDefinitions>
+					<TextBlock Grid.Row="0" Background="DarkSeaGreen" VerticalAlignment="Center" TextAlignment="Center" FontSize="40" Text="Проигравший"></TextBlock>
+					<TextBlock Grid.Row="1" Background="DarkSeaGreen" VerticalAlignment="Center" TextAlignment="Center" FontSize="30" Text="{Binding Loser.UserName}"></TextBlock>
+					<Image Grid.Row="2" Source="Resources/Images/no.png"/>
+				</Grid>
+			</Grid>
+			
 		</Grid>
-		<Button Grid.Row="2" Command="{Binding RevengeCommand, Mode=OneWay}">Реванш</Button>
+		<Button Grid.Row="2" Command="{Binding StartNewGameCommand, Mode=OneWay}">Реванш</Button>
 		<Button Grid.Row="3" Command="{Binding ShowFirstScreenCommand, Mode=OneWay}">Основное меню</Button>
 	</Grid>
 </UserControl>

@@ -11,7 +11,7 @@ namespace View
 	{
 		private IEnumerable<ImageSource> _piecesCollection;
 
-		public ICommand ExitSettingsCommand { get; }
+		//public ICommand ExitSettingsCommand { get; }
 
 		public ICommand StartNewGameCommand { get; }
 
@@ -21,6 +21,8 @@ namespace View
 		public Gamer SecondGamer { get; } = new Gamer();
 
 		public IEnumerable<ImageSource> PiecesCollection { get => _piecesCollection; set =>SetProperty(ref _piecesCollection , value); }
+
+		public ICommand ShowFirstScreenCommand { get; }
 
 		public SettingsVM()
 		{

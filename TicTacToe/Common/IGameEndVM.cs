@@ -8,12 +8,12 @@ namespace Common
 		ICommand ShowFirstScreenCommand { get; }
 
 		/// <summary>Команда для начала новой игры - реванш - с прежними настройками (игроки)</summary>
-		ICommand RevengeCommand { get; }
+		ICommand StartNewGameCommand { get; }
 
 		/// <summary>Победитель</summary>
-		User Winner { get; }
+		Gamer Winner { get; }
 
 		/// <summary>Проигравший</summary>
-		User Loser { get; }
+		Gamer Loser { get; }
 	}
 }

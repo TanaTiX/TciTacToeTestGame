@@ -10,7 +10,7 @@ namespace Common
 		
 
 		/// <summary>Вернуться на 1ю панель</summary>
-		ICommand ExitSettingsCommand { get; }
+		ICommand ShowFirstScreenCommand { get; }
 		/// <summary>
 		/// начало новой игры
 		/// </summary>

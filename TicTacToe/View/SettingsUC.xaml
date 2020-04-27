@@ -52,7 +52,7 @@
 		<Button Grid.Row="2" Command="{Binding StartNewGameCommand, Mode=OneWay}" CommandParameter="" Padding="20,5">
 			<Button.Style>
 				<Style TargetType="Button">
-					<Setter Property="Content" Value="Сохранить настройки и выйти"/>
+					<Setter Property="Content" Value="Сохранить настройки и играть"/>
 					<Style.Triggers>
 						<Trigger Property="IsEnabled" Value="False">
 							<Setter Property="Content" Value="Необходимо выбрать 2 разных игровых знака и имени"/>
@@ -61,7 +61,7 @@
 				</Style>
 			</Button.Style>
 		</Button>
-		<Button Grid.Row="3" Content="Выйти в основное меню" Command="{Binding ExitSettingsCommand, Mode=OneWay}"
+		<Button Grid.Row="3" Content="Выйти в основное меню" Command="{Binding ShowFirstScreenCommand, Mode=OneWay}"
 				Padding="20,5"/>
 	</Grid>
 </UserControl>

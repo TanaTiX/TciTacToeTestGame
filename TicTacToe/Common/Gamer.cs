@@ -18,5 +18,14 @@ namespace Common
 		public string UserName { get => _userName; set => SetProperty(ref _userName , value); }
 		public ImageSource Image { get => _image; set => SetProperty(ref  _image , value); }
 
+		public Gamer Clone()
+		{
+			return new Gamer()
+			{
+				UserName = _userName,
+				Image = _image
+			};
+		}
+
 	}
 }

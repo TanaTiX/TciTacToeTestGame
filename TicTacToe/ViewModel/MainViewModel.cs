@@ -26,7 +26,7 @@ namespace ViewModel
 			}
 		}
         
-		public Dictionary<string, object> Pieces { get; } = new Dictionary<string, object>()
+		public Dictionary<string, object> Pieces { get; } = new Dictionary<string, object>()//удалить?
 		{
 			{"crossStandrart", @"Resources/Images/cross.png" },
 			{"zeroStandrart", @"Resources/Images/zero.png" },
@@ -34,22 +34,19 @@ namespace ViewModel
 			{"zeroNo", @"Resources/Images/no.png" }
 		};
 
-		public RelayCommand ChangePieceIndexCommand { get; private set; }
+		public RelayCommand ChangePieceIndexCommand { get; private set; }//удалить?
 
 		public ObservableCollection<User> Users {get;}
 
-		private ICommand _exitStatisticCommand;
-		public ICommand ExitStatisticCommand => _exitStatisticCommand
-			?? (_exitStatisticCommand = new RelayCommand(ReturnFirstScreenMethod));
+		private ICommand _showFirstScreenCommand;
+		public ICommand ShowFirstScreenCommand => _showFirstScreenCommand ?? (_showFirstScreenCommand = new RelayCommand(ShowFirstScreenMethod));
 
-		private void ReturnFirstScreenMethod(object parameter)
+		private void ShowFirstScreenMethod(object parameter)
 		{
 			windowsChanger(typeof(IFirstScreenVM));
 		}
 
-		private ICommand _exitSettingsCommand;
-		public ICommand ExitSettingsCommand => _exitSettingsCommand ?? (_exitSettingsCommand = new RelayCommand(ReturnFirstScreenMethod));
-
+		
 
 		private ICommand _startNewGameCommand;
 
@@ -96,13 +93,26 @@ namespace ViewModel
 		
 			CellDto cell = (CellDto)p;
 			Cells[cell.X * ColumnsCount + cell.Y] = new CellDto(cell.X, cell.Y, contens[random.Next(contens.Length - 1) + 1]);
+			var clearCells = Cells.Where(c => c.CellType == CellContent.Empty).Count();
+			if(clearCells == 0)
+			{
+				MessageBox.Show("Game over");
+				//как правильно это запустить отсюда?
+			}
 		}
 		protected virtual bool MoveCanMethod(object p)
 		{
 			return p is CellDto cell && cell.CellType == CellContent.Empty;
 		}
 
-		public ICommand LoseCommand {get;}
+		private ICommand _loseCommand;
+		public ICommand LoseCommand => _loseCommand ?? (_loseCommand = new RelayCommand(LoseMethod));
+
+		private void LoseMethod(object parameter)
+		{
+			//необходимо добавить изменение статистики
+			windowsChanger(typeof(IGameEndVM));
+		}
 
 		public int RowsCount { get; }
 
@@ -117,9 +127,13 @@ namespace ViewModel
 		}
 		public Dictionary<CellContent, ImageSource> Picturies { get; } = new Dictionary<CellContent, ImageSource>();
 
-		
 
-		public ICommand RepairGameCommand { get; }
+		private ICommand _repairGameCommand;
+		public ICommand RepairGameCommand => _repairGameCommand ?? (_repairGameCommand = new RelayCommand(StartNewGameMethod));
+		private bool RepairGameCanMethod(object parameter)
+		{
+			return true;//добавить реализацию
+		}
 
 		private ICommand _showSettingsCommand;
 		public ICommand ShowSettingsCommand => _showSettingsCommand ?? (_showSettingsCommand = new RelayCommand(ShowSettingsMethod));
@@ -129,18 +143,19 @@ namespace ViewModel
 			windowsChanger(typeof(ISettingsVM));
 		}
 
-		public ICommand ShowStatisticCommand { get; }
+		private ICommand _showStatisticCommand;
+		public ICommand ShowStatisticCommand => _showStatisticCommand ?? (_showStatisticCommand = new RelayCommand(ShowStatisticMethod));
+		private void ShowStatisticMethod(object parameter)
+		{
+			windowsChanger(typeof(IStatisticVM));
+		}
 
 		public bool IsRevenge { get; }
 
-		public ICommand ShowFirstScreenCommand {get;}
-
 		public ICommand RevengeCommand { get; }
 
-		public User Winner {get;}
+		public Gamer Winner { get; set; }/* = FirstGamer.Clone();*///не могу создать копию победителя и проигравшего
 
-		public User Loser {get;}
-
-
+		public Gamer Loser { get; }
 	}
 }

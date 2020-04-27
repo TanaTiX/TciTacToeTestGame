@@ -9,7 +9,7 @@ namespace Common
 		ObservableCollection<User> Users { get; }
 
 		/// <summary>Вернуться на 1ю панель</summary>
-		ICommand ExitStatisticCommand { get; }
+		ICommand ShowFirstScreenCommand { get; }
 
 	}
 }
