@@ -1,0 +1,60 @@
+﻿<UserControl x:Class="View.GameTotalUC"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:View"
+             xmlns:comm="clr-namespace:Common;assembly=Common"
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="600"
+			 >
+	<UserControl.DataContext>
+		<local:GameTotalVM Statuse="WinFirst"/>
+	</UserControl.DataContext>
+	<UserControl.Style>
+		<Style TargetType="UserControl">
+			<Style.Triggers>
+				<DataTrigger Binding="{Binding Statuse}" Value="{x:Static comm:GameStatuses.Game}">
+					<Setter Property="Content">
+						<Setter.Value>
+							<local:GameUC/>
+						</Setter.Value>
+					</Setter>
+				</DataTrigger>
+
+				<DataTrigger Binding="{Binding Statuse}" Value="{x:Static comm:GameStatuses.Draw}">
+					<Setter Property="Content">
+						<Setter.Value>
+							<local:DrawUC/>
+						</Setter.Value>
+					</Setter>
+				</DataTrigger>
+
+				<DataTrigger Binding="{Binding Statuse}" Value="{x:Static comm:GameStatuses.WinFirst}">
+					<Setter Property="Content">
+						<Setter.Value>
+							<local:GameEndUC/>
+						</Setter.Value>
+					</Setter>
+				</DataTrigger>
+
+				<DataTrigger Binding="{Binding Statuse}" Value="{x:Static comm:GameStatuses.WinSecond}">
+					<Setter Property="Content">
+						<Setter.Value>
+							<local:GameEndUC/>
+						</Setter.Value>
+					</Setter>
+				</DataTrigger>
+
+				<DataTrigger Binding="{Binding Statuse}" Value="{x:Static comm:GameStatuses.Cancel}">
+					<Setter Property="Content">
+						<Setter.Value>
+							<local:GameEndUC/>
+						</Setter.Value>
+					</Setter>
+				</DataTrigger>
+
+			</Style.Triggers>
+		</Style>
+	</UserControl.Style>
+</UserControl>

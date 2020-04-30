@@ -61,6 +61,10 @@
       <DependentUpon>GameEndUC.xaml</DependentUpon>
     </Compile>
     <Compile Include="GameEndVM.cs" />
+    <Compile Include="GameTotalUC.xaml.cs">
+      <DependentUpon>GameTotalUC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GameTotalVM.cs" />
     <Compile Include="GameUC.xaml.cs">
       <DependentUpon>GameUC.xaml</DependentUpon>
     </Compile>
@@ -132,6 +136,10 @@
     <Page Include="GameEndUC.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="GameTotalUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GameUC.xaml">
       <Generator>MSBuild:Compile</Generator>

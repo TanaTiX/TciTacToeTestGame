@@ -46,7 +46,8 @@
 			<Run Text="{Binding SecondGamer.UserName}"/>
 		</TextBlock>
 		</Viewbox>
-		<Grid Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Background="AliceBlue" Width="{Binding Height, RelativeSource={RelativeSource Self}, Mode=TwoWay}" Height="{Binding Width, RelativeSource={RelativeSource Self}, Mode=TwoWay}">
+		<!--<Grid Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Background="AliceBlue" Width="{Binding Height, RelativeSource={RelativeSource Self}, Mode=TwoWay}" Height="{Binding Width, RelativeSource={RelativeSource Self}, Mode=TwoWay}">-->
+		<Grid Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Background="AliceBlue" Width="500" Height="500">
 
             <ItemsControl ItemsSource="{Binding Cells}">
                 <!--<ItemsControl.Resources>

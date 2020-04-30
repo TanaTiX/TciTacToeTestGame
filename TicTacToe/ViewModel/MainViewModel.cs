@@ -11,21 +11,22 @@ using System.Windows.Media;
 
 namespace ViewModel
 {
-	public class MainViewModel : OnPropertyChangedClass, IGameEndVM, IFirstScreenVM, IGamersVM, IGameVM, ISettingsVM, IStatisticVM, IGameEndDrawVM
+	public class MainViewModel : OnPropertyChangedClass, IGameEndVM, IFirstScreenVM, IGamersVM, IGameVM, ISettingsVM, IStatisticVM, IGameEndDrawVM, IStatusesVM
 	{
 		private readonly Action<Type> windowsChanger;
 		public MainViewModel(Action<Type> windowsChanger, bool isDisignedMode = true)
 		{
 			this.windowsChanger = windowsChanger ?? throw new ArgumentNullException(nameof(windowsChanger));
-
+			
 			if (isDisignedMode)
 			{
 				_rowsCount = 3;
 				_columnsCount = 3;
-				ClearGameCells();
+				InitCollDisign();
+
 			}
 		}
-        
+
 		/*public Dictionary<string, object> Pieces { get; } = new Dictionary<string, object>()//удалить?
 		{
 			{"crossStandrart", @"Resources/Images/cross.png" },
@@ -54,7 +55,7 @@ namespace ViewModel
 			windowsChanger(typeof(IFirstScreenVM));
 		}
 
-		
+
 
 		private ICommand _startNewGameCommand;
 
@@ -92,7 +93,7 @@ namespace ViewModel
 		{
 			UserName = "Пользователь 2"
 		};
-		public Gamer SecondGamer { get=>_secondGamer; }
+		public Gamer SecondGamer { get => _secondGamer; }
 
 
 		private static readonly CellContent[] contens = Enum.GetValues(typeof(CellContent)).Cast<CellContent>().ToArray();
@@ -101,11 +102,11 @@ namespace ViewModel
 		public ICommand MoveCommand => _moveCommand ?? (_moveCommand = new RelayCommand(MoveMethod, MoveCanMethod));
 		protected virtual void MoveMethod(object p)
 		{
-		
+
 			CellDto cell = (CellDto)p;
 			Cells[cell.X * ColumnsCount + cell.Y] = new CellDto(cell.X, cell.Y, contens[random.Next(contens.Length - 1) + 1]);
 			var clearCells = Cells.Where(c => c.CellType == CellContent.Empty).Count();
-			if(clearCells == 0)
+			if (clearCells == 0)
 			{
 				MessageBox.Show("Game over");
 				//как правильно это запустить отсюда?
@@ -126,14 +127,14 @@ namespace ViewModel
 		}
 
 		private int _rowsCount;
-		public int RowsCount { get=>_rowsCount; }
+		public int RowsCount { get => _rowsCount; }
 
 		private int _columnsCount;
-		public int ColumnsCount { get=>_columnsCount; }
+		public int ColumnsCount { get => _columnsCount; }
 
 		private ObservableCollection<CellDto> _cells = new ObservableCollection<CellDto>();
-		public ObservableCollection<CellDto> Cells { get=>_cells; }
-		private void ClearGameCells()
+		public ObservableCollection<CellDto> Cells { get => _cells; }
+		private void InitCollDisign()
 		{
 			Cells.Clear();
 			for (int row = 0; row < RowsCount; row++)
@@ -141,7 +142,7 @@ namespace ViewModel
 					Cells.Add(new CellDto(row, column, contens[random.Next(contens.Length)]));
 		}
 		private Dictionary<CellContent, ImageSource> _pictures = new Dictionary<CellContent, ImageSource>();
-		public Dictionary<CellContent, ImageSource> Picturies { get=>_pictures; }
+		public Dictionary<CellContent, ImageSource> Picturies { get => _pictures; }
 
 
 		private ICommand _repairGameCommand;
@@ -176,16 +177,54 @@ namespace ViewModel
 
 		//Сначала переделал, потом прочитал твой ответ. Пока оставлю до изменения подхода.
 		private Gamer _winner;//сомневаюсь, что есть смысл выносить пользователя в отдельную переменную
-		public Gamer Winner {
+		public Gamer Winner
+		{
 			get => _winner;
 			protected set => SetProperty(ref _winner, value);
 		}/* = FirstGamer.Clone();*///не могу создать копию победителя и проигравшего
 		private Gamer _loser;
+
 		public Gamer Loser
 		{
 			get => _loser;
 			protected set => SetProperty(ref _loser, value);
 		}
 
+
+		private GameStatuses _statuse;
+		public GameStatuses Statuse {
+			get => _statuse;
+			protected set => SetProperty(ref _statuse, value);
+		}
+		protected override void PropertyNewValue<T>(ref T fieldProperty, T newValue, string propertyName)
+		{
+			base.PropertyNewValue(ref fieldProperty, newValue, propertyName);
+			if(propertyName == nameof(GameStatuses))
+			{
+				switch (Statuse)
+				{
+					case GameStatuses.Zero:
+						break;
+					case GameStatuses.New:
+						break;
+					case GameStatuses.Draw:
+					case GameStatuses.Game:
+						Winner = Loser = null;
+						break;
+					case GameStatuses.WinFirst:
+						Winner = FirstGamer;
+						Loser = SecondGamer;
+						break;
+					case GameStatuses.WinSecond:
+						Winner = SecondGamer;
+						Loser = FirstGamer;
+						break;
+					case GameStatuses.Cancel:
+						break;
+					default:
+						break;
+				}
+			}
+		}
 	}
 }
