@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "View", "View\View.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewModel", "ViewModel\ViewModel.csproj", "{9E41BCFC-F7B3-41C9-9050-A81DBA5CD9A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppWPF", "AppWPF\AppWPF.csproj", "{ADE3A67D-9BCF-4C56-8486-9F3B7BE37A87}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameWPF", "AppWPF\GameWPF.csproj", "{ADE3A67D-9BCF-4C56-8486-9F3B7BE37A87}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

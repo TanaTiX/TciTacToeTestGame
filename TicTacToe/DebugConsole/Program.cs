@@ -185,7 +185,10 @@ namespace DebugConsole
 				case GameStatuses.Game:
 					Utils.Log("Можно ходить");
 					break;
-				case GameStatuses.Win:
+				case GameStatuses.WinFirst:
+					Utils.Log("Победа!", _currentUser);
+					break;
+				case GameStatuses.WinSecond:
 					Utils.Log("Победа!", _currentUser);
 					break;
 				case GameStatuses.Draw:

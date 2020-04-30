@@ -11,7 +11,7 @@ using System.Windows.Media;
 
 namespace ViewModel
 {
-	public class MainViewModel : OnPropertyChangedClass, IGameEndVM, IFirstScreenVM, IGamersVM, IGameVM, ISettingsVM, IStatisticVM
+	public class MainViewModel : OnPropertyChangedClass, IGameEndVM, IFirstScreenVM, IGamersVM, IGameVM, ISettingsVM, IStatisticVM, IGameEndDrawVM
 	{
 		private readonly Action<Type> windowsChanger;
 		public MainViewModel(Action<Type> windowsChanger, bool isDisignedMode = true)
@@ -20,23 +20,31 @@ namespace ViewModel
 
 			if (isDisignedMode)
 			{
-				RowsCount = 3;
-				ColumnsCount = 3;
+				_rowsCount = 3;
+				_columnsCount = 3;
 				ClearGameCells();
 			}
 		}
         
-		public Dictionary<string, object> Pieces { get; } = new Dictionary<string, object>()//удалить?
+		/*public Dictionary<string, object> Pieces { get; } = new Dictionary<string, object>()//удалить?
 		{
 			{"crossStandrart", @"Resources/Images/cross.png" },
 			{"zeroStandrart", @"Resources/Images/zero.png" },
 			{"crossYes", @"Resources/Images/yes.png" },
 			{"zeroNo", @"Resources/Images/no.png" }
+		};*/
+
+		//public RelayCommand ChangePieceIndexCommand { get; private set; }//удалить?
+
+		private ObservableCollection<User> _users => new ObservableCollection<User> {
+			new User(){ Name = "Иван", Total=111,  Win=56, Lose=5 },
+			new User(){ Name = "Петр", Total=31,  Win=26, Lose=5 },
+			new User(){ Name = "Сидор", Total=81,  Win=44, Lose=5 },
+			new User(){ Name = "Феофан", Total=1000,  Win=777, Lose=5 },
+			new User(){ Name = "Акакий", Total=9999,  Win=56, Lose=888 },
+			new User(){ Name = "Ivengo", Total=564,  Win=564, Lose=0 }
 		};
-
-		public RelayCommand ChangePieceIndexCommand { get; private set; }//удалить?
-
-		public ObservableCollection<User> Users {get;}
+		public ObservableCollection<User> Users { get => _users; }
 
 		private ICommand _showFirstScreenCommand;
 		public ICommand ShowFirstScreenCommand => _showFirstScreenCommand ?? (_showFirstScreenCommand = new RelayCommand(ShowFirstScreenMethod));
@@ -52,7 +60,7 @@ namespace ViewModel
 
 		public ICommand StartNewGameCommand => _startNewGameCommand ?? (_startNewGameCommand = new RelayCommand(StartNewGameMethod, StartNewGameCanMethod));
 
-		private bool StartNewGameCanMethod(object parameter)
+		protected virtual bool StartNewGameCanMethod(object parameter)
 		{
 			if (string.IsNullOrWhiteSpace(FirstGamer.UserName) || string.IsNullOrWhiteSpace(SecondGamer.UserName))
 				return false;
@@ -62,7 +70,7 @@ namespace ViewModel
 			return true;
 		}
 
-		private void StartNewGameMethod(object parameter)
+		protected virtual void StartNewGameMethod(object parameter)
 		{
 			Picturies.Clear();
 			Picturies.Add(CellContent.Cross, FirstGamer.Image);
@@ -71,17 +79,20 @@ namespace ViewModel
 			windowsChanger(typeof(IGameVM));
 		}
 
-		public IEnumerable<ImageSource> PiecesCollection { get; set; }
+		private IEnumerable<ImageSource> _piecesCollection;
+		public IEnumerable<ImageSource> PiecesCollection { get => _piecesCollection; set => SetProperty(ref _piecesCollection, value); }
 
-		public Gamer FirstGamer { get; } = new Gamer()
+		private Gamer _firstGamer = new Gamer()
 		{
 			UserName = "Пользователь 1"
 		};
+		public Gamer FirstGamer { get => _firstGamer; }
 
-		public Gamer SecondGamer { get; } = new Gamer()
+		private Gamer _secondGamer = new Gamer()
 		{
 			UserName = "Пользователь 2"
 		};
+		public Gamer SecondGamer { get=>_secondGamer; }
 
 
 		private static readonly CellContent[] contens = Enum.GetValues(typeof(CellContent)).Cast<CellContent>().ToArray();
@@ -108,31 +119,36 @@ namespace ViewModel
 		private ICommand _loseCommand;
 		public ICommand LoseCommand => _loseCommand ?? (_loseCommand = new RelayCommand(LoseMethod));
 
-		private void LoseMethod(object parameter)
+		protected virtual void LoseMethod(object parameter)
 		{
 			//необходимо добавить изменение статистики
 			windowsChanger(typeof(IGameEndVM));
 		}
 
-		public int RowsCount { get; }
+		private int _rowsCount;
+		public int RowsCount { get=>_rowsCount; }
 
-		public int ColumnsCount { get; }
+		private int _columnsCount;
+		public int ColumnsCount { get=>_columnsCount; }
 
-		public ObservableCollection<CellDto> Cells { get; } = new ObservableCollection<CellDto>();
+		private ObservableCollection<CellDto> _cells = new ObservableCollection<CellDto>();
+		public ObservableCollection<CellDto> Cells { get=>_cells; }
 		private void ClearGameCells()
 		{
+			Cells.Clear();
 			for (int row = 0; row < RowsCount; row++)
 				for (int column = 0; column < ColumnsCount; column++)
 					Cells.Add(new CellDto(row, column, contens[random.Next(contens.Length)]));
 		}
-		public Dictionary<CellContent, ImageSource> Picturies { get; } = new Dictionary<CellContent, ImageSource>();
+		private Dictionary<CellContent, ImageSource> _pictures = new Dictionary<CellContent, ImageSource>();
+		public Dictionary<CellContent, ImageSource> Picturies { get=>_pictures; }
 
 
 		private ICommand _repairGameCommand;
-		public ICommand RepairGameCommand => _repairGameCommand ?? (_repairGameCommand = new RelayCommand(StartNewGameMethod));
+		public ICommand RepairGameCommand => _repairGameCommand ?? (_repairGameCommand = new RelayCommand(StartNewGameMethod, RepairGameCanMethod));
 		private bool RepairGameCanMethod(object parameter)
 		{
-			return true;//добавить реализацию
+			return IsRevenge;
 		}
 
 		private ICommand _showSettingsCommand;
@@ -145,17 +161,31 @@ namespace ViewModel
 
 		private ICommand _showStatisticCommand;
 		public ICommand ShowStatisticCommand => _showStatisticCommand ?? (_showStatisticCommand = new RelayCommand(ShowStatisticMethod));
-		private void ShowStatisticMethod(object parameter)
+		protected virtual void ShowStatisticMethod(object parameter)
 		{
 			windowsChanger(typeof(IStatisticVM));
 		}
 
-		public bool IsRevenge { get; }
+		//public ICommand RevengeCommand { get; }
+		private bool _isRevenge = false;
+		public bool IsRevenge
+		{
+			get => _isRevenge;
+			protected set => SetProperty(ref _isRevenge, value);
+		}//добавить реализацию
 
-		public ICommand RevengeCommand { get; }
+		//Сначала переделал, потом прочитал твой ответ. Пока оставлю до изменения подхода.
+		private Gamer _winner;//сомневаюсь, что есть смысл выносить пользователя в отдельную переменную
+		public Gamer Winner {
+			get => _winner;
+			protected set => SetProperty(ref _winner, value);
+		}/* = FirstGamer.Clone();*///не могу создать копию победителя и проигравшего
+		private Gamer _loser;
+		public Gamer Loser
+		{
+			get => _loser;
+			protected set => SetProperty(ref _loser, value);
+		}
 
-		public Gamer Winner { get; set; }/* = FirstGamer.Clone();*///не могу создать копию победителя и проигравшего
-
-		public Gamer Loser { get; }
 	}
 }

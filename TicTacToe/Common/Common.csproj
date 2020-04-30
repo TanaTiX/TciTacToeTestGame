@@ -48,6 +48,7 @@
     <Compile Include="CellDto.cs" />
     <Compile Include="DictionaryKeyToValueConverter.cs" />
     <Compile Include="Gamer.cs" />
+    <Compile Include="IGameEndDrawVM.cs" />
     <Compile Include="IGameEndVM.cs" />
     <Compile Include="IGamersVM.cs" />
     <Compile Include="IGameVM.cs" />

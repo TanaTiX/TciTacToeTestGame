@@ -11,7 +11,7 @@ namespace View
 {
 	public class StatisticVM : IStatisticVM
 	{
-		public ObservableCollection<User> Users => new ObservableCollection<User> {
+		public ObservableCollection<User> Users => new ObservableCollection<User> {//удалить?
 			new User(){ Name = "Иван", Total=111,  Win=56, Lose=5 },
 			new User(){ Name = "Петр", Total=31,  Win=26, Lose=5 },
 			new User(){ Name = "Сидор", Total=81,  Win=44, Lose=5 },

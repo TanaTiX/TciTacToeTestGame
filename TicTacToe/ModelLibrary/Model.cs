@@ -3,6 +3,8 @@ using System;
 using System.Linq;
 using System.Collections.ObjectModel;
 using CommonUtils;
+using System.Security.Cryptography;
+using System.Collections.Generic;
 
 namespace ModelLibrary
 {
@@ -116,7 +118,17 @@ namespace ModelLibrary
 
 			if (isWin == true)
 			{
-				SetStatus(GameStatuses.Win);
+				//var sel = from p in cells where p
+				List<CellDto> bufer = cells.Cast<CellDto>().ToList();
+				int countMoves = bufer.Where(p => p.CellType != CellContent.Empty).Count();
+				if (countMoves % 2 == 1)//TODO: проверить правильность
+				{
+					SetStatus(GameStatuses.WinFirst);
+				}
+				else
+				{
+					SetStatus(GameStatuses.WinSecond);
+				}
 				//GameOverWinEvent?.Invoke(this);
 				return true;
 			}
@@ -199,10 +211,15 @@ namespace ModelLibrary
 					if(GameStatus != GameStatuses.New)
 						throw new Exception("Невозможная последовательность смены состояния игры");
 					break;
-				case GameStatuses.Win:
+				case GameStatuses.WinFirst:
 					if (GameStatus != GameStatuses.Game)
 						throw new Exception("Невозможная последовательность смены состояния игры");
 					break;
+				case GameStatuses.WinSecond:
+					if (GameStatus != GameStatuses.Game)
+						throw new Exception("Невозможная последовательность смены состояния игры");
+					break;
+
 				case GameStatuses.Draw:
 					if (GameStatus != GameStatuses.Game)
 						throw new Exception("Невозможная последовательность смены состояния игры");
@@ -221,7 +238,17 @@ namespace ModelLibrary
 
 		public void CancelGame()
 		{
-			SetStatus(GameStatuses.Win);
+			List<CellDto> bufer = cells.Cast<CellDto>().ToList();
+			int countMoves = bufer.Where(p => p.CellType != CellContent.Empty).Count();
+			if (countMoves % 2 == 1)//TODO: проверить правильность
+			{
+				SetStatus(GameStatuses.WinFirst);
+			}
+			else
+			{
+				SetStatus(GameStatuses.WinSecond);
+			}
+			//SetStatus(GameStatuses.Win);
 		}
 
 		public void Save()//Сохранять игру должно в автоматическом режиме, по хорошему это должен делать, как и загрузку результатов, отдельный объект. Поэтому не понятно, необхоимо ли это свойство в интерфейсе. Ведь достаточно приватного метода.

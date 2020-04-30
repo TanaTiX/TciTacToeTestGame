@@ -14,9 +14,11 @@ namespace Common
 	{
 		private string _userName;
 		private ImageSource _image;
+		private bool _isWin;
 
 		public string UserName { get => _userName; set => SetProperty(ref _userName , value); }
 		public ImageSource Image { get => _image; set => SetProperty(ref  _image , value); }
+		public bool IsWin { get => _isWin; set => SetProperty(ref _isWin, value); }
 
 		public Gamer Clone()
 		{

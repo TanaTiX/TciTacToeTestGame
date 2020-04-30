@@ -11,7 +11,15 @@ namespace CommonUtils
 			{
 				res += args[i].ToString() + " ";
 			}
-			res += args[args.Length - 1];
+			
+			//if (args[args.Length - 1] == null)
+			//{
+			//	res += "NULL";
+			//}
+			//else
+			//{
+				res += args[args.Length - 1].ToString();
+			//}
 			Console.WriteLine(res);
 		}
 	}

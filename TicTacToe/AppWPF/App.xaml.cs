@@ -44,9 +44,12 @@ namespace AppWPF
 		/// <remarks>Экземпляр создаётся один раз на всё время жизни приложения</remarks>
 		private readonly GameUC gameUC = new GameUC();
 
-		/// <summary>Экземпляр экрана собственно игры</summary>
+		/// <summary>Экземпляр экрана результата игры - есть победитель</summary>
 		/// <remarks>Экземпляр создаётся один раз на всё время жизни приложения</remarks>
 		private readonly GameEndUC gameEndUC = new GameEndUC();
+		/// <summary>Экземпляр экрана результата игры - ничья</summary>
+		/// <remarks>Экземпляр создаётся один раз на всё время жизни приложения</remarks>
+		private readonly DrawUC drawUC = new DrawUC();
 
 
 
@@ -65,6 +68,7 @@ namespace AppWPF
 			controls.Add(typeof(ISettingsVM), settingsUC);
 			controls.Add(typeof(IGameVM), gameUC);
 			controls.Add(typeof(IGameEndVM), gameEndUC);
+			controls.Add(typeof(IGameEndDrawVM), drawUC);
 
 			
 			window.Width = 600;
