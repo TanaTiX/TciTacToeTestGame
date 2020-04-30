@@ -17,7 +17,7 @@ namespace ViewModel
 		public MainViewModel(Action<Type> windowsChanger, bool isDisignedMode = true)
 		{
 			this.windowsChanger = windowsChanger ?? throw new ArgumentNullException(nameof(windowsChanger));
-			
+
 			if (isDisignedMode)
 			{
 				_rowsCount = 3;
@@ -37,15 +37,7 @@ namespace ViewModel
 
 		//public RelayCommand ChangePieceIndexCommand { get; private set; }//удалить?
 
-		private ObservableCollection<User> _users => new ObservableCollection<User> {
-			new User(){ Name = "Иван", Total=111,  Win=56, Lose=5 },
-			new User(){ Name = "Петр", Total=31,  Win=26, Lose=5 },
-			new User(){ Name = "Сидор", Total=81,  Win=44, Lose=5 },
-			new User(){ Name = "Феофан", Total=1000,  Win=777, Lose=5 },
-			new User(){ Name = "Акакий", Total=9999,  Win=56, Lose=888 },
-			new User(){ Name = "Ivengo", Total=564,  Win=564, Lose=0 }
-		};
-		public ObservableCollection<User> Users { get => _users; }
+		public ObservableCollection<User> Users { get; } = new ObservableCollection<User>();
 
 		private ICommand _showFirstScreenCommand;
 		public ICommand ShowFirstScreenCommand => _showFirstScreenCommand ?? (_showFirstScreenCommand = new RelayCommand(ShowFirstScreenMethod));
@@ -82,18 +74,14 @@ namespace ViewModel
 
 		private IEnumerable<ImageSource> _piecesCollection;
 		public IEnumerable<ImageSource> PiecesCollection { get => _piecesCollection; set => SetProperty(ref _piecesCollection, value); }
-
-		private Gamer _firstGamer = new Gamer()
+		public Gamer FirstGamer { get; } = new Gamer()
 		{
 			UserName = "Пользователь 1"
 		};
-		public Gamer FirstGamer { get => _firstGamer; }
-
-		private Gamer _secondGamer = new Gamer()
+		public Gamer SecondGamer { get; } = new Gamer()
 		{
 			UserName = "Пользователь 2"
 		};
-		public Gamer SecondGamer { get => _secondGamer; }
 
 
 		private static readonly CellContent[] contens = Enum.GetValues(typeof(CellContent)).Cast<CellContent>().ToArray();
@@ -127,19 +115,30 @@ namespace ViewModel
 		}
 
 		private int _rowsCount;
-		public int RowsCount { get => _rowsCount; }
+		public int RowsCount { get => _rowsCount; protected set => SetProperty(ref _rowsCount, value); }
 
 		private int _columnsCount;
-		public int ColumnsCount { get => _columnsCount; }
-
-		private ObservableCollection<CellDto> _cells = new ObservableCollection<CellDto>();
-		public ObservableCollection<CellDto> Cells { get => _cells; }
+		public int ColumnsCount { get => _columnsCount; protected set => SetProperty(ref _columnsCount, value);}
+		public ObservableCollection<CellDto> Cells { get; } = new ObservableCollection<CellDto>();
 		private void InitCollDisign()
 		{
 			Cells.Clear();
 			for (int row = 0; row < RowsCount; row++)
 				for (int column = 0; column < ColumnsCount; column++)
 					Cells.Add(new CellDto(row, column, contens[random.Next(contens.Length)]));
+
+			new List<User> 
+			{
+				new User(){ Name = "Иван", Total=111,  Win=56, Lose=5 },
+				new User(){ Name = "Петр", Total=31,  Win=26, Lose=5 },
+				new User(){ Name = "Сидор", Total=81,  Win=44, Lose=5 },
+				new User(){ Name = "Феофан", Total=1000,  Win=777, Lose=5 },
+				new User(){ Name = "Акакий", Total=9999,  Win=56, Lose=888 },
+				new User(){ Name = "Ivengo", Total=564,  Win=564, Lose=0 }
+			}
+			.ForEach(it => Users.Add(it));
+
+
 		}
 		private Dictionary<CellContent, ImageSource> _pictures = new Dictionary<CellContent, ImageSource>();
 		public Dictionary<CellContent, ImageSource> Picturies { get => _pictures; }
@@ -192,14 +191,15 @@ namespace ViewModel
 
 
 		private GameStatuses _statuse;
-		public GameStatuses Statuse {
+		public GameStatuses Statuse
+		{
 			get => _statuse;
 			protected set => SetProperty(ref _statuse, value);
 		}
 		protected override void PropertyNewValue<T>(ref T fieldProperty, T newValue, string propertyName)
 		{
 			base.PropertyNewValue(ref fieldProperty, newValue, propertyName);
-			if(propertyName == nameof(GameStatuses))
+			if (propertyName == nameof(GameStatuses))
 			{
 				switch (Statuse)
 				{
@@ -225,6 +225,12 @@ namespace ViewModel
 						break;
 				}
 			}
+
+			if (propertyName == nameof(IsRevenge))
+				if (RepairGameCommand is RelayCommand relayCommand)
+					relayCommand.Invalidate();
+				else
+					OnPropertyChanged(nameof(RepairGameCommand));
 		}
 	}
 }
