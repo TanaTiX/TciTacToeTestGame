@@ -7,8 +7,4 @@ using System.Threading.Tasks;
 
 namespace ViewModel
 {
-	public interface IStatusesVM
-	{
-		GameStatuses Statuse { get; }
-	}
 }

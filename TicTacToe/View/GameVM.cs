@@ -21,35 +21,7 @@ namespace View
 
 		public int ColumnsCount => 3;
 
-		//public GameVM()
-		//{
-		//	Data2D = data2D;
-		//}
 
-		//string[] data2D = { "Resources/Images/cross.png", "true", "false" , "true", "true", "false", "true", "true", "false" };
-
-
-		//private string[] _data2D;
-		//public string[] Data2D
-		//{
-		//	get { return _data2D; }
-		//	set { _data2D = value; }
-		//}
-
-		//public string[][] TestArray
-		//{
-		//	get
-		//	{
-		//		var cells = new string[RowsCount][];
-		//		for (int i = 0; i < RowsCount; i++)
-		//		{
-		//			cells[i] = new string[ColumnsCount];
-		//			for (int column = 0; column < ColumnsCount; column++)
-		//				cells[i][column] = "string" + i + " " + column;
-		//		}
-		//		return cells;
-		//	}
-		//}
 
 		public Dictionary<CellContent, ImageSource> Picturies { get; }
 			= new Dictionary<CellContent, ImageSource>();
@@ -61,6 +33,7 @@ namespace View
 		public Gamer FirstGamer { get; set; }
 
 		public Gamer SecondGamer { get; set; }
+
 
 		private static readonly CellContent[] contens = Enum.GetValues(typeof(CellContent)).Cast<CellContent>().ToArray();
 		private static readonly Random random = new Random();
@@ -76,11 +49,13 @@ namespace View
 				p =>
 				{
 					CellDto cell = (CellDto)p;
-					Cells[cell.X * ColumnsCount + cell.Y] = new CellDto(cell.X, cell.Y, contens[random.Next(contens.Length - 1) + 1]);
+					Cells[cell.Y * ColumnsCount + cell.X] = new CellDto(cell.X, cell.Y, contens[random.Next(contens.Length - 1) + 1]);
 				},
 				p => p is CellDto cell && cell.CellType == CellContent.Empty
 
 			);
 		}
+		
+		public UserType CurrentUser { get; set; }
 	}
 }

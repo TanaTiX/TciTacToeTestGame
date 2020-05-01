@@ -30,10 +30,10 @@ namespace DebugConsole
 						Console.Clear();
 						break;
 					case "new x":
-						StartNewGame(UserType.User0);
+						StartNewGame(UserType.UserSecond);
 						break;
 					case "new 0":
-						StartNewGame(UserType.UserX);
+						StartNewGame(UserType.UserFirst);
 						break;
 					case "cancel":
 						Cancel();
@@ -100,7 +100,7 @@ namespace DebugConsole
 				int x = Int32.Parse(command[0].ToString());
 				int y = Int32.Parse(command[1].ToString());
 
-				CellContent content = (_currentUser == UserType.UserX) ? CellContent.Cross : CellContent.Zero;
+				CellContent content = (_currentUser == UserType.UserFirst) ? CellContent.Cross : CellContent.Zero;
 				CellDto cell = new CellDto(x, y, content);
 				bool moveComplete = model.Move(cell, _currentUser);
 				if(moveComplete == false)
@@ -138,7 +138,7 @@ namespace DebugConsole
 				}
 				Console.WriteLine("************************** - ход совершен");
 				
-				_currentUser = (_currentUser == UserType.User0) ? UserType.UserX : UserType.User0;
+				_currentUser = (_currentUser == UserType.UserSecond) ? UserType.UserFirst : UserType.UserSecond;
 			}
 			catch (Exception ex)
 			{
@@ -156,7 +156,7 @@ namespace DebugConsole
 				return;
 			}
 			
-			_currentUser = (user == UserType.UserX) ? UserType.User0 : UserType.UserX;
+			_currentUser = (user == UserType.UserFirst) ? UserType.UserSecond : UserType.UserFirst;
 
 			cells = new CellView[rowsCount][];
 

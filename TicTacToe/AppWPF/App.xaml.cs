@@ -1,4 +1,5 @@
 ﻿using Common;
+using ModelLibrary;
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
@@ -24,8 +25,10 @@ namespace AppWPF
 		/// При закрытии окна происходит закрытие приложения.</remarks>
 		private readonly Window window = new Window()
 		{
-			WindowStartupLocation = WindowStartupLocation.CenterScreen,
-			ResizeMode = ResizeMode.NoResize
+			WindowStartupLocation = WindowStartupLocation.Manual,
+			ResizeMode = ResizeMode.NoResize,
+			Left = 1320,
+			Top = 40
 		};
 
 		/// <summary>Экземпляр Первого экрана</summary>
@@ -74,9 +77,11 @@ namespace AppWPF
 			
 			window.Width = 600;
 			window.Height = 700;
-			ChangeWindowContent(typeof(IGameVM));
+			ChangeWindowContent(typeof(IFirstScreenVM));
 
-			MainViewModel viewModel = new MainViewModel(ChangeWindowContent);
+			Model model = new Model(3, 3, UserType.UserFirst);
+			//MainViewModel viewModel = new MainViewModel(ChangeWindowContent);
+			MainVM viewModel = new MainVM(ChangeWindowContent, model);
 
 			ImageSource[] images =
 			{
@@ -95,6 +100,7 @@ namespace AppWPF
 		}
 
 		public static readonly ImageSourceConverter imageSourceConverter = new ImageSourceConverter();
+
 		private void Window_Closed(object sender, EventArgs e)
 		{
 			///<remarks>Закрываем приложение</remarks>

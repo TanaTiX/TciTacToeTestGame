@@ -69,7 +69,7 @@ namespace ViewModel
 			Picturies.Add(CellContent.Cross, FirstGamer.Image);
 			Picturies.Add(CellContent.Zero, SecondGamer.Image);
 			Picturies.Add(CellContent.Empty, null);
-			windowsChanger(typeof(IGameVM));
+			windowsChanger(typeof(IStatusesVM));
 		}
 
 		private IEnumerable<ImageSource> _piecesCollection;
@@ -92,7 +92,7 @@ namespace ViewModel
 		{
 
 			CellDto cell = (CellDto)p;
-			Cells[cell.X * ColumnsCount + cell.Y] = new CellDto(cell.X, cell.Y, contens[random.Next(contens.Length - 1) + 1]);
+			Cells[cell.Y * ColumnsCount + cell.X] = new CellDto(cell.X, cell.Y, contens[random.Next(contens.Length - 1) + 1]);
 			var clearCells = Cells.Where(c => c.CellType == CellContent.Empty).Count();
 			if (clearCells == 0)
 			{
@@ -118,16 +118,16 @@ namespace ViewModel
 		public int RowsCount { get => _rowsCount; protected set => SetProperty(ref _rowsCount, value); }
 
 		private int _columnsCount;
-		public int ColumnsCount { get => _columnsCount; protected set => SetProperty(ref _columnsCount, value);}
+		public int ColumnsCount { get => _columnsCount; protected set => SetProperty(ref _columnsCount, value); }
 		public ObservableCollection<CellDto> Cells { get; } = new ObservableCollection<CellDto>();
 		private void InitCollDisign()
 		{
 			Cells.Clear();
 			for (int row = 0; row < RowsCount; row++)
 				for (int column = 0; column < ColumnsCount; column++)
-					Cells.Add(new CellDto(row, column, contens[random.Next(contens.Length)]));
+					Cells.Add(new CellDto(column, row, contens[random.Next(contens.Length)]));
 
-			new List<User> 
+			new List<User>
 			{
 				new User(){ Name = "Иван", Total=111,  Win=56, Lose=5 },
 				new User(){ Name = "Петр", Total=31,  Win=26, Lose=5 },
@@ -196,6 +196,10 @@ namespace ViewModel
 			get => _statuse;
 			protected set => SetProperty(ref _statuse, value);
 		}
+
+		private UserType _currentUser = UserType.Unknown;
+		public UserType CurrentUser { get => _currentUser; protected set => SetProperty(ref _currentUser, value); }
+
 		protected override void PropertyNewValue<T>(ref T fieldProperty, T newValue, string propertyName)
 		{
 			base.PropertyNewValue(ref fieldProperty, newValue, propertyName);

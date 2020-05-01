@@ -1,4 +1,4 @@
 ﻿namespace Common
 {
-	public enum UserType { Unknown, UserX, User0 };
+	public enum UserType { Unknown, UserFirst, UserSecond };
 }

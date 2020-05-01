@@ -8,9 +8,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="600"
 			 >
-	<UserControl.DataContext>
+	<d:UserControl.DataContext>
 		<local:GameTotalVM Statuse="WinFirst"/>
-	</UserControl.DataContext>
+	</d:UserControl.DataContext>
 	<UserControl.Style>
 		<Style TargetType="UserControl">
 			<Style.Triggers>

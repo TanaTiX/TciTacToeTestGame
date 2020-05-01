@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using CommonUtils;
 using System.Security.Cryptography;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace ModelLibrary
 {
@@ -24,7 +25,7 @@ namespace ModelLibrary
 		public event MoveHandler MoveEvent;
 		public event ChangeStatusHandler ChangeStatusEvent;
 
-		private readonly ReadOnlyCollection<CellDto[]> cells;
+		private readonly ReadOnlyCollection<CellDto[]> cellsArray;
 		public ReadOnlyCollection<ReadOnlyCollection<CellDto>> Cells { get; }
 
 		//private UserType _currentUser;
@@ -46,18 +47,24 @@ namespace ModelLibrary
 			ShiftForCalculateCompleteLine = LineLength - 1;
 
 			// Делаем временный массив и заполняем его
-			var cells = new CellDto[RowsCount][];
+			var cells = new CellDto[ColumnsCount][];
 
-			for (int row = 0; row < RowsCount; row++)
+			for (int column = 0; column < RowsCount; column++)
+			{
+				cells[column] = new CellDto[RowsCount];
+				for (int row = 0; row < rowsCount; row++)
+					cells[column][row] = new CellDto(row, column, CellContent.Empty);
+			}
+			/*for (int row = 0; row < RowsCount; row++)
 			{
 				cells[row] = new CellDto[ColumnsCount];
 				for (int column = 0; column < ColumnsCount; column++)
 					cells[row][column] = new CellDto(row, column, CellContent.Empty);
-			}
+			}*/
 
 			/// Так как строки не меняются, то преобразуем 
 			/// временный массив в неизменяемый по первому измерению
-			this.cells = Array.AsReadOnly(cells);
+			cellsArray = Array.AsReadOnly(cells);
 
 			/// Публичный массив делаем неизменяемым по двум измерениям.
 			/// При этом у нас сохраняется связь с элементами внутреннего массива,
@@ -68,58 +75,85 @@ namespace ModelLibrary
 			SetStatus(GameStatuses.New);
 		}
 
+		public void StartNewGame()
+		{
+			for (int row = 0; row < RowsCount; row++)
+			{
+				for (int column = 0; column < ColumnsCount; column++)
+					cellsArray[row][column] = new CellDto(row, column, CellContent.Empty);
+			}
 
+			SetStatus(GameStatuses.Game);
+		}
 
 		public bool CanMove(CellDto cell, UserType user)
 		{
-			if(user == CurrentUser)
+			if (user != CurrentUser)
 			{
-				throw new Exception("Ход вне очереди");//По хорошему все эти и аналогичные сообщения нужно вынестти в отдельный список, но пока не буду заморачиваться
+				return false;
+				//throw new Exception("Ход вне очереди");//По хорошему все эти и аналогичные сообщения нужно вынестти в отдельный список, но пока не буду заморачиваться
 			}
-			return cells[cell.Y][cell.X].CellType == CellContent.Empty;
+			return Cells[cell.Y][cell.X].CellType == CellContent.Empty;
 		}
 
 		public bool Move(CellDto cell, UserType user)
 		{
 			//Utils.Log("x", cell.X, "y", cell.Y);
-			if (cell.CellType == CellContent.Empty)
+			if (cell.CellType != CellContent.Empty)
 			{
 				throw new Exception("Произведена попытка хода пустой клеткой");
 			}
-			if (CanMove(cell, user))
+			if (!CanMove(cell, user))
+				throw new Exception("Данный ход не возможен. Игрок: " + user + ", x: " + cell.X + ", y: " + cell.Y);
+
+			SetStatus(GameStatuses.Game);
+			TotalFreeCells--;
+			CellDto newCell;
+			if (CurrentUser == UserType.UserFirst)
 			{
-				SetStatus(GameStatuses.Game);
-				TotalFreeCells--;
-				cells[cell.Y][cell.X] = cell;
-				CurrentUser = user;
-				MoveEvent?.Invoke(this, cell);
-				bool isWin = WinCheck(cell);
-				//CurrentUser = user; Перенесём перед вызовом события
-				if (isWin == false && TotalFreeCells == 0)
-				{
-					SetStatus(GameStatuses.Draw);
-				}
+				newCell = new CellDto(cell.X, cell.Y, CellContent.Cross);
+			}
+			else if (CurrentUser == UserType.UserSecond)
+			{
+				newCell = new CellDto(cell.X, cell.Y, CellContent.Zero);
+
 			}
 			else
 			{
-				throw new Exception("Данный ход не возможен. Игрок: " + user + ", x: " + cell.X + ", y: " + cell.Y);
+				throw new Exception("Нет польхователя для хода");
 			}
+			cellsArray[cell.Y][cell.X] = newCell;
+			//CurrentUser = user;
+			MoveEvent?.Invoke(this, newCell);
+			bool isWin = WinCheck(newCell);
+			//CurrentUser = user; Перенесём перед вызовом события
+			if (isWin == false && TotalFreeCells == 0)
+			{
+				SetStatus(GameStatuses.Draw);
+			}
+			if (isWin)
+			{
+				SetStatus(CurrentUser == UserType.UserFirst ? GameStatuses.WinFirst : GameStatuses.WinSecond);
+			}
+			CurrentUser = CurrentUser == UserType.UserFirst ? UserType.UserSecond : UserType.UserFirst;
 			return true;
 		}
 
 		private bool WinCheck(CellDto cell)
 		{
+			if (cell.CellType == CellContent.Empty) throw new Exception("Попытка проверки пустой ячейки");
 			bool isWin = (
 				TestLine(cell, LineLength, false, true, false) ||   //vertical
 				TestLine(cell, LineLength, true, false, false) ||   //horizontal
-				TestLine(cell, LineLength, true, true, false) ||	//diagonal-1
-				TestLine(cell, LineLength, true, true, true)		//diagonal-2
+				TestLine(cell, LineLength, true, true, false) ||    //diagonal-1
+				TestLine(cell, LineLength, true, true, true)        //diagonal-2
 				);
 
 			if (isWin == true)
 			{
 				//var sel = from p in cells where p
-				List<CellDto> bufer = cells.Cast<CellDto>().ToList();
+				//List<CellDto> bufer = Cells.Cast<CellDto>().ToList();
+				var bufer = Cells.Concat();
 				int countMoves = bufer.Where(p => p.CellType != CellContent.Empty).Count();
 				if (countMoves % 2 == 1)//TODO: проверить правильность
 				{
@@ -193,7 +227,7 @@ namespace ModelLibrary
 			{
 				return null;
 			}
-			return cells[y][x];
+			return Cells[y][x];
 		}
 
 		private void SetStatus(GameStatuses status)
@@ -204,13 +238,13 @@ namespace ModelLibrary
 				case GameStatuses.Zero:
 					throw new Exception("Невозможная последовательность смены состояния игры");
 				case GameStatuses.New:
-					if(GameStatus == GameStatuses.Game)
-						throw new Exception("Невозможная последовательность смены состояния игры");					
-					break;
-				case GameStatuses.Game:
-					if(GameStatus != GameStatuses.New)
+					if (GameStatus == GameStatuses.Game)
 						throw new Exception("Невозможная последовательность смены состояния игры");
 					break;
+				//case GameStatuses.Game:
+					//if (GameStatus != GameStatuses.New)
+						//throw new Exception("Невозможная последовательность смены состояния игры");
+					//break;
 				case GameStatuses.WinFirst:
 					if (GameStatus != GameStatuses.Game)
 						throw new Exception("Невозможная последовательность смены состояния игры");
@@ -238,7 +272,8 @@ namespace ModelLibrary
 
 		public void CancelGame()
 		{
-			List<CellDto> bufer = cells.Cast<CellDto>().ToList();
+			//List<CellDto> bufer = Cells.Cast<CellDto>().ToList();
+			var bufer = Cells.Concat();
 			int countMoves = bufer.Where(p => p.CellType != CellContent.Empty).Count();
 			if (countMoves % 2 == 1)//TODO: проверить правильность
 			{
@@ -258,6 +293,16 @@ namespace ModelLibrary
 		public void Load()
 		{
 
+		}
+	}
+
+	public static class ExtensionMethods
+	{
+		public static IEnumerable<T> Concat<T>(this IEnumerable<IEnumerable<T>> source)
+		{
+			foreach (var items in source)
+				foreach (var item in items)
+					yield return item;
 		}
 	}
 }

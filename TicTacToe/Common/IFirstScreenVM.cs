@@ -22,4 +22,5 @@ namespace Common
 		bool IsRevenge { get; }
 
 	}
+
 }

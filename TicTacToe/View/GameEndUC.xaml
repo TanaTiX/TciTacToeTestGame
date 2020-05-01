@@ -34,7 +34,7 @@
 						<RowDefinition/>
 					</Grid.RowDefinitions>
 					<TextBlock Grid.Row="0" Background="DarkSeaGreen" VerticalAlignment="Center" TextAlignment="Center" FontSize="40" Text="Победитель"></TextBlock>
-					<TextBlock Grid.Row="1" Background="DarkSeaGreen" VerticalAlignment="Center" TextAlignment="Center" FontSize="30" FontWeight="Bold" Text="{Binding Winner.UserName}"></TextBlock>
+					<TextBlock Grid.Row="1" Background="DarkSeaGreen" VerticalAlignment="Center" TextAlignment="Center" FontSize="30" FontWeight="Bold" Text="{Binding Winner.UserName, Mode=TwoWay}"></TextBlock>
 					<Image Grid.Row="2" Source="Resources/Images/cross.png"/>
 				</Grid>
 			</Grid>
@@ -46,7 +46,7 @@
 						<RowDefinition/>
 					</Grid.RowDefinitions>
 					<TextBlock Grid.Row="0" Background="DarkSeaGreen" VerticalAlignment="Center" TextAlignment="Center" FontSize="40" Text="Проигравший"></TextBlock>
-					<TextBlock Grid.Row="1" Background="DarkSeaGreen" VerticalAlignment="Center" TextAlignment="Center" FontSize="30" Text="{Binding Loser.UserName}"></TextBlock>
+					<TextBlock Grid.Row="1" Background="DarkSeaGreen" VerticalAlignment="Center" TextAlignment="Center" FontSize="30" Text="{Binding Loser.UserName, Mode=TwoWay}"></TextBlock>
 					<Image Grid.Row="2" Source="Resources/Images/no.png"/>
 				</Grid>
 			</Grid>

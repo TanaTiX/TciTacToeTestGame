@@ -41,9 +41,29 @@
 
 		<Viewbox Margin="5">
         <TextBlock Grid.Row="0" HorizontalAlignment="Center" MaxHeight="40">
-			<Run Text="{Binding FirstGamer.UserName}"/>
+			<Run Text="{Binding FirstGamer.UserName}">
+				<Run.Style>
+					<Style TargetType="Run">
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding CurrentUser}" Value="{x:Static comm:UserType.UserSecond}">
+								<Setter Property="Foreground" Value="LightGray"/>
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</Run.Style>
+			</Run>
 			<Run Text="vs"/>
-			<Run Text="{Binding SecondGamer.UserName}"/>
+			<Run Text="{Binding SecondGamer.UserName}">
+				<Run.Style>
+					<Style TargetType="Run">
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding CurrentUser}" Value="{x:Static comm:UserType.UserFirst}">
+								<Setter Property="Foreground" Value="LightGray"/>
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</Run.Style>
+			</Run>
 		</TextBlock>
 		</Viewbox>
 		<!--<Grid Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Background="AliceBlue" Width="{Binding Height, RelativeSource={RelativeSource Self}, Mode=TwoWay}" Height="{Binding Width, RelativeSource={RelativeSource Self}, Mode=TwoWay}">-->

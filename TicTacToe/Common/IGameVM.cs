@@ -23,5 +23,7 @@ namespace Common
 		ObservableCollection<CellDto> Cells { get; }
 		/// <summary>Словарь рисунков для контекста ячееек</summary>
 		Dictionary<CellContent, ImageSource> Picturies { get; }
+
+		UserType CurrentUser { get; }
 	}
 }
