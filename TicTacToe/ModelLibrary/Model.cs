@@ -77,10 +77,11 @@ namespace ModelLibrary
 
 		public void StartNewGame()
 		{
+			TotalFreeCells = 0;
 			for (int row = 0; row < RowsCount; row++)
 			{
 				for (int column = 0; column < ColumnsCount; column++)
-					cellsArray[row][column] = new CellDto(row, column, CellContent.Empty);
+					cellsArray[row][column] = new CellDto(column, row, CellContent.Empty);
 			}
 
 			SetStatus(GameStatuses.Game);
@@ -93,7 +94,7 @@ namespace ModelLibrary
 				return false;
 				//throw new Exception("Ход вне очереди");//По хорошему все эти и аналогичные сообщения нужно вынестти в отдельный список, но пока не буду заморачиваться
 			}
-			return Cells[cell.Y][cell.X].CellType == CellContent.Empty;
+			return Cells[cell.Row][cell.Column].CellType == CellContent.Empty;
 		}
 
 		public bool Move(CellDto cell, UserType user)
@@ -104,25 +105,25 @@ namespace ModelLibrary
 				throw new Exception("Произведена попытка хода пустой клеткой");
 			}
 			if (!CanMove(cell, user))
-				throw new Exception("Данный ход не возможен. Игрок: " + user + ", x: " + cell.X + ", y: " + cell.Y);
+				throw new Exception("Данный ход не возможен. Игрок: " + user + ", column: " + cell.Column + ", row: " + cell.Row);
 
 			SetStatus(GameStatuses.Game);
 			TotalFreeCells--;
 			CellDto newCell;
 			if (CurrentUser == UserType.UserFirst)
 			{
-				newCell = new CellDto(cell.X, cell.Y, CellContent.Cross);
+				newCell = new CellDto(cell.Column, cell.Row, CellContent.Cross);
 			}
 			else if (CurrentUser == UserType.UserSecond)
 			{
-				newCell = new CellDto(cell.X, cell.Y, CellContent.Zero);
+				newCell = new CellDto(cell.Column, cell.Row, CellContent.Zero);
 
 			}
 			else
 			{
 				throw new Exception("Нет польхователя для хода");
 			}
-			cellsArray[cell.Y][cell.X] = newCell;
+			cellsArray[cell.Row][cell.Column] = newCell;
 			//CurrentUser = user;
 			MoveEvent?.Invoke(this, newCell);
 			bool isWin = WinCheck(newCell);
@@ -180,7 +181,7 @@ namespace ModelLibrary
 		{
 			//Utils.Log("start test line************************************", useShiftX, useShiftY, directionForDiagonalTest);
 			int shiftFromX = 0;//точка начала проверки по оси X
-			int shiftFromY = (useShiftY == true) ? cell.Y - ShiftForCalculateCompleteLine : 0;//точка начала проверки по оси Y - вычисляется сразу т.к. параметр directionForDiagonalTest не влияет на расчеты по оси Y
+			int shiftFromY = (useShiftY == true) ? cell.Row - ShiftForCalculateCompleteLine : 0;//точка начала проверки по оси Y - вычисляется сразу т.к. параметр directionForDiagonalTest не влияет на расчеты по оси Y
 			int diagonalFactor = 1;//коэффициент для расчета в случае проверки совпадений по 2й диагонали
 			int countCoinCidencesInLine = 0;//количество совпадений в линии
 
@@ -189,20 +190,20 @@ namespace ModelLibrary
 			{
 				if (directionForDiagonalTest == true)//расчет по диагонали с правой стороны
 				{
-					shiftFromX = cell.X + ShiftForCalculateCompleteLine;
+					shiftFromX = cell.Column + ShiftForCalculateCompleteLine;
 					diagonalFactor = -1;
 				}
 				else
 				{
-					shiftFromX = cell.X - ShiftForCalculateCompleteLine;
+					shiftFromX = cell.Column - ShiftForCalculateCompleteLine;
 				}
 			}
 			int length = ShiftForCalculateCompleteLine * 2 + 1;//количество определяемых ячеек - длина возможной линии в обе стороны (с учетом текущей ячейки)
 
 			for (int i = 0; i < length; i++)
 			{
-				int x = (useShiftX) ? shiftFromX + (diagonalFactor * i) : cell.X;//координаты проверяемой ячейки по оси X
-				int y = (useShiftY) ? shiftFromY + i : cell.Y;//координаты проверяемой ячейки по оси Y
+				int x = (useShiftX) ? shiftFromX + (diagonalFactor * i) : cell.Column;//координаты проверяемой ячейки по оси X
+				int y = (useShiftY) ? shiftFromY + i : cell.Row;//координаты проверяемой ячейки по оси Y
 				CellDto targetCell = GetCellByPosiotion(x, y);
 				//Utils.Log("test cell (x, y):", x, y);
 				if (targetCell != null && targetCell.CellType == cell.CellType)//если ячейка существует и типы совпадают...
@@ -233,7 +234,7 @@ namespace ModelLibrary
 		private void SetStatus(GameStatuses status)
 		{
 			if (GameStatus == status) return;
-			switch (status)
+			/*switch (status)
 			{
 				case GameStatuses.Zero:
 					throw new Exception("Невозможная последовательность смены состояния игры");
@@ -264,7 +265,7 @@ namespace ModelLibrary
 					break;
 				default:
 					break;
-			}
+			}*/
 			GameStatus = status;
 			ChangeStatusEvent?.Invoke(this, status);
 			Utils.Log("status changed in model:", status);

@@ -15,10 +15,7 @@ namespace ViewModel
 			this.model = model;
 			RowsCount = model.RowsCount;
 			ColumnsCount = model.ColumnsCount;
-
-			foreach (var cells in model.Cells)
-				foreach (var cell in cells)
-					Cells.Add(cell);
+			//UpdateCells();
 
 			CurrentUser = model.CurrentUser;
 
@@ -28,9 +25,17 @@ namespace ViewModel
 
 		}
 
+		private void UpdateCells()
+		{
+			Cells.Clear();
+			foreach (var cells in model.Cells)
+				foreach (var cell in cells)
+					Cells.Add(cell);
+		}
+
 		private void Model_MoveEvent(object sender, CellDto cell)
 		{
-			Cells[cell.Y * RowsCount + cell.X] = cell;
+			Cells[cell.Row * ColumnsCount + cell.Column] = cell;
 			CurrentUser = model.CurrentUser;
 		}
 
@@ -67,6 +72,7 @@ namespace ViewModel
 		protected override void StartNewGameMethod(object parameter)
 		{
 			model.StartNewGame();
+			UpdateCells();
 			base.StartNewGameMethod(parameter);
 			CurrentUser = model.CurrentUser;
 		}

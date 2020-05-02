@@ -1,0 +1,23 @@
+﻿<local:UserGameEndUCBase x:Name="PART_MainUC" x:Class="View.UserGameEndUC"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:View"
+						 xmlns:comm="clr-namespace:Common;assembly=Common"
+             mc:Ignorable="d" d:DataContext="{x:Type comm:Gamer}"
+             d:DesignHeight="500" d:DesignWidth="300">
+
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+		<TextBlock Grid.Row="0" Background="DarkSeaGreen" VerticalAlignment="Center" TextAlignment="Center" FontSize="40" Text="{Binding Title, ElementName=PART_MainUC}"></TextBlock>
+		<TextBlock Grid.Row="1" Background="DarkSeaGreen" VerticalAlignment="Center" TextAlignment="Center" FontSize="30" Text="{Binding UserName, Mode=TwoWay}"/>
+		<Image Grid.Row="2" Source="{Binding Image}"/>
+	</Grid>
+
+</local:UserGameEndUCBase>

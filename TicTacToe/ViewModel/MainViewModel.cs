@@ -92,7 +92,7 @@ namespace ViewModel
 		{
 
 			CellDto cell = (CellDto)p;
-			Cells[cell.Y * ColumnsCount + cell.X] = new CellDto(cell.X, cell.Y, contens[random.Next(contens.Length - 1) + 1]);
+			Cells[cell.Row * ColumnsCount + cell.Column] = new CellDto(cell.Column, cell.Row, contens[random.Next(contens.Length - 1) + 1]);
 			var clearCells = Cells.Where(c => c.CellType == CellContent.Empty).Count();
 			if (clearCells == 0)
 			{
@@ -203,7 +203,7 @@ namespace ViewModel
 		protected override void PropertyNewValue<T>(ref T fieldProperty, T newValue, string propertyName)
 		{
 			base.PropertyNewValue(ref fieldProperty, newValue, propertyName);
-			if (propertyName == nameof(GameStatuses))
+			if (propertyName == nameof(Statuse))
 			{
 				switch (Statuse)
 				{

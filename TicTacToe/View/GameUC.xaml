@@ -95,11 +95,11 @@
                                 </Image.Source>
                                 </Image>
                             </Button>
-                            <!--<TextBlock FontSize="30" Foreground="Red" HorizontalAlignment="Left" VerticalAlignment="Top">
-                                <Run Text="{Binding X, Mode=OneWay}"/>
+                            <TextBlock FontSize="30" Foreground="Red" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                <Run Text="{Binding Column, Mode=OneWay}"/>
                                 <LineBreak/>
-                                <Run Text="{Binding Y, Mode=OneWay}"/>
-                            </TextBlock>-->
+                                <Run Text="{Binding Row, Mode=OneWay}"/>
+                            </TextBlock>
                         </Grid>
                         <!--<TextBlock x:Name="TestTexy" Width="150" Height="150">
                             <TextBlock.Text>

@@ -49,7 +49,7 @@ namespace View
 				p =>
 				{
 					CellDto cell = (CellDto)p;
-					Cells[cell.Y * ColumnsCount + cell.X] = new CellDto(cell.X, cell.Y, contens[random.Next(contens.Length - 1) + 1]);
+					Cells[cell.Row * ColumnsCount + cell.Column] = new CellDto(cell.Column, cell.Row, contens[random.Next(contens.Length - 1) + 1]);
 				},
 				p => p is CellDto cell && cell.CellType == CellContent.Empty
 
