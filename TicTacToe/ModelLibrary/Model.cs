@@ -6,6 +6,8 @@ using CommonUtils;
 using System.Security.Cryptography;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace ModelLibrary
 {
@@ -18,6 +20,10 @@ namespace ModelLibrary
 
 
 		private readonly int ShiftForCalculateCompleteLine;//сдвиг относительно проверяемой ячейки
+
+		public Gamer FirstGamer { get; private set; }
+		public Gamer SecondGamer { get; private set; }
+
 		private int TotalFreeCells;
 
 		//public event GameOverHandler GameOverWinEvent;
@@ -75,9 +81,11 @@ namespace ModelLibrary
 			SetStatus(GameStatuses.New);
 		}
 
-		public void StartNewGame()
+		public void StartNewGame(Gamer firstGamer, Gamer secondGamer)
 		{
-			TotalFreeCells = 0;
+			FirstGamer = firstGamer;
+			SecondGamer = secondGamer;
+			TotalFreeCells = ColumnsCount * RowsCount;
 			for (int row = 0; row < RowsCount; row++)
 			{
 				for (int column = 0; column < ColumnsCount; column++)
@@ -97,7 +105,7 @@ namespace ModelLibrary
 			return Cells[cell.Row][cell.Column].CellType == CellContent.Empty;
 		}
 
-		public bool Move(CellDto cell, UserType user)
+		public void Move(CellDto cell, UserType user)
 		{
 			//Utils.Log("x", cell.X, "y", cell.Y);
 			if (cell.CellType != CellContent.Empty)
@@ -117,7 +125,6 @@ namespace ModelLibrary
 			else if (CurrentUser == UserType.UserSecond)
 			{
 				newCell = new CellDto(cell.Column, cell.Row, CellContent.Zero);
-
 			}
 			else
 			{
@@ -126,8 +133,12 @@ namespace ModelLibrary
 			cellsArray[cell.Row][cell.Column] = newCell;
 			//CurrentUser = user;
 			MoveEvent?.Invoke(this, newCell);
-			bool isWin = WinCheck(newCell);
-			//CurrentUser = user; Перенесём перед вызовом события
+			FinishGame(newCell);
+		}
+		private void FinishGame(CellDto testCell)
+		{
+
+			bool isWin = WinCheck(testCell);
 			if (isWin == false && TotalFreeCells == 0)
 			{
 				SetStatus(GameStatuses.Draw);
@@ -137,7 +148,7 @@ namespace ModelLibrary
 				SetStatus(CurrentUser == UserType.UserFirst ? GameStatuses.WinFirst : GameStatuses.WinSecond);
 			}
 			CurrentUser = CurrentUser == UserType.UserFirst ? UserType.UserSecond : UserType.UserFirst;
-			return true;
+			RemoveSavedFile();
 		}
 
 		private bool WinCheck(CellDto cell)
@@ -165,6 +176,7 @@ namespace ModelLibrary
 					SetStatus(GameStatuses.WinSecond);
 				}
 				//GameOverWinEvent?.Invoke(this);
+
 				return true;
 			}
 			return false;
@@ -287,23 +299,66 @@ namespace ModelLibrary
 			//SetStatus(GameStatuses.Win);
 		}
 
+
+		public static string FileNameXml { get; set; }
+		protected static readonly XmlSerializer serializer = new XmlSerializer(typeof(SaveGame));
 		public void Save()//Сохранять игру должно в автоматическом режиме, по хорошему это должен делать, как и загрузку результатов, отдельный объект. Поэтому не понятно, необхоимо ли это свойство в интерфейсе. Ведь достаточно приватного метода.
 		{
+			if(GameStatus != GameStatuses.Game)
+			{
+				return;
+			}
+			if(Cells.Concat().Where(p=> p.CellType == CellContent.Empty).Count() == RowsCount * ColumnsCount)
+			{
+				return;
+			}
+
+
+			SaveGame saveGame = new SaveGame();
+			saveGame.FirstUser = FirstGamer.UserName;
+			saveGame.SecondUser = SecondGamer.UserName;
+			saveGame.ImageIndexFirstUser = FirstGamer.ImageIndex;
+			saveGame.ImageIndexSecondUser = SecondGamer.ImageIndex;
+			saveGame.IsCurrentFirstUtser = CurrentUser == UserType.UserFirst;
+			saveGame.Cells = CellXML.CreateCells(Cells);
+
+			using (var file = File.Create(FileNameXml))
+				serializer.Serialize(file, saveGame);
 
 		}
-		public void Load()
+		public  SaveGame Load()
 		{
+			SaveGame saveGame;
 
+			try
+			{
+				using (var file = File.OpenRead(FileNameXml))
+					saveGame = (SaveGame)serializer.Deserialize(file);
+
+				return saveGame;
+			}
+			catch (Exception)
+			{
+				return null;
+			}
+		}
+
+		private void RemoveSavedFile()
+		{
+			if (File.Exists(FileNameXml))
+			{
+				try
+				{
+					File.Delete(FileNameXml);
+				}
+				catch (Exception ex)
+				{
+
+					throw ex;
+				}
+			}
 		}
 	}
 
-	public static class ExtensionMethods
-	{
-		public static IEnumerable<T> Concat<T>(this IEnumerable<IEnumerable<T>> source)
-		{
-			foreach (var items in source)
-				foreach (var item in items)
-					yield return item;
-		}
-	}
+
 }

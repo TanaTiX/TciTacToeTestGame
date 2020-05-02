@@ -23,6 +23,8 @@ namespace ViewModel
 
 			model.MoveEvent += Model_MoveEvent;
 
+			
+
 		}
 
 		private void UpdateCells()
@@ -71,7 +73,7 @@ namespace ViewModel
 
 		protected override void StartNewGameMethod(object parameter)
 		{
-			model.StartNewGame();
+			model.StartNewGame(FirstGamer, SecondGamer);
 			UpdateCells();
 			base.StartNewGameMethod(parameter);
 			CurrentUser = model.CurrentUser;

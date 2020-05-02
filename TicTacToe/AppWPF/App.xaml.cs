@@ -5,11 +5,13 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using View;
 using ViewModel;
 
@@ -20,6 +22,7 @@ namespace AppWPF
 	/// </summary>
 	public partial class App : Application
 	{
+		private Model model;
 		/// <summary>Экземпляр главного окна</summary>
 		/// <remarks>Экземпляр создаётся один раз на всё время жизни приложения.
 		/// При закрытии окна происходит закрытие приложения.</remarks>
@@ -79,7 +82,8 @@ namespace AppWPF
 			window.Height = 700;
 			ChangeWindowContent(typeof(IFirstScreenVM));
 
-			Model model = new Model(3, 3, UserType.UserFirst);
+			Model.FileNameXml = "SavedGame.xml";
+			model = new Model(3, 3, UserType.UserFirst);
 			//MainViewModel viewModel = new MainViewModel(ChangeWindowContent);
 			MainVM viewModel = new MainVM(ChangeWindowContent, model);
 
@@ -93,7 +97,10 @@ namespace AppWPF
 
 			viewModel.FirstGamer.Image = images[0];
 			viewModel.SecondGamer.Image = images[1];
+			viewModel.FirstGamer.ImageIndex = 0;
+			viewModel.SecondGamer.ImageIndex = 1;
 			viewModel.PiecesCollection = images;
+			//viewModel.IsRevenge = File.Exists(Model.FileNameXml);
 
 			window.DataContext = viewModel;
 			window.Show();
@@ -115,6 +122,12 @@ namespace AppWPF
 			///Если есть ключ, то в контент окна записываем его значение</remarks>
 			if (controls.TryGetValue(type, out UserControl control))
 				window.Content = control;
+		}
+
+		protected override void OnExit(ExitEventArgs e)
+		{
+			base.OnExit(e);
+			model.Save();
 		}
 	}
 }

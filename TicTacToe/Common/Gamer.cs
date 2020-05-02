@@ -10,24 +10,26 @@ using System.Windows.Media;
 
 namespace Common
 {
-	public class Gamer : OnPropertyChangedClass
+	public class Gamer : OnPropertyChangedClass, ICloneable
 	{
 		private string _userName;
 		private ImageSource _image;
 		private bool _isWin;
 
-		public string UserName { get => _userName; set => SetProperty(ref _userName , value); }
-		public ImageSource Image { get => _image; set => SetProperty(ref  _image , value); }
+		public string UserName { get => _userName; set => SetProperty(ref _userName, value); }
+		public ImageSource Image { get => _image; set => SetProperty(ref _image, value); }
+		public int ImageIndex { get; set; }
 		public bool IsWin { get => _isWin; set => SetProperty(ref _isWin, value); }
 
-		public Gamer Clone()
-		{
-			return new Gamer()
-			{
-				UserName = _userName,
-				Image = _image
-			};
-		}
+		//public Gamer Clone()
+		//{
+		//	return new Gamer()
+		//	{
+		//		UserName = _userName,
+		//		Image = _image
+		//	};
+		//}
 
+		public object Clone() => MemberwiseClone();
 	}
 }

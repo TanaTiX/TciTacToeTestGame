@@ -1,7 +1,9 @@
 ﻿using Common;
+using ModelLibrary;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -148,7 +150,7 @@ namespace ViewModel
 		public ICommand RepairGameCommand => _repairGameCommand ?? (_repairGameCommand = new RelayCommand(StartNewGameMethod, RepairGameCanMethod));
 		private bool RepairGameCanMethod(object parameter)
 		{
-			return IsRevenge;
+			return File.Exists(Model.FileNameXml);
 		}
 
 		private ICommand _showSettingsCommand;

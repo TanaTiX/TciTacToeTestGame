@@ -102,17 +102,10 @@ namespace DebugConsole
 
 				CellContent content = (_currentUser == UserType.UserFirst) ? CellContent.Cross : CellContent.Zero;
 				CellDto cell = new CellDto(x, y, content);
-				bool moveComplete = model.Move(cell, _currentUser);
-				if(moveComplete == false)
-				{
-					Utils.Log("Ход не совершен");
-					return;
-				}
-				else
-				{
-					CellView cellView = new CellView(cell);
-					cells[y][x] = cellView;
-				}
+				
+				CellView cellView = new CellView(cell);
+				cells[y][x] = cellView;
+				
 				for (int i = 0; i < cells.Length; i++)
 				{
 					string res = "";

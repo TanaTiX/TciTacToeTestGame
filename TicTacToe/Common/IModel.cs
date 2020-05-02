@@ -23,7 +23,7 @@ namespace Common
 		/// <param name="user">Игрок сделавший ход</param>
 		/// <remarks>Если ход допустим, то будет возбужденно событие MoveEvent,
 		/// в противном случае - ничего не произойдёт.</remarks>
-		bool Move(CellDto cell, UserType user);
+		void Move(CellDto cell, UserType user);
 
 		/// <summary>Количество строк в поле Игры</summary>
 		int RowsCount { get; }
@@ -46,10 +46,10 @@ namespace Common
 		void CancelGame();
 
 		/// <summary>Сохранить игру</summary>
-		void Save();
+		//void Save();
 
-		/// <summary>Загрузить настройки и ранее сохраненную игру (при наличии)</summary>
-		void Load();
+		///// <summary>Загрузить настройки и ранее сохраненную игру (при наличии)</summary>
+		//void Load();
 
 
 	}

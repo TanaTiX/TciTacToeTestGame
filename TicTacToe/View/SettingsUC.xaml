@@ -43,11 +43,11 @@
 			<local:UserSettingsUC x:Name="User1" Grid.Column="0" Title="{Binding FirstGamer.UserName, Mode=TwoWay}"
 								  SelectedItem="{Binding FirstGamer.Image}"
 								  ItemsSource="{Binding PiecesCollection}"
-								  SelectedIndex="0"/>
+								  SelectedIndex="{Binding FirstGamer.ImageIndex, Mode=TwoWay}"/>
 			<local:UserSettingsUC x:Name="User2" Grid.Column="1" Title="{Binding SecondGamer.UserName}"
 								  ItemsSource="{Binding PiecesCollection}"
 								  SelectedItem="{Binding SecondGamer.Image}"
-								  SelectedIndex="1"/>
+								  SelectedIndex="{Binding SecondGamer.ImageIndex, Mode=TwoWay}"/>
         </Grid>
 		<Button Grid.Row="2" Command="{Binding StartNewGameCommand, Mode=OneWay}" CommandParameter="" Padding="20,5">
 			<Button.Style>
