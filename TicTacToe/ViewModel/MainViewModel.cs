@@ -71,6 +71,7 @@ namespace ViewModel
 			Picturies.Add(CellContent.Cross, FirstGamer.Image);
 			Picturies.Add(CellContent.Zero, SecondGamer.Image);
 			Picturies.Add(CellContent.Empty, null);
+			
 			windowsChanger(typeof(IStatusesVM));
 		}
 
@@ -147,7 +148,21 @@ namespace ViewModel
 
 
 		private ICommand _repairGameCommand;
-		public ICommand RepairGameCommand => _repairGameCommand ?? (_repairGameCommand = new RelayCommand(StartNewGameMethod, RepairGameCanMethod));
+		public ICommand RepairGameCommand => _repairGameCommand ?? (_repairGameCommand = new RelayCommand(RepairGameMethod, RepairGameCanMethod));
+
+		protected virtual void RepairGameMethod(object parameter)
+		{
+
+
+
+			Picturies.Clear();
+			Picturies.Add(CellContent.Cross, FirstGamer.Image);
+			Picturies.Add(CellContent.Zero, SecondGamer.Image);
+			Picturies.Add(CellContent.Empty, null);
+
+			windowsChanger(typeof(IStatusesVM));
+		}
+
 		private bool RepairGameCanMethod(object parameter)
 		{
 			return File.Exists(Model.FileNameXml);

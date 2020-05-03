@@ -35,7 +35,7 @@ namespace ModelLibrary
 		public ReadOnlyCollection<ReadOnlyCollection<CellDto>> Cells { get; }
 
 		//private UserType _currentUser;
-		public UserType CurrentUser { get; private set; }
+		public UserType CurrentUser { get; set; }
 
 		/// <summary>Конструктор модели</summary>
 		/// <param name="rowsCount">Колиичество строк</param>
@@ -81,7 +81,7 @@ namespace ModelLibrary
 			SetStatus(GameStatuses.New);
 		}
 
-		public void StartNewGame(Gamer firstGamer, Gamer secondGamer)
+		public void CreateGame(Gamer firstGamer, Gamer secondGamer)
 		{
 			FirstGamer = firstGamer;
 			SecondGamer = secondGamer;
@@ -91,6 +91,18 @@ namespace ModelLibrary
 				for (int column = 0; column < ColumnsCount; column++)
 					cellsArray[row][column] = new CellDto(column, row, CellContent.Empty);
 			}
+		}
+
+		public void StartNewGame(/*Gamer firstGamer, Gamer secondGamer*/)
+		{
+			//FirstGamer = firstGamer;
+			//SecondGamer = secondGamer;
+			//TotalFreeCells = ColumnsCount * RowsCount;
+			/*for (int row = 0; row < RowsCount; row++)
+			{
+				for (int column = 0; column < ColumnsCount; column++)
+					cellsArray[row][column] = new CellDto(column, row, CellContent.Empty);
+			}*/
 
 			SetStatus(GameStatuses.Game);
 		}
@@ -326,7 +338,7 @@ namespace ModelLibrary
 				serializer.Serialize(file, saveGame);
 
 		}
-		public  SaveGame Load()
+		public SaveGame Load()
 		{
 			SaveGame saveGame;
 
