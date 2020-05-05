@@ -1,17 +1,18 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace Common
 {
 	/// <summary>Интерфейс Модели</summary>
 	/// <remarks>Интерфей Модели игры в крестики-нолики произвольного размера поля</remarks>
-	public interface IModel
+	public interface IModel : INotifyPropertyChanged
 	{
 		/// <summary>Собыие хода</summary>
 		/// <remarks>Происходит при измении любой ячейки</remarks>
 		event MoveHandler MoveEvent;
 		/// <summary>Событие изменеия статуса игры</summary>
 		/// <remarks>Происходит после изменения свойства GameStatus</remarks>
-		event ChangeStatusHandler ChangeStatusEvent;
+		//event ChangeStatusHandler ChangeStatusEvent;
 
 		/// <summary>Метод проверки допустимости хода</summary>
 		/// <param name="cell">Данные о ходе</param>

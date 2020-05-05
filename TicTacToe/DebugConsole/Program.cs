@@ -161,7 +161,7 @@ namespace DebugConsole
 			}
 
 			model = new Model(3, 3, user, 3);
-			model.ChangeStatusEvent += OnChangeGameStatus;
+			//model.ChangeStatusEvent += OnChangeGameStatus;
 		}
 
 		private static void OnChangeGameStatus(object sender, GameStatuses status)
@@ -195,9 +195,9 @@ namespace DebugConsole
 			}
 		}
 
-		private static void ClearListeners()
-		{
-			model.ChangeStatusEvent -= OnChangeGameStatus;
-		}
+		//private static void ClearListeners()
+		//{
+		//	//model.ChangeStatusEvent -= OnChangeGameStatus;
+		//}
 	}
 }

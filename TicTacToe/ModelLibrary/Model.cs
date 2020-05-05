@@ -11,31 +11,42 @@ using System.IO;
 
 namespace ModelLibrary
 {
-	public class Model : IModel
+	public class Model : OnPropertyChangedClass, IModel
 	{
-		public int RowsCount { get; }
-		public int ColumnsCount { get; }
-		public int LineLength { get; }
-		public GameStatuses GameStatus { get; private set; }
+		/// <summary>Количество пустых ячеек</summary>
+		private int TotalFreeCells;
+
+		private int _rowsCount;
+		private int _columnsCount;
+		private int _lineLength;
+		private GameStatuses _gameStatus;
+		private Gamer _firstGamer;
+		private Gamer _secondGamer;
+		private UserType _currentUser;
+		private bool _isRevenge;
+
+		public int RowsCount { get => _rowsCount; private set => SetProperty(ref _rowsCount, value); }
+		public int ColumnsCount { get => _columnsCount; private set => SetProperty(ref _columnsCount, value); }
+		public int LineLength { get => _lineLength; private set => SetProperty(ref _lineLength, value); }
+		public GameStatuses GameStatus { get => _gameStatus; private set => SetProperty(ref _gameStatus, value); }
 
 
 		private readonly int ShiftForCalculateCompleteLine;//сдвиг относительно проверяемой ячейки
 
-		public Gamer FirstGamer { get; private set; }
-		public Gamer SecondGamer { get; private set; }
+		public Gamer FirstGamer { get => _firstGamer; private set => SetProperty(ref _firstGamer, value); }
+		public Gamer SecondGamer { get => _secondGamer; private set => SetProperty(ref _secondGamer, value); }
 
-		private int TotalFreeCells;
 
 		//public event GameOverHandler GameOverWinEvent;
 		//public event GameOverDrawHandler GameOverDrawEvent;
 		public event MoveHandler MoveEvent;
-		public event ChangeStatusHandler ChangeStatusEvent;
+		//public event ChangeStatusHandler ChangeStatusEvent;
 
 		private readonly ReadOnlyCollection<CellDto[]> cellsArray;
 		public ReadOnlyCollection<ReadOnlyCollection<CellDto>> Cells { get; }
 
 		//private UserType _currentUser;
-		public UserType CurrentUser { get; set; }
+		public UserType CurrentUser { get => _currentUser; private set => SetProperty(ref _currentUser, value); }
 
 		/// <summary>Конструктор модели</summary>
 		/// <param name="rowsCount">Колиичество строк</param>
@@ -45,7 +56,7 @@ namespace ModelLibrary
 		public Model(int rowsCount, int columnsCount, UserType secondUser, int lineLength = 3)
 		{
 			if (secondUser == UserType.Unknown) throw new Exception("Не допустимое значение 1-го игрока");
-					IsRevenge = false;
+			IsRevenge = false;
 			try
 			{
 				if (File.Exists(Model.FileNameXml))
@@ -56,7 +67,7 @@ namespace ModelLibrary
 				}
 
 			}
-			catch (Exception ex){}
+			catch (Exception ex) { }
 
 			CurrentUser = secondUser;
 			RowsCount = rowsCount;
@@ -91,7 +102,7 @@ namespace ModelLibrary
 			/// массивом каждой строки. И изменяя значения в исходном массиве мы их меняем 
 			/// и в публичном. Но "из вне" эти значения поменять не могут.
 			Cells = Array.AsReadOnly(cells.Select(_row => Array.AsReadOnly(_row)).ToArray());
-			SetStatus(GameStatuses.New);
+			GameStatus = GameStatuses.New;
 		}
 
 		public void CreateGame(Gamer firstGamer, Gamer secondGamer)
@@ -117,7 +128,7 @@ namespace ModelLibrary
 					cellsArray[row][column] = new CellDto(column, row, CellContent.Empty);
 			}*/
 
-			SetStatus(GameStatuses.Game);
+			GameStatus = GameStatuses.Game;
 		}
 
 		public bool CanMove(CellDto cell, UserType user)
@@ -140,7 +151,7 @@ namespace ModelLibrary
 			if (!CanMove(cell, user))
 				throw new Exception("Данный ход не возможен. Игрок: " + user + ", column: " + cell.Column + ", row: " + cell.Row);
 
-			SetStatus(GameStatuses.Game);
+			GameStatus = GameStatuses.Game;
 			TotalFreeCells--;
 			CellDto newCell;
 			if (CurrentUser == UserType.UserFirst)
@@ -166,11 +177,11 @@ namespace ModelLibrary
 			bool isWin = WinCheck(testCell);
 			if (isWin == false && TotalFreeCells == 0)
 			{
-				SetStatus(GameStatuses.Draw);
+				GameStatus = GameStatuses.Draw;
 			}
 			if (isWin)
 			{
-				SetStatus(CurrentUser == UserType.UserFirst ? GameStatuses.WinFirst : GameStatuses.WinSecond);
+				GameStatus = CurrentUser == UserType.UserFirst ? GameStatuses.WinFirst : GameStatuses.WinSecond;
 			}
 			CurrentUser = CurrentUser == UserType.UserFirst ? UserType.UserSecond : UserType.UserFirst;
 			RemoveSavedFile();
@@ -194,11 +205,11 @@ namespace ModelLibrary
 				int countMoves = bufer.Where(p => p.CellType != CellContent.Empty).Count();
 				if (countMoves % 2 == 1)//TODO: проверить правильность
 				{
-					SetStatus(GameStatuses.WinFirst);
+					GameStatus = GameStatuses.WinFirst;
 				}
 				else
 				{
-					SetStatus(GameStatuses.WinSecond);
+					GameStatus = GameStatuses.WinSecond;
 				}
 				//GameOverWinEvent?.Invoke(this);
 
@@ -268,10 +279,10 @@ namespace ModelLibrary
 			return Cells[y][x];
 		}
 
-		private void SetStatus(GameStatuses status)
+		/*private void SetStatus(GameStatuses status)
 		{
 			if (GameStatus == status) return;
-			/*switch (status)
+			*//*switch (status)
 			{
 				case GameStatuses.Zero:
 					throw new Exception("Невозможная последовательность смены состояния игры");
@@ -302,11 +313,11 @@ namespace ModelLibrary
 					break;
 				default:
 					break;
-			}*/
+			}*//*
 			GameStatus = status;
-			ChangeStatusEvent?.Invoke(this, status);
+			//ChangeStatusEvent?.Invoke(this, status);
 			Utils.Log("status changed in model:", status);
-		}
+		}*/
 
 		public void CancelGame()
 		{
@@ -315,11 +326,11 @@ namespace ModelLibrary
 			int countMoves = bufer.Where(p => p.CellType != CellContent.Empty).Count();
 			if (countMoves % 2 == 1)//TODO: проверить правильность
 			{
-				SetStatus(GameStatuses.WinFirst);
+				GameStatus = GameStatuses.WinFirst;
 			}
 			else
 			{
-				SetStatus(GameStatuses.WinSecond);
+				GameStatus = GameStatuses.WinSecond;
 			}
 			//SetStatus(GameStatuses.Win);
 		}
@@ -329,16 +340,16 @@ namespace ModelLibrary
 
 		//private bool _isRevenge = false;
 
-		public bool IsRevenge { get; private set; }
+		public bool IsRevenge { get => _isRevenge; private set => SetProperty(ref _isRevenge, value); }
 
 		protected static readonly XmlSerializer serializer = new XmlSerializer(typeof(SaveGame));
 		public void Save()//Сохранять игру должно в автоматическом режиме, по хорошему это должен делать, как и загрузку результатов, отдельный объект. Поэтому не понятно, необхоимо ли это свойство в интерфейсе. Ведь достаточно приватного метода.
 		{
-			if(GameStatus != GameStatuses.Game)
+			if (GameStatus != GameStatuses.Game)
 			{
 				return;
 			}
-			if(Cells.Concat().Where(p=> p.CellType == CellContent.Empty).Count() == RowsCount * ColumnsCount)
+			if (Cells.Concat().Where(p => p.CellType == CellContent.Empty).Count() == RowsCount * ColumnsCount)
 			{
 				return;
 			}
@@ -368,7 +379,7 @@ namespace ModelLibrary
 				for (int i = 0; i < saveGame.Cells.Count(); i++)
 				{
 					string xmlType = saveGame.Cells[i].CellType;
-					CellContent type = (CellContent)Enum.Parse(typeof(CellContent), xmlType); 
+					CellContent type = (CellContent)Enum.Parse(typeof(CellContent), xmlType);
 					//switch (xmlType)
 					//{
 					//	case "Cross": type = CellContent.Cross; break;
@@ -377,7 +388,7 @@ namespace ModelLibrary
 					//	default: throw new Exception("При попытке загрузки сохраненной игры возникла ошибка");
 					//}
 					//model.Cells = new CellDto(Cells[i].Column, Cells[i].Row, type);
-					cellsArray[i / 3][i % 3] = new CellDto(i%3, i/3, type);
+					cellsArray[i / 3][i % 3] = new CellDto(i % 3, i / 3, type);
 				}
 				FirstGamer = firstGamer;
 				SecondGamer = secondGamer;
@@ -386,7 +397,7 @@ namespace ModelLibrary
 				FirstGamer.ImageIndex = saveGame.ImageIndexFirstUser;
 				SecondGamer.ImageIndex = saveGame.ImageIndexSecondUser;
 				CurrentUser = saveGame.IsCurrentFirstUtser ? UserType.UserFirst : UserType.UserSecond;
-				SetStatus(GameStatuses.Game);
+				GameStatus = GameStatuses.Game;
 				return saveGame;
 			}
 			catch (Exception)

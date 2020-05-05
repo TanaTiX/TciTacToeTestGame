@@ -1,6 +1,7 @@
 ﻿using Common;
 using ModelLibrary;
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime;
 using System.Windows.Controls;
@@ -14,17 +15,41 @@ namespace ViewModel
 			: base(windowsChanger, false)
 		{
 			this.model = model;
-			RowsCount = model.RowsCount;
-			ColumnsCount = model.ColumnsCount;
+			//RowsCount = model.RowsCount;
+			//ColumnsCount = model.ColumnsCount;
+			//	IsRevenge = model.IsRevenge;
 			//UpdateCells();
 
-			CurrentUser = model.CurrentUser;
-			model.ChangeStatusEvent += Model_ChangeStatusEvent;
+			//CurrentUser = model.CurrentUser;
+			//model.ChangeStatusEvent += Model_ChangeStatusEvent;
+			model.PropertyChanged += OnModelPropertyChanged;
+			model.MoveEvent += OnModelMoveEvent;
 
-			model.MoveEvent += Model_MoveEvent;
-			IsRevenge = model.IsRevenge;
-
+			model.OnAllPropertyChanged();
 			
+
+		}
+
+		private void OnModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+
+			if (string.IsNullOrEmpty(e.PropertyName) || e.PropertyName == nameof(Model.GameStatus))
+			{
+				Statuse = model.GameStatus;
+				if(Statuse == GameStatuses.Game)
+				{
+					UpdateCells();
+				}
+			}
+
+			if (string.IsNullOrEmpty(e.PropertyName) || e.PropertyName == nameof(Model.RowsCount))
+				RowsCount = model.RowsCount;
+			if (string.IsNullOrEmpty(e.PropertyName) || e.PropertyName == nameof(Model.ColumnsCount))
+				ColumnsCount = model.ColumnsCount;
+			if (string.IsNullOrEmpty(e.PropertyName) || e.PropertyName == nameof(Model.IsRevenge))
+				IsRevenge = model.IsRevenge;
+			if (string.IsNullOrEmpty(e.PropertyName) || e.PropertyName == nameof(Model.CurrentUser))
+				CurrentUser = model.CurrentUser;
 
 		}
 
@@ -36,18 +61,18 @@ namespace ViewModel
 					Cells.Add(cell);
 		}
 
-		private void Model_MoveEvent(object sender, CellDto cell)
+		private void OnModelMoveEvent(object sender, CellDto cell)
 		{
 			Cells[cell.Row * ColumnsCount + cell.Column] = cell;
-			CurrentUser = model.CurrentUser;
+			//CurrentUser = model.CurrentUser;
 		}
 
-		private void Model_ChangeStatusEvent(object sender, GameStatuses status)
-		{
-			Statuse = model.GameStatus;
-			CurrentUser = model.CurrentUser;
-			IsRevenge = model.IsRevenge;
-		}
+		//private void Model_ChangeStatusEvent(object sender, GameStatuses status)
+		//{
+		//	Statuse = model.GameStatus;
+		//	CurrentUser = model.CurrentUser;
+		//	IsRevenge = model.IsRevenge;
+		//}
 
 		protected override void LoseMethod(object parameter)
 		{
@@ -63,7 +88,7 @@ namespace ViewModel
 		{
 			if (p is CellDto cell) {
 				model.Move(cell, CurrentUser);
-				CurrentUser = model.CurrentUser;
+				//CurrentUser = model.CurrentUser;
 			}
 		}
 
@@ -78,16 +103,16 @@ namespace ViewModel
 		{
 			model.CreateGame(FirstGamer, SecondGamer);
 			model.StartNewGame();
-			UpdateCells();
+			//UpdateCells();
 			base.StartNewGameMethod(parameter);
-			CurrentUser = model.CurrentUser;
+			//CurrentUser = model.CurrentUser;
 		}
 
 		protected override void RepairGameMethod(object parameter)
 		{
 			SaveGame saveGame = model.Load(FirstGamer, SecondGamer);
 			//model.StartNewGame();
-			UpdateCells();
+			//UpdateCells();
 			//model.CreateGame(FirstGamer, SecondGamer);
 			try
 			{
