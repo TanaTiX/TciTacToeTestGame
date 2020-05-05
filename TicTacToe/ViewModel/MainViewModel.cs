@@ -165,7 +165,7 @@ namespace ViewModel
 
 		private bool RepairGameCanMethod(object parameter)
 		{
-			return File.Exists(Model.FileNameXml);
+			return IsRevenge;
 		}
 
 		private ICommand _showSettingsCommand;

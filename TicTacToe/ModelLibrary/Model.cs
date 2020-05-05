@@ -45,6 +45,19 @@ namespace ModelLibrary
 		public Model(int rowsCount, int columnsCount, UserType secondUser, int lineLength = 3)
 		{
 			if (secondUser == UserType.Unknown) throw new Exception("Не допустимое значение 1-го игрока");
+					IsRevenge = false;
+			try
+			{
+				if (File.Exists(Model.FileNameXml))
+				{
+					using (var file = File.OpenRead(FileNameXml))
+						_ = (SaveGame)serializer.Deserialize(file);
+					IsRevenge = true;
+				}
+
+			}
+			catch (Exception ex){}
+
 			CurrentUser = secondUser;
 			RowsCount = rowsCount;
 			ColumnsCount = columnsCount;
@@ -313,6 +326,11 @@ namespace ModelLibrary
 
 
 		public static string FileNameXml { get; set; }
+
+		//private bool _isRevenge = false;
+
+		public bool IsRevenge { get; private set; }
+
 		protected static readonly XmlSerializer serializer = new XmlSerializer(typeof(SaveGame));
 		public void Save()//Сохранять игру должно в автоматическом режиме, по хорошему это должен делать, как и загрузку результатов, отдельный объект. Поэтому не понятно, необхоимо ли это свойство в интерфейсе. Ведь достаточно приватного метода.
 		{
@@ -338,7 +356,7 @@ namespace ModelLibrary
 				serializer.Serialize(file, saveGame);
 
 		}
-		public SaveGame Load()
+		public SaveGame Load(Gamer firstGamer, Gamer secondGamer)
 		{
 			SaveGame saveGame;
 
@@ -347,6 +365,28 @@ namespace ModelLibrary
 				using (var file = File.OpenRead(FileNameXml))
 					saveGame = (SaveGame)serializer.Deserialize(file);
 
+				for (int i = 0; i < saveGame.Cells.Count(); i++)
+				{
+					string xmlType = saveGame.Cells[i].CellType;
+					CellContent type = (CellContent)Enum.Parse(typeof(CellContent), xmlType); 
+					//switch (xmlType)
+					//{
+					//	case "Cross": type = CellContent.Cross; break;
+					//	case "Zero": type = CellContent.Zero; break;
+					//	case "Empty": type = CellContent.Empty; break;
+					//	default: throw new Exception("При попытке загрузки сохраненной игры возникла ошибка");
+					//}
+					//model.Cells = new CellDto(Cells[i].Column, Cells[i].Row, type);
+					cellsArray[i / 3][i % 3] = new CellDto(i%3, i/3, type);
+				}
+				FirstGamer = firstGamer;
+				SecondGamer = secondGamer;
+				FirstGamer.UserName = saveGame.FirstUser;
+				SecondGamer.UserName = saveGame.SecondUser;
+				FirstGamer.ImageIndex = saveGame.ImageIndexFirstUser;
+				SecondGamer.ImageIndex = saveGame.ImageIndexSecondUser;
+				CurrentUser = saveGame.IsCurrentFirstUtser ? UserType.UserFirst : UserType.UserSecond;
+				SetStatus(GameStatuses.Game);
 				return saveGame;
 			}
 			catch (Exception)
@@ -362,6 +402,7 @@ namespace ModelLibrary
 				try
 				{
 					File.Delete(FileNameXml);
+					IsRevenge = false;
 				}
 				catch (Exception ex)
 				{

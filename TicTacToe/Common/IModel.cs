@@ -51,6 +51,6 @@ namespace Common
 		///// <summary>Загрузить настройки и ранее сохраненную игру (при наличии)</summary>
 		//void Load();
 
-
+		bool IsRevenge { get; }
 	}
 }
