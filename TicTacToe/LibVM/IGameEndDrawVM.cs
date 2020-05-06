@@ -1,8 +1,14 @@
-﻿using System.Windows.Input;
+﻿using Common;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
-namespace Common
+namespace LibVM
 {
-	public interface IGameEndVM
+	public interface IGameEndDrawVM
 	{
 		/// <summary>Показать исходное окно прогарммы</summary>
 		ICommand ShowFirstScreenCommand { get; }
@@ -11,9 +17,9 @@ namespace Common
 		ICommand StartNewGameCommand { get; }
 
 		/// <summary>Победитель</summary>
-		Gamer Winner { get; }
+		Gamer FirstGamer { get; }
 
 		/// <summary>Проигравший</summary>
-		Gamer Loser { get; }
+		Gamer SecondGamer { get; }
 	}
 }

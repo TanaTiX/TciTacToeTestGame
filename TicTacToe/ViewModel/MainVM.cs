@@ -1,5 +1,7 @@
 ﻿using Common;
+using Model;
 using ModelLibrary;
+using Repo;
 using System;
 using System.ComponentModel;
 using System.Linq;
@@ -10,8 +12,8 @@ namespace ViewModel
 {
 	public class MainVM : MainViewModel
 	{
-		protected Model model;
-		public MainVM(Action<Type> windowsChanger, Model model)
+		protected Model.ModelTicTacToe model;
+		public MainVM(Action<Type> windowsChanger, Model.ModelTicTacToe model)
 			: base(windowsChanger, false)
 		{
 			this.model = model;
@@ -33,7 +35,7 @@ namespace ViewModel
 		private void OnModelPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 
-			if (string.IsNullOrEmpty(e.PropertyName) || e.PropertyName == nameof(Model.GameStatus))
+			if (string.IsNullOrEmpty(e.PropertyName) || e.PropertyName == nameof(Model.ModelTicTacToe.GameStatus))
 			{
 				Statuse = model.GameStatus;
 				if(Statuse == GameStatuses.Game)
@@ -42,13 +44,13 @@ namespace ViewModel
 				}
 			}
 
-			if (string.IsNullOrEmpty(e.PropertyName) || e.PropertyName == nameof(Model.RowsCount))
+			if (string.IsNullOrEmpty(e.PropertyName) || e.PropertyName == nameof(Model.ModelTicTacToe.RowsCount))
 				RowsCount = model.RowsCount;
-			if (string.IsNullOrEmpty(e.PropertyName) || e.PropertyName == nameof(Model.ColumnsCount))
+			if (string.IsNullOrEmpty(e.PropertyName) || e.PropertyName == nameof(Model.ModelTicTacToe.ColumnsCount))
 				ColumnsCount = model.ColumnsCount;
-			if (string.IsNullOrEmpty(e.PropertyName) || e.PropertyName == nameof(Model.IsRevenge))
+			if (string.IsNullOrEmpty(e.PropertyName) || e.PropertyName == nameof(Model.ModelTicTacToe.IsRevenge))
 				IsRevenge = model.IsRevenge;
-			if (string.IsNullOrEmpty(e.PropertyName) || e.PropertyName == nameof(Model.CurrentUser))
+			if (string.IsNullOrEmpty(e.PropertyName) || e.PropertyName == nameof(Model.ModelTicTacToe.CurrentUser))
 				CurrentUser = model.CurrentUser;
 
 		}

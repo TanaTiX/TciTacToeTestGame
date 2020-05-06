@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using ModelLibrary;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace Common
+namespace LibVM
 {
 	public interface IGameVM :IGamersVM
 	{

@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:View"
              xmlns:comm="clr-namespace:Common;assembly=Common"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
+			 xmlns:ml="clr-namespace:ModelLibrary;assembly=ModelLibrary"
              d:DesignHeight="700" d:DesignWidth="600"
 			 >
 	<d:UserControl.DataContext>
@@ -14,7 +15,7 @@
 	<UserControl.Style>
 		<Style TargetType="UserControl">
 			<Style.Triggers>
-				<DataTrigger Binding="{Binding Statuse}" Value="{x:Static comm:GameStatuses.Game}">
+				<DataTrigger Binding="{Binding Statuse}" Value="{x:Static ml:GameStatuses.Game}">
 					<Setter Property="Content">
 						<Setter.Value>
 							<local:GameUC/>
@@ -22,7 +23,7 @@
 					</Setter>
 				</DataTrigger>
 
-				<DataTrigger Binding="{Binding Statuse}" Value="{x:Static comm:GameStatuses.Draw}">
+				<DataTrigger Binding="{Binding Statuse}" Value="{x:Static ml:GameStatuses.Draw}">
 					<Setter Property="Content">
 						<Setter.Value>
 							<local:DrawUC/>
@@ -30,7 +31,7 @@
 					</Setter>
 				</DataTrigger>
 
-				<DataTrigger Binding="{Binding Statuse}" Value="{x:Static comm:GameStatuses.WinFirst}">
+				<DataTrigger Binding="{Binding Statuse}" Value="{x:Static ml:GameStatuses.WinFirst}">
 					<Setter Property="Content">
 						<Setter.Value>
 							<local:GameEndUC/>
@@ -38,7 +39,7 @@
 					</Setter>
 				</DataTrigger>
 
-				<DataTrigger Binding="{Binding Statuse}" Value="{x:Static comm:GameStatuses.WinSecond}">
+				<DataTrigger Binding="{Binding Statuse}" Value="{x:Static ml:GameStatuses.WinSecond}">
 					<Setter Property="Content">
 						<Setter.Value>
 							<local:GameEndUC/>
@@ -46,7 +47,7 @@
 					</Setter>
 				</DataTrigger>
 
-				<DataTrigger Binding="{Binding Statuse}" Value="{x:Static comm:GameStatuses.Cancel}">
+				<DataTrigger Binding="{Binding Statuse}" Value="{x:Static ml:GameStatuses.Cancel}">
 					<Setter Property="Content">
 						<Setter.Value>
 							<local:GameEndUC/>

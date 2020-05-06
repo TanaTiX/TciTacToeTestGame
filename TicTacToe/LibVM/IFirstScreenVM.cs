@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 
-namespace Common
+namespace LibVM
 {
 	public interface IFirstScreenVM
 	{

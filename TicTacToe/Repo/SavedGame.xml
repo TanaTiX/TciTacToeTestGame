@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<saveGameRoot xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <FirstUser>Пользователь 1</FirstUser>
+  <SecondUser>Пользователь 2</SecondUser>
+  <ImageIndexFirstUser>0</ImageIndexFirstUser>
+  <ImageIndexSecondUser>1</ImageIndexSecondUser>
+  <IsCurrentFirstUtser>false</IsCurrentFirstUtser>
+  <Cells>
+    <CellXML>
+      <CellType>Empty</CellType>
+      <Column>0</Column>
+      <Row>0</Row>
+    </CellXML>
+    <CellXML>
+      <CellType>Cross</CellType>
+      <Column>1</Column>
+      <Row>0</Row>
+    </CellXML>
+    <CellXML>
+      <CellType>Cross</CellType>
+      <Column>2</Column>
+      <Row>0</Row>
+    </CellXML>
+    <CellXML>
+      <CellType>Zero</CellType>
+      <Column>0</Column>
+      <Row>1</Row>
+    </CellXML>
+    <CellXML>
+      <CellType>Empty</CellType>
+      <Column>1</Column>
+      <Row>1</Row>
+    </CellXML>
+    <CellXML>
+      <CellType>Empty</CellType>
+      <Column>2</Column>
+      <Row>1</Row>
+    </CellXML>
+    <CellXML>
+      <CellType>Empty</CellType>
+      <Column>0</Column>
+      <Row>2</Row>
+    </CellXML>
+    <CellXML>
+      <CellType>Empty</CellType>
+      <Column>1</Column>
+      <Row>2</Row>
+    </CellXML>
+    <CellXML>
+      <CellType>Empty</CellType>
+      <Column>2</Column>
+      <Row>2</Row>
+    </CellXML>
+  </Cells>
+</saveGameRoot>

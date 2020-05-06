@@ -1,4 +1,6 @@
 ﻿using Common;
+using LibVM;
+using Model;
 using ModelLibrary;
 using System;
 using System.CodeDom;
@@ -15,14 +17,14 @@ using System.Windows.Media.Imaging;
 using View;
 using ViewModel;
 
-namespace AppWPF
+namespace GameWPF
 {
 	/// <summary>
 	/// Логика взаимодействия для App.xaml
 	/// </summary>
 	public partial class App : Application
 	{
-		private Model model;
+		private Model.ModelTicTacToe model;
 		/// <summary>Экземпляр главного окна</summary>
 		/// <remarks>Экземпляр создаётся один раз на всё время жизни приложения.
 		/// При закрытии окна происходит закрытие приложения.</remarks>
@@ -82,8 +84,8 @@ namespace AppWPF
 			window.Height = 700;
 			ChangeWindowContent(typeof(IFirstScreenVM));
 
-			Model.FileNameXml = "SavedGame.xml";
-			model = new Model(3, 3, UserType.UserFirst);
+			Model.ModelTicTacToe.FileNameXml = "SavedGame.xml";
+			model = new Model.ModelTicTacToe(3, 3, UserType.UserFirst);
 			//MainViewModel viewModel = new MainViewModel(ChangeWindowContent);
 			MainVM viewModel = new MainVM(ChangeWindowContent, model);
 

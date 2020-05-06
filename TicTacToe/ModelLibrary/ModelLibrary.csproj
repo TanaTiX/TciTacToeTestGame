@@ -41,14 +41,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model.cs" />
+    <Compile Include="BaseId.cs" />
+    <Compile Include="CellContent.cs" />
+    <Compile Include="CellDto.cs" />
+    <Compile Include="CellTypeDto.cs" />
+    <Compile Include="GameStatuses.cs" />
+    <Compile Include="Handlers.cs" />
+    <Compile Include="IModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SavedGameDto.cs" />
+    <Compile Include="UserDto.cs" />
+    <Compile Include="UserStatistic.cs" />
+    <Compile Include="UserTypes.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CommonUtils\CommonUtils.csproj">
-      <Project>{19bf447a-8260-40ae-bae9-dd343cf9596b}</Project>
-      <Name>CommonUtils</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{33ed3377-dcec-4334-9bb9-6d35bd6102d7}</Project>
       <Name>Common</Name>

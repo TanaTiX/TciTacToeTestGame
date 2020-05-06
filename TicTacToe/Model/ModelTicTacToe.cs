@@ -2,16 +2,15 @@
 using System;
 using System.Linq;
 using System.Collections.ObjectModel;
-using CommonUtils;
-using System.Security.Cryptography;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 using System.IO;
+using ModelLibrary;
+using Repo;
+using System.Collections.Generic;
 
-namespace ModelLibrary
+namespace Model
 {
-	public class Model : OnPropertyChangedClass, IModel
+	public class ModelTicTacToe : OnPropertyChangedClass, IModel
 	{
 		/// <summary>Количество пустых ячеек</summary>
 		private int TotalFreeCells;
@@ -39,70 +38,78 @@ namespace ModelLibrary
 
 		//public event GameOverHandler GameOverWinEvent;
 		//public event GameOverDrawHandler GameOverDrawEvent;
-		public event MoveHandler MoveEvent;
+		public event ChangeCellHandler MoveEvent;
 		//public event ChangeStatusHandler ChangeStatusEvent;
 
-		private readonly ReadOnlyCollection<CellDto[]> cellsArray;
+		private readonly List<CellDto[]> cellsArray;
 		public ReadOnlyCollection<ReadOnlyCollection<CellDto>> Cells { get; }
 
 		//private UserType _currentUser;
 		public UserType CurrentUser { get => _currentUser; private set => SetProperty(ref _currentUser, value); }
 
+		protected IReposSaveGame repos;
+		protected SavedGameDto savedGame;
 		/// <summary>Конструктор модели</summary>
 		/// <param name="rowsCount">Колиичество строк</param>
 		/// <param name="columnsCount">Количество колонок</param>
-		/// <param name="secondUser">Игрок, который считается походившим. Следующий ход должен быть другим игроком.</param>
 		/// <param name="lineLength">Минимальная длина линии из однородных элементов, необходимая для учета ее завершенности</param>
-		public Model(int rowsCount, int columnsCount, UserType secondUser, int lineLength = 3)
+		public ModelTicTacToe(IReposSaveGame repos)
 		{
-			if (secondUser == UserType.Unknown) throw new Exception("Не допустимое значение 1-го игрока");
-			IsRevenge = false;
-			try
-			{
-				if (File.Exists(Model.FileNameXml))
-				{
-					using (var file = File.OpenRead(FileNameXml))
-						_ = (SaveGame)serializer.Deserialize(file);
-					IsRevenge = true;
-				}
+			this.repos = repos;
+			savedGame = repos.Load();
 
-			}
-			catch (Exception ex) { }
+			IsRevenge = savedGame != null;
 
-			CurrentUser = secondUser;
-			RowsCount = rowsCount;
-			ColumnsCount = columnsCount;
-			TotalFreeCells = RowsCount * ColumnsCount;
-			LineLength = lineLength;
-			ShiftForCalculateCompleteLine = LineLength - 1;
+			Cells= cellsArray.
 
-			// Делаем временный массив и заполняем его
-			var cells = new CellDto[ColumnsCount][];
+			//if (secondUser == UserType.Unknown) throw new Exception("Не допустимое значение 1-го игрока");
+			//IsRevenge = false;
+			//try
+			//{
+			//	if (File.Exists(ModelTicTacToe.FileNameXml))
+			//	{
+			//		using (var file = File.OpenRead(FileNameXml))
+			//			_ = (SaveGame)serializer.Deserialize(file);
+			//		IsRevenge = true;
+			//	}
 
-			for (int column = 0; column < RowsCount; column++)
-			{
-				cells[column] = new CellDto[RowsCount];
-				for (int row = 0; row < rowsCount; row++)
-					cells[column][row] = new CellDto(row, column, CellContent.Empty);
-			}
-			/*for (int row = 0; row < RowsCount; row++)
-			{
-				cells[row] = new CellDto[ColumnsCount];
-				for (int column = 0; column < ColumnsCount; column++)
-					cells[row][column] = new CellDto(row, column, CellContent.Empty);
-			}*/
+			//}
+			//catch (Exception ex) { }
 
-			/// Так как строки не меняются, то преобразуем 
-			/// временный массив в неизменяемый по первому измерению
-			cellsArray = Array.AsReadOnly(cells);
+			//CurrentUser = secondUser;
+			//RowsCount = rowsCount;
+			//ColumnsCount = columnsCount;
+			//TotalFreeCells = RowsCount * ColumnsCount;
+			//LineLength = lineLength;
+			//ShiftForCalculateCompleteLine = LineLength - 1;
 
-			/// Публичный массив делаем неизменяемым по двум измерениям.
-			/// При этом у нас сохраняется связь с элементами внутреннего массива,
-			/// так Array.AsReadOnly(_row)) делает не копию, а оболочку надо 
-			/// массивом каждой строки. И изменяя значения в исходном массиве мы их меняем 
-			/// и в публичном. Но "из вне" эти значения поменять не могут.
-			Cells = Array.AsReadOnly(cells.Select(_row => Array.AsReadOnly(_row)).ToArray());
-			GameStatus = GameStatuses.New;
+			//// Делаем временный массив и заполняем его
+			//var cells = new CellDto[ColumnsCount][];
+
+			//for (int column = 0; column < RowsCount; column++)
+			//{
+			//	cells[column] = new CellDto[RowsCount];
+			//	for (int row = 0; row < rowsCount; row++)
+			//		cells[column][row] = new CellDto(row, column, CellContent.Empty);
+			//}
+			///*for (int row = 0; row < RowsCount; row++)
+			//{
+			//	cells[row] = new CellDto[ColumnsCount];
+			//	for (int column = 0; column < ColumnsCount; column++)
+			//		cells[row][column] = new CellDto(row, column, CellContent.Empty);
+			//}*/
+
+			///// Так как строки не меняются, то преобразуем 
+			///// временный массив в неизменяемый по первому измерению
+			//cellsArray = Array.AsReadOnly(cells);
+
+			///// Публичный массив делаем неизменяемым по двум измерениям.
+			///// При этом у нас сохраняется связь с элементами внутреннего массива,
+			///// так Array.AsReadOnly(_row)) делает не копию, а оболочку надо 
+			///// массивом каждой строки. И изменяя значения в исходном массиве мы их меняем 
+			///// и в публичном. Но "из вне" эти значения поменять не могут.
+			//Cells = Array.AsReadOnly(cells.Select(_row => Array.AsReadOnly(_row)).ToArray());
+			//GameStatus = GameStatuses.New;
 		}
 
 		public void CreateGame(Gamer firstGamer, Gamer secondGamer)
@@ -336,7 +343,7 @@ namespace ModelLibrary
 		}
 
 
-		public static string FileNameXml { get; set; }
+		//public static string FileNameXml { get; set; }
 
 		//private bool _isRevenge = false;
 

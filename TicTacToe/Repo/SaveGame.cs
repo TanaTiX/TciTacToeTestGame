@@ -1,12 +1,11 @@
-﻿using System;
+﻿using Common;
+using ModelLibrary;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
 using System.Xml.Serialization;
 
-namespace Common
+namespace Repo
 {
 	[Serializable]
 	[XmlRoot("saveGameRoot")]

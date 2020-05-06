@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-namespace Common
+namespace ModelLibrary
 {
 	/// <summary>Интерфейс Модели</summary>
 	/// <remarks>Интерфей Модели игры в крестики-нолики произвольного размера поля</remarks>
@@ -9,7 +9,7 @@ namespace Common
 	{
 		/// <summary>Собыие хода</summary>
 		/// <remarks>Происходит при измении любой ячейки</remarks>
-		event MoveHandler MoveEvent;
+		event ChangeCellHandler MoveEvent;
 		/// <summary>Событие изменеия статуса игры</summary>
 		/// <remarks>Происходит после изменения свойства GameStatus</remarks>
 		//event ChangeStatusHandler ChangeStatusEvent;
@@ -53,5 +53,7 @@ namespace Common
 		//void Load();
 
 		bool IsRevenge { get; }
+
+		//void StartNewGame(UserType type);
 	}
 }

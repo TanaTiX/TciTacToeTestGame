@@ -1,6 +1,6 @@
 ﻿using Common;
 using CommonUtils;
-using ModelLibrary;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -160,7 +160,7 @@ namespace DebugConsole
 					cells[row][column] = new CellView(row, column, CellContent.Empty);
 			}
 
-			model = new Model(3, 3, user, 3);
+			model = new Model.ModelTicTacToe(3, 3, user, 3);
 			//model.ChangeStatusEvent += OnChangeGameStatus;
 		}
 

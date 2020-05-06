@@ -1,4 +1,6 @@
-﻿namespace Common
+﻿using ModelLibrary;
+
+namespace LibVM
 {
 	public interface IStatusesVM
 	{

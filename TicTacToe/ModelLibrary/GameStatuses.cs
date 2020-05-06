@@ -1,4 +1,4 @@
-﻿namespace Common
+﻿namespace ModelLibrary
 {
 	/// <summary>Перечисления статусов игры</summary>
 	public enum GameStatuses 

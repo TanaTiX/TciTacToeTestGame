@@ -118,6 +118,10 @@
       <Project>{33ed3377-dcec-4334-9bb9-6d35bd6102d7}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LibVM\LibVM.csproj">
+      <Project>{F6C85531-873B-4B4E-9F63-B78C0CF8863D}</Project>
+      <Name>LibVM</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ModelLibrary\ModelLibrary.csproj">
       <Project>{e66a3b93-4774-4f21-a7d2-5be8959d87e0}</Project>
       <Name>ModelLibrary</Name>

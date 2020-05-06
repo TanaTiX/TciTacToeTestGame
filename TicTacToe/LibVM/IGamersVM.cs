@@ -1,4 +1,6 @@
-﻿namespace Common
+﻿using Common;
+
+namespace LibVM
 {
 	public interface IGamersVM
 	{

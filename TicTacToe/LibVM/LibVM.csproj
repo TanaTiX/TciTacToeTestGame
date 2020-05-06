@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9E41BCFC-F7B3-41C9-9050-A81DBA5CD9A0}</ProjectGuid>
+    <ProjectGuid>{F6C85531-873B-4B4E-9F63-B78C0CF8863D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ViewModel</RootNamespace>
-    <AssemblyName>ViewModel</AssemblyName>
+    <RootNamespace>LibVM</RootNamespace>
+    <AssemblyName>LibVM</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -32,7 +32,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,12 +40,16 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IFirstScreenVM.cs" />
+    <Compile Include="IGameEndDrawVM.cs" />
+    <Compile Include="IGameEndVM.cs" />
+    <Compile Include="IGamersVM.cs" />
+    <Compile Include="IGameVM.cs" />
+    <Compile Include="ISettingsVM.cs" />
+    <Compile Include="IStatisticVM.cs" />
     <Compile Include="IStatusesVM.cs" />
-    <Compile Include="MainViewModel.cs" />
-    <Compile Include="MainVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -54,21 +57,9 @@
       <Project>{33ED3377-DCEC-4334-9BB9-6D35BD6102D7}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LibVM\LibVM.csproj">
-      <Project>{F6C85531-873B-4B4E-9F63-B78C0CF8863D}</Project>
-      <Name>LibVM</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ModelLibrary\ModelLibrary.csproj">
       <Project>{E66A3B93-4774-4F21-A7D2-5BE8959D87E0}</Project>
       <Name>ModelLibrary</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Model\Model.csproj">
-      <Project>{7f2766af-ef15-4c64-adf3-e9d244f5b1a8}</Project>
-      <Name>Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Repo\Repo.csproj">
-      <Project>{235AC355-1B40-4E4D-9C64-49616020F4C6}</Project>
-      <Name>Repo</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

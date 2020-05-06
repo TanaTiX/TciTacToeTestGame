@@ -7,6 +7,7 @@
 			 xmlns:comm="clr-namespace:Common;assembly=Common"
 			 xmlns:model="ModelLibrary"
 			 xmlns:dataGrid2D="http://gu.se/DataGrid2D"
+			 xmlns:ml="clr-namespace:ModelLibrary;assembly=ModelLibrary"
              mc:Ignorable="d"
 			 Background="AliceBlue"
              d:DesignHeight="700" d:DesignWidth="600">
@@ -15,9 +16,9 @@
     <d:UserControl.DataContext>
         <local:GameVM >
             <local:GameVM.Picturies>
-                <x:Null x:Key="{x:Static comm:CellContent.Empty}"/>
-                <BitmapImage x:Key="{x:Static comm:CellContent.Cross}" UriSource="Resources/Images/cross.png"/>
-                <BitmapImage x:Key="{x:Static comm:CellContent.Zero}" UriSource="Resources/Images/zero.png"/>
+                <x:Null x:Key="{x:Static ml:CellContent.Empty}"/>
+                <BitmapImage x:Key="{x:Static ml:CellContent.Cross}" UriSource="Resources/Images/cross.png"/>
+                <BitmapImage x:Key="{x:Static ml:CellContent.Zero}" UriSource="Resources/Images/zero.png"/>
             </local:GameVM.Picturies>
 			<local:GameVM.FirstGamer>
 				<comm:Gamer UserName="Пользователь 1" Image="Resources/Images/no.png"/>
@@ -45,7 +46,7 @@
 				    <Run.Style>
 					    <Style TargetType="Run">
 						    <Style.Triggers>
-							    <DataTrigger Binding="{Binding CurrentUser}" Value="{x:Static comm:UserType.UserSecond}">
+							    <DataTrigger Binding="{Binding CurrentUser}" Value="{x:Static ml:UserType.UserSecond}">
 								    <Setter Property="Foreground" Value="LightGray"/>
 							    </DataTrigger>
 						    </Style.Triggers>
@@ -57,7 +58,7 @@
 				    <Run.Style>
 					    <Style TargetType="Run">
 						    <Style.Triggers>
-							    <DataTrigger Binding="{Binding CurrentUser}" Value="{x:Static comm:UserType.UserFirst}">
+							    <DataTrigger Binding="{Binding CurrentUser}" Value="{x:Static ml:UserType.UserFirst}">
 								    <Setter Property="Foreground" Value="LightGray"/>
 							    </DataTrigger>
 						    </Style.Triggers>
@@ -82,7 +83,7 @@
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate x:Name="CellTestInfo" DataType="{x:Type comm:CellDto}">
+                    <DataTemplate x:Name="CellTestInfo" DataType="{x:Type ml:CellDto}">
                         <Grid>
                             <Button Command="{Binding DataContext.MoveCommand, ElementName=PART_MainUC}" 
                                     CommandParameter="{Binding}" Margin="2" BorderThickness="5">
