@@ -7,45 +7,96 @@ using System.IO;
 using ModelLibrary;
 using Repo;
 using System.Collections.Generic;
+using System.CodeDom;
 
 namespace Model
 {
 	public class ModelTicTacToe : OnPropertyChangedClass, IModel
 	{
-		/// <summary>Количество пустых ячеек</summary>
-		private int TotalFreeCells;
-
-		private int _rowsCount;
-		private int _columnsCount;
-		private int _lineLength;
-		private GameStatuses _gameStatus;
-		private Gamer _firstGamer;
-		private Gamer _secondGamer;
-		private UserType _currentUser;
-		private bool _isRevenge;
-
-		public int RowsCount { get => _rowsCount; private set => SetProperty(ref _rowsCount, value); }
-		public int ColumnsCount { get => _columnsCount; private set => SetProperty(ref _columnsCount, value); }
-		public int LineLength { get => _lineLength; private set => SetProperty(ref _lineLength, value); }
-		public GameStatuses GameStatus { get => _gameStatus; private set => SetProperty(ref _gameStatus, value); }
+		protected int RowsCount;
+		protected int ColumnsCount;
+		protected int LineLength;
+		protected GameStatuses GameStatus;
+		protected UserDto[] Gamers;
+		protected ISet<CellTypeDto> Types;
+		protected int CurrentGamerId => CurrentGamer.Id;
+		protected int CurrentGamerIndex;
+		protected UserDto CurrentGamer => Gamers[CurrentGamerIndex];
 
 
 		private readonly int ShiftForCalculateCompleteLine;//сдвиг относительно проверяемой ячейки
+		public event NotifyChangedCellHandler ChangedCellEvent;
 
-		public Gamer FirstGamer { get => _firstGamer; private set => SetProperty(ref _firstGamer, value); }
-		public Gamer SecondGamer { get => _secondGamer; private set => SetProperty(ref _secondGamer, value); }
+		void SetCellType(CellDto cell, CellTypeDto type)
+		{
+			if (Cells[cell.Row, cell.Column].CellType == type)
+				return;
+			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs("CellType",
+				Cells[cell.Row, cell.Column] = new CellDto(Cells[cell.Row, cell.Column]?.Id ?? cell.Id, cell.Row, cell.Column, type)));
+		}
+		void SetCellType(CellDto cell)
+			=> SetCellType(cell, cell.CellType);
+
+		public event NotifyChangedStateHandler ChangedStateEvent;
+
+		void SetIsRevenge(bool value)
+		{
+			if (IsRevenge == value)
+				return;
+			IsRevenge = value;
+			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(nameof(IsRevenge), value));
+		}
+		void ChangeCellsCount(int rows, int columns)
+		{
+			if (Cells == null || Cells.GetLength(0) != rows || Cells.GetLength(1) != columns)
+			{
+				Cells = new CellDto[rows, columns];
+				ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs("ChangeCellsCount", new int[] { rows, columns }));
+			}
+		}
+		void SetGameStatus(GameStatuses value, object args = null)
+		{
+			if (GameStatus == value)
+				return;
+			GameStatus = value;
+			if (args == null)
+				ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(nameof(GameStatus), value));
+			else
+				ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(nameof(GameStatus), new object[] { value, args }));
+		}
+
+		void SetCurrentGamerIndex(int value)
+		{
+			value %= Gamers.Length;
+			if (CurrentGamerIndex == value)
+				return;
+
+			CurrentGamerIndex = value;
+			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(nameof(CurrentGamer), CurrentGamer));
+		}
 
 
-		//public event GameOverHandler GameOverWinEvent;
-		//public event GameOverDrawHandler GameOverDrawEvent;
-		public event ChangeCellHandler MoveEvent;
-		//public event ChangeStatusHandler ChangeStatusEvent;
+		void SetChangeGamerIsTurn(int index, bool isTurn)
+		{
+			if (Gamers[index].IsTurn == isTurn)
+				return;
 
-		private readonly List<CellDto[]> cellsArray;
-		public ReadOnlyCollection<ReadOnlyCollection<CellDto>> Cells { get; }
+			var gamerOld = Gamers[index];
+			var gamerNew = new UserDto(gamerOld.Id, gamerOld.UserName, gamerOld.ImageIndex, gamerOld.Turn, isTurn, gamerOld.CellType);
+			Gamers[index] = gamerNew;
+			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs("ChangeGamerIsTurn", gamerOld, gamerNew));
+		}
 
-		//private UserType _currentUser;
-		public UserType CurrentUser { get => _currentUser; private set => SetProperty(ref _currentUser, value); }
+		void SetTypes(ISet<CellTypeDto> value)
+		{
+			if (Types == value)
+				return;
+			Types = value;
+			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(nameof(Types), value));
+		}
+		protected CellDto[,] Cells;
+
+		protected int CurrentUserID;
 
 		protected IReposSaveGame repos;
 		protected SavedGameDto savedGame;
@@ -56,173 +107,71 @@ namespace Model
 		public ModelTicTacToe(IReposSaveGame repos)
 		{
 			this.repos = repos;
-			savedGame = repos.Load();
-
-			IsRevenge = savedGame != null;
-
-			Cells= cellsArray.
-
-			//if (secondUser == UserType.Unknown) throw new Exception("Не допустимое значение 1-го игрока");
-			//IsRevenge = false;
-			//try
-			//{
-			//	if (File.Exists(ModelTicTacToe.FileNameXml))
-			//	{
-			//		using (var file = File.OpenRead(FileNameXml))
-			//			_ = (SaveGame)serializer.Deserialize(file);
-			//		IsRevenge = true;
-			//	}
-
-			//}
-			//catch (Exception ex) { }
-
-			//CurrentUser = secondUser;
-			//RowsCount = rowsCount;
-			//ColumnsCount = columnsCount;
-			//TotalFreeCells = RowsCount * ColumnsCount;
-			//LineLength = lineLength;
-			//ShiftForCalculateCompleteLine = LineLength - 1;
-
-			//// Делаем временный массив и заполняем его
-			//var cells = new CellDto[ColumnsCount][];
-
-			//for (int column = 0; column < RowsCount; column++)
-			//{
-			//	cells[column] = new CellDto[RowsCount];
-			//	for (int row = 0; row < rowsCount; row++)
-			//		cells[column][row] = new CellDto(row, column, CellContent.Empty);
-			//}
-			///*for (int row = 0; row < RowsCount; row++)
-			//{
-			//	cells[row] = new CellDto[ColumnsCount];
-			//	for (int column = 0; column < ColumnsCount; column++)
-			//		cells[row][column] = new CellDto(row, column, CellContent.Empty);
-			//}*/
-
-			///// Так как строки не меняются, то преобразуем 
-			///// временный массив в неизменяемый по первому измерению
-			//cellsArray = Array.AsReadOnly(cells);
-
-			///// Публичный массив делаем неизменяемым по двум измерениям.
-			///// При этом у нас сохраняется связь с элементами внутреннего массива,
-			///// так Array.AsReadOnly(_row)) делает не копию, а оболочку надо 
-			///// массивом каждой строки. И изменяя значения в исходном массиве мы их меняем 
-			///// и в публичном. Но "из вне" эти значения поменять не могут.
-			//Cells = Array.AsReadOnly(cells.Select(_row => Array.AsReadOnly(_row)).ToArray());
-			//GameStatus = GameStatuses.New;
 		}
 
-		public void CreateGame(Gamer firstGamer, Gamer secondGamer)
+		public void CreateGame()
 		{
-			FirstGamer = firstGamer;
-			SecondGamer = secondGamer;
-			TotalFreeCells = ColumnsCount * RowsCount;
+			ChangeCellsCount(RowsCount, ColumnsCount);
 			for (int row = 0; row < RowsCount; row++)
 			{
 				for (int column = 0; column < ColumnsCount; column++)
-					cellsArray[row][column] = new CellDto(column, row, CellContent.Empty);
+					SetCellType(new CellDto(row * ColumnsCount + column, column, row, null));
 			}
 		}
 
-		public void StartNewGame(/*Gamer firstGamer, Gamer secondGamer*/)
+		public void StartNewGame(params object[] args)
 		{
-			//FirstGamer = firstGamer;
-			//SecondGamer = secondGamer;
-			//TotalFreeCells = ColumnsCount * RowsCount;
-			/*for (int row = 0; row < RowsCount; row++)
-			{
-				for (int column = 0; column < ColumnsCount; column++)
-					cellsArray[row][column] = new CellDto(column, row, CellContent.Empty);
-			}*/
-
-			GameStatus = GameStatuses.Game;
+			RowsCount = (int)args[0];
+			ColumnsCount = (int)args[1];
+			LineLength = (int)args[2];
+			Gamers = ((IEnumerable<UserDto>)args[3]).OrderBy(gmr => gmr.Turn).ToArray();
+			int gamerInd = Gamers.TakeWhile(gmr => !gmr.IsTurn).Count();
+			SetCurrentGamerIndex(gamerInd);
+			CreateGame();
+			SetGameStatus(GameStatuses.Game);
 		}
 
-		public bool CanMove(CellDto cell, UserType user)
+		public bool CanMove(CellDto cell, UserDto user)
 		{
-			if (user != CurrentUser)
-			{
+			if (user != CurrentGamer || GameStatus != GameStatuses.Game)
 				return false;
-				//throw new Exception("Ход вне очереди");//По хорошему все эти и аналогичные сообщения нужно вынестти в отдельный список, но пока не буду заморачиваться
-			}
-			return Cells[cell.Row][cell.Column].CellType == CellContent.Empty;
+
+			return Cells[cell.Row, cell.Column].CellType == null;
 		}
 
-		public void Move(CellDto cell, UserType user)
+		public void Move(CellDto cell, UserDto user)
 		{
-			//Utils.Log("x", cell.X, "y", cell.Y);
-			if (cell.CellType != CellContent.Empty)
-			{
-				throw new Exception("Произведена попытка хода пустой клеткой");
-			}
 			if (!CanMove(cell, user))
-				throw new Exception("Данный ход не возможен. Игрок: " + user + ", column: " + cell.Column + ", row: " + cell.Row);
-
-			GameStatus = GameStatuses.Game;
-			TotalFreeCells--;
-			CellDto newCell;
-			if (CurrentUser == UserType.UserFirst)
-			{
-				newCell = new CellDto(cell.Column, cell.Row, CellContent.Cross);
-			}
-			else if (CurrentUser == UserType.UserSecond)
-			{
-				newCell = new CellDto(cell.Column, cell.Row, CellContent.Zero);
-			}
-			else
-			{
-				throw new Exception("Нет польхователя для хода");
-			}
-			cellsArray[cell.Row][cell.Column] = newCell;
-			//CurrentUser = user;
-			MoveEvent?.Invoke(this, newCell);
-			FinishGame(newCell);
+				throw new Exception("Данный ход не возможен. Игрок: " + user.Id + ", column: " + cell.Column + ", row: " + cell.Row);
+			SetCellType(cell, CurrentGamer.CellType);
+			FinishGame(Cells[cell.Row, cell.Column]);
+			if (GameStatus == GameStatuses.Game)
+				SetCurrentGamerIndex(++CurrentGamerIndex);
 		}
 		private void FinishGame(CellDto testCell)
 		{
-
 			bool isWin = WinCheck(testCell);
-			if (isWin == false && TotalFreeCells == 0)
-			{
-				GameStatus = GameStatuses.Draw;
-			}
 			if (isWin)
 			{
-				GameStatus = CurrentUser == UserType.UserFirst ? GameStatuses.WinFirst : GameStatuses.WinSecond;
+				SetGameStatus(GameStatuses.Win, CurrentGamerId);
+				return;
 			}
-			CurrentUser = CurrentUser == UserType.UserFirst ? UserType.UserSecond : UserType.UserFirst;
-			RemoveSavedFile();
+			if (!Cells.Cast<CellDto>().Any(cl => cl.CellType == null))
+			{
+				SetGameStatus(GameStatuses.Draw);
+			}
 		}
 
 		private bool WinCheck(CellDto cell)
 		{
-			if (cell.CellType == CellContent.Empty) throw new Exception("Попытка проверки пустой ячейки");
-			bool isWin = (
+
+			if (cell.CellType == null) throw new Exception("Попытка проверки пустой ячейки");
+			return (
 				TestLine(cell, LineLength, false, true, false) ||   //vertical
 				TestLine(cell, LineLength, true, false, false) ||   //horizontal
 				TestLine(cell, LineLength, true, true, false) ||    //diagonal-1
 				TestLine(cell, LineLength, true, true, true)        //diagonal-2
 				);
-
-			if (isWin == true)
-			{
-				//var sel = from p in cells where p
-				//List<CellDto> bufer = Cells.Cast<CellDto>().ToList();
-				var bufer = Cells.Concat();
-				int countMoves = bufer.Where(p => p.CellType != CellContent.Empty).Count();
-				if (countMoves % 2 == 1)//TODO: проверить правильность
-				{
-					GameStatus = GameStatuses.WinFirst;
-				}
-				else
-				{
-					GameStatus = GameStatuses.WinSecond;
-				}
-				//GameOverWinEvent?.Invoke(this);
-
-				return true;
-			}
-			return false;
 		}
 
 		/// <summary>Проверка на появление новой завершенной линии относительно свежедобавленного элемента</summary>
@@ -283,151 +232,88 @@ namespace Model
 			{
 				return null;
 			}
-			return Cells[y][x];
+			return Cells[y, x];
 		}
 
-		/*private void SetStatus(GameStatuses status)
+		public void GamerSurrender()
 		{
-			if (GameStatus == status) return;
-			*//*switch (status)
-			{
-				case GameStatuses.Zero:
-					throw new Exception("Невозможная последовательность смены состояния игры");
-				case GameStatuses.New:
-					if (GameStatus == GameStatuses.Game)
-						throw new Exception("Невозможная последовательность смены состояния игры");
-					break;
-				//case GameStatuses.Game:
-					//if (GameStatus != GameStatuses.New)
-						//throw new Exception("Невозможная последовательность смены состояния игры");
-					//break;
-				case GameStatuses.WinFirst:
-					if (GameStatus != GameStatuses.Game)
-						throw new Exception("Невозможная последовательность смены состояния игры");
-					break;
-				case GameStatuses.WinSecond:
-					if (GameStatus != GameStatuses.Game)
-						throw new Exception("Невозможная последовательность смены состояния игры");
-					break;
-
-				case GameStatuses.Draw:
-					if (GameStatus != GameStatuses.Game)
-						throw new Exception("Невозможная последовательность смены состояния игры");
-					break;
-				case GameStatuses.Cancel:
-					if (GameStatus != GameStatuses.New)
-						throw new Exception("Невозможная последовательность смены состояния игры");
-					break;
-				default:
-					break;
-			}*//*
-			GameStatus = status;
-			//ChangeStatusEvent?.Invoke(this, status);
-			Utils.Log("status changed in model:", status);
-		}*/
-
-		public void CancelGame()
-		{
-			//List<CellDto> bufer = Cells.Cast<CellDto>().ToList();
-			var bufer = Cells.Concat();
-			int countMoves = bufer.Where(p => p.CellType != CellContent.Empty).Count();
-			if (countMoves % 2 == 1)//TODO: проверить правильность
-			{
-				GameStatus = GameStatuses.WinFirst;
-			}
-			else
-			{
-				GameStatus = GameStatuses.WinSecond;
-			}
-			//SetStatus(GameStatuses.Win);
+			SetCurrentGamerIndex(++CurrentGamerIndex);
+			SetGameStatus(GameStatuses.Win, CurrentGamerId);
 		}
 
-
-		//public static string FileNameXml { get; set; }
-
-		//private bool _isRevenge = false;
-
-		public bool IsRevenge { get => _isRevenge; private set => SetProperty(ref _isRevenge, value); }
-
-		protected static readonly XmlSerializer serializer = new XmlSerializer(typeof(SaveGame));
-		public void Save()//Сохранять игру должно в автоматическом режиме, по хорошему это должен делать, как и загрузку результатов, отдельный объект. Поэтому не понятно, необхоимо ли это свойство в интерфейсе. Ведь достаточно приватного метода.
+		protected bool IsRevenge;
+		public void Save()
 		{
-			if (GameStatus != GameStatuses.Game)
-			{
-				return;
-			}
-			if (Cells.Concat().Where(p => p.CellType == CellContent.Empty).Count() == RowsCount * ColumnsCount)
-			{
-				return;
-			}
-
-
-			SaveGame saveGame = new SaveGame();
-			saveGame.FirstUser = FirstGamer.UserName;
-			saveGame.SecondUser = SecondGamer.UserName;
-			saveGame.ImageIndexFirstUser = FirstGamer.ImageIndex;
-			saveGame.ImageIndexSecondUser = SecondGamer.ImageIndex;
-			saveGame.IsCurrentFirstUtser = CurrentUser == UserType.UserFirst;
-			saveGame.Cells = CellXML.CreateCells(Cells);
-
-			using (var file = File.Create(FileNameXml))
-				serializer.Serialize(file, saveGame);
+			repos.Save(new SavedGameDto
+			(
+				Gamers.ToHashSet(),
+				Cells.Cast<CellDto>().Where(cl => cl.CellType != null).ToHashSet(),
+				Types,
+				RowsCount,
+				ColumnsCount,
+				LineLength
+			));
 
 		}
-		public SaveGame Load(Gamer firstGamer, Gamer secondGamer)
-		{
-			SaveGame saveGame;
-
-			try
-			{
-				using (var file = File.OpenRead(FileNameXml))
-					saveGame = (SaveGame)serializer.Deserialize(file);
-
-				for (int i = 0; i < saveGame.Cells.Count(); i++)
-				{
-					string xmlType = saveGame.Cells[i].CellType;
-					CellContent type = (CellContent)Enum.Parse(typeof(CellContent), xmlType);
-					//switch (xmlType)
-					//{
-					//	case "Cross": type = CellContent.Cross; break;
-					//	case "Zero": type = CellContent.Zero; break;
-					//	case "Empty": type = CellContent.Empty; break;
-					//	default: throw new Exception("При попытке загрузки сохраненной игры возникла ошибка");
-					//}
-					//model.Cells = new CellDto(Cells[i].Column, Cells[i].Row, type);
-					cellsArray[i / 3][i % 3] = new CellDto(i % 3, i / 3, type);
-				}
-				FirstGamer = firstGamer;
-				SecondGamer = secondGamer;
-				FirstGamer.UserName = saveGame.FirstUser;
-				SecondGamer.UserName = saveGame.SecondUser;
-				FirstGamer.ImageIndex = saveGame.ImageIndexFirstUser;
-				SecondGamer.ImageIndex = saveGame.ImageIndexSecondUser;
-				CurrentUser = saveGame.IsCurrentFirstUtser ? UserType.UserFirst : UserType.UserSecond;
-				GameStatus = GameStatuses.Game;
-				return saveGame;
-			}
-			catch (Exception)
-			{
-				return null;
-			}
-		}
-
 		private void RemoveSavedFile()
 		{
-			if (File.Exists(FileNameXml))
-			{
-				try
-				{
-					File.Delete(FileNameXml);
-					IsRevenge = false;
-				}
-				catch (Exception ex)
-				{
+			repos.RemoveSavedGame();
+			SetIsRevenge(false);
+		}
 
-					throw ex;
-				}
+		public void RepairGame()
+		{
+			if (!IsRevenge || savedGame == null)
+				return;
+
+			
+			SetRowsCount(savedGame.RowsCount);
+			SetColumnsCount(savedGame.ColumnsCount);
+			SetLineLength(savedGame.LengthLineForWin);
+			
+			SetTypes(savedGame.Types);
+			SetGamers(savedGame.Users);
+			ChangeCellsCount(RowsCount, ColumnsCount);
+			foreach (CellDto cell in savedGame.Cells)
+			{
+				SetCellType(cell);
 			}
+			int gamerInd = Gamers.TakeWhile(gmr => !gmr.IsTurn).Count();
+			SetCurrentGamerIndex(gamerInd);
+			SetGameStatus(GameStatuses.Game);
+		}
+
+		private void SetGamers(ISet<UserDto> value)
+		{
+			Gamers = value.OrderBy(i=>i.Turn).ToArray();
+			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(nameof(Gamers), value));
+		}
+
+		private void SetLineLength(int value)
+		{
+			if (LineLength == value) return;
+			LineLength = value;
+			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(nameof(LineLength), value));
+		}
+
+		private void SetColumnsCount(int value)
+		{
+			if (ColumnsCount == value) return;
+			ColumnsCount = value;
+			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(nameof(ColumnsCount), value));
+		}
+
+		private void SetRowsCount(int value)
+		{
+			if (RowsCount == value) return;
+			RowsCount = value;
+			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(nameof(RowsCount), value));
+		}
+
+		public void Load()
+		{
+			savedGame = repos.Load();
+			SetIsRevenge(savedGame != null);
 		}
 	}
 

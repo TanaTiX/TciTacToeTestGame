@@ -60,6 +60,10 @@ namespace Repo
 		/// <remarks/>
 		[XmlAttribute()]
 		public int ImageIndex { get; set; }
+		/// <remarks/>
+		[XmlAttribute()]
+		public int typeId { get; set; }
+
 	}
 
 	/// <remarks/>

@@ -9,10 +9,10 @@
 		New,
 		/// <summary>Идет игра</summary>
 		Game,
-		/// <summary>Победил 1й игрок</summary>
-		WinFirst,
+		/// <summary>Победак</summary>
+		Win,
 		/// <summary>Победил 2й игрок</summary>
-		WinSecond, 
+		//WinSecond, 
 		/// <summary>Ничья</summary>
 		Draw, 
 		/// <summary>Отмена игры</summary>

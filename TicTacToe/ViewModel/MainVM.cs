@@ -25,7 +25,7 @@ namespace ViewModel
 			//CurrentUser = model.CurrentUser;
 			//model.ChangeStatusEvent += Model_ChangeStatusEvent;
 			model.PropertyChanged += OnModelPropertyChanged;
-			model.MoveEvent += OnModelMoveEvent;
+			model.ChangedCellEvent += OnModelMoveEvent;
 
 			model.OnAllPropertyChanged();
 			

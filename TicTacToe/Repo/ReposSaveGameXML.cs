@@ -60,6 +60,8 @@ namespace Repo
 				.Select(xml => new CellTypeDto(xml.id, xml.value))
 				.ToHashSet();
 
+			var tps = types.ToDictionary(tp => tp.Id);
+
 			HashSet<CellDto> cells = null;
 			if (game.cells != null)
 			{
@@ -68,14 +70,14 @@ namespace Repo
 				{
 					if (types.FirstOrDefault(dto => dto.Id == cell.id) == null)
 						throw new ArgumentException("Такого типа нет в списке", "cell.id");
-					cells.Add(new CellDto(cell.id, cell.row, cell.column, cell.typeId));
+					cells.Add(new CellDto(cell.id, cell.row, cell.column, tps[cell.typeId]));
 				}
 			}
 
 			if (!(game.users?.Count > 0))
 				throw new ArgumentOutOfRangeException(nameof(game) + "." + nameof(game.users), "Не может быть меньше одного");
 			HashSet<UserDto> users = game.users
-					.Select(xml => new UserDto(xml.id, xml.Name, xml.ImageIndex, xml.turn, xml.id == game.currentUser.userId))
+					.Select(xml => new UserDto(xml.id, xml.Name, xml.ImageIndex, xml.turn, xml.id == game.currentUser.userId, tps[xml.typeId]))
 					.ToHashSet();
 
 			return new SavedGameDto
@@ -100,12 +102,14 @@ namespace Repo
 				.Select(dto => new CellTypeXML() { id = dto.Id, value = dto.Type })
 				.ToList();
 
+			var tps = types.ToDictionary(tp => tp.value, tp => tp.id);
+
 			List<CellXML> cells = new List<CellXML>();
 			if (game.Cells != null)
 			{
 				foreach (CellDto cell in game.Cells)
 				{
-					cells.Add(new CellXML() { id = cell.Id, row = cell.Row, column = cell.Column, typeId = cell.CellType });
+					cells.Add(new CellXML() { id = cell.Id, row = cell.Row, column = cell.Column, typeId = tps[cell.CellType.Type]});
 
 				}
 			}
@@ -122,7 +126,7 @@ namespace Repo
 			if (!(game.Users?.Count > 0))
 				throw new ArgumentOutOfRangeException(nameof(game) + "." + nameof(game.Users), "Не может быть меньше одного");
 			List<UserXML> users = game.Users
-					.Select(dto => new UserXML() { id = dto.Id, Name = dto.UserName, ImageIndex = dto.ImageIndex, turn = dto.Turn })
+					.Select(dto => new UserXML() { id = dto.Id, Name = dto.UserName, ImageIndex = dto.ImageIndex, turn = dto.Turn, typeId = tps[dto.CellType.Type] })
 					.ToList();
 
 			return new SavedGameXML()
@@ -139,6 +143,22 @@ namespace Repo
 				}
 			};
 
+		}
+
+		public void RemoveSavedGame()
+		{
+			if (File.Exists(FileXml.AbsolutePath))
+			{
+				try
+				{
+					File.Delete(FileXml.AbsolutePath);
+				}
+				catch (Exception ex)
+				{
+
+					throw ex;
+				}
+			}
 		}
 	}
 }

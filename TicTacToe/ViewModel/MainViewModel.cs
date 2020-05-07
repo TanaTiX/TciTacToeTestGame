@@ -234,7 +234,7 @@ namespace ViewModel
 					case GameStatuses.Game:
 						Winner = Loser = null;
 						break;
-					case GameStatuses.WinFirst:
+					case GameStatuses.Win:
 						Winner = FirstGamer;
 						Loser = SecondGamer;
 						break;

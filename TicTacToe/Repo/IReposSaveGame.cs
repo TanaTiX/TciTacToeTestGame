@@ -8,5 +8,6 @@ public	interface IReposSaveGame
 	{
 		SavedGameDto Load();
 		void Save(SavedGameDto gameDto);
+		void RemoveSavedGame();
 	}
 }

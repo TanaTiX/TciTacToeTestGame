@@ -8,7 +8,7 @@ namespace ModelLibrary
 
 	public class UserDto : BaseId
 	{
-		public UserDto(int id, string userName, int imageIndex, int turn, bool isTurn) : base(id)
+		public UserDto(int id, string userName, int imageIndex, int turn, bool isTurn, CellTypeDto cellType) : base(id)
 		{
 			if (string.IsNullOrWhiteSpace(userName))
 				throw new ArgumentNullException(nameof(userName));
@@ -19,13 +19,14 @@ namespace ModelLibrary
 			ImageIndex = imageIndex;
 			Turn = turn;
 			IsTurn = isTurn;
+			CellType = cellType;
 		}
 
 		public string UserName { get; }
 		public int ImageIndex { get; }
 		public int Turn { get; }
 		public bool IsTurn { get; }
-
+		public CellTypeDto CellType { get; }
 	}
 
 
