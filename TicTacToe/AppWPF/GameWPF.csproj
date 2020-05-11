@@ -59,6 +59,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Window1.xaml.cs">
+      <DependentUpon>Window1.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -103,6 +106,10 @@
       <Project>{7f2766af-ef15-4c64-adf3-e9d244f5b1a8}</Project>
       <Name>Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Repo\Repo.csproj">
+      <Project>{235AC355-1B40-4E4D-9C64-49616020F4C6}</Project>
+      <Name>Repo</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ViewModel\ViewModel.csproj">
       <Project>{9E41BCFC-F7B3-41C9-9050-A81DBA5CD9A0}</Project>
       <Name>ViewModel</Name>
@@ -111,6 +118,12 @@
       <Project>{4594E831-A72C-4569-A0AD-BE8460F450DD}</Project>
       <Name>View</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Window1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

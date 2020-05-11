@@ -5,10 +5,10 @@ namespace ModelLibrary
 {
 	public class CellDto
 	{
-		private static Random rnd = new Random();
+		//private static Random rnd = new Random();
 		public CellDto( int row,int column, CellTypeDto cellType)
 		{
-			Name = "test " + rnd.Next();
+			//Name = "test " + rnd.Next();
 			Column = column;
 			Row = row;
 			CellType = cellType;
@@ -22,6 +22,6 @@ namespace ModelLibrary
 		public int Column { get; }
 		public int Row { get; }
 		public int Id { get; }
-		public string Name { get; }
+		//public string Name { get; }
 	}
 }

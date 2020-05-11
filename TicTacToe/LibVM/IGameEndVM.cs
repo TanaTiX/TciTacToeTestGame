@@ -1,4 +1,5 @@
 ﻿using Common;
+using ModelLibrary;
 using System.Windows.Input;
 
 namespace LibVM
@@ -12,9 +13,9 @@ namespace LibVM
 		ICommand StartNewGameCommand { get; }
 
 		/// <summary>Победитель</summary>
-		Gamer Winner { get; }
+		UserVM Winner { get; }
 
 		/// <summary>Проигравший</summary>
-		Gamer Loser { get; }
+		UserVM Loser { get; }
 	}
 }

@@ -16,7 +16,7 @@ namespace Common
                     return Dictionary[values[0]];
 
             }
-            else if (values.Length > 1 && (values[1] is IDictionary dictionary) && (dictionary.Contains(values[0]) == true))
+            else if (values.Length > 1 && values[0] != null && (values[1] is IDictionary dictionary) && (dictionary.Contains(values[0]) == true))
             {
                 return dictionary[values[0]];
             }

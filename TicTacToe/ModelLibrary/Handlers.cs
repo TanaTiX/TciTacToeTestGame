@@ -7,21 +7,21 @@
 
 	public class ChangedStateHandlerArgs
 	{
-		public string StateName { get; }
+		public NamesState StateName { get; }
 		public object OldValue { get; }
 		public object NewValue { get; }
 
-		public ChangedStateHandlerArgs(string stateName)
+		public ChangedStateHandlerArgs(NamesState stateName)
 		{
 			StateName = stateName;
 		}
 
-		public ChangedStateHandlerArgs(string stateName, object newValue) : this(stateName)
+		public ChangedStateHandlerArgs(NamesState stateName, object newValue) : this(stateName)
 		{
 			NewValue = newValue;
 		}
 
-		public ChangedStateHandlerArgs(string stateName, object oldValue, object newValue) : this(stateName, oldValue)
+		public ChangedStateHandlerArgs(NamesState stateName, object oldValue, object newValue) : this(stateName, oldValue)
 		{
 			NewValue = newValue;
 		}

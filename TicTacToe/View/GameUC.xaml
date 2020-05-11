@@ -7,6 +7,7 @@
 			 xmlns:comm="clr-namespace:Common;assembly=Common"
 			 xmlns:model="ModelLibrary"
 			 xmlns:dataGrid2D="http://gu.se/DataGrid2D"
+			 xmlns:vm="clr-namespace:LibVM;assembly=LibVM"
 			 xmlns:ml="clr-namespace:ModelLibrary;assembly=ModelLibrary"
              mc:Ignorable="d"
 			 Background="AliceBlue"
@@ -14,17 +15,18 @@
 
 
     <d:UserControl.DataContext>
+		
         <local:GameVM >
             <local:GameVM.Picturies>
-                <x:Null x:Key="{x:Static ml:CellContent.Empty}"/>
-                <BitmapImage x:Key="{x:Static ml:CellContent.Cross}" UriSource="Resources/Images/cross.png"/>
-                <BitmapImage x:Key="{x:Static ml:CellContent.Zero}" UriSource="Resources/Images/zero.png"/>
+				<x:Null      x:Key="{x:Static ml:CellTypeDto.Empty}"/>
+				<BitmapImage x:Key="{x:Static ml:CellTypeDto.Cross}" UriSource="Resources/Images/cross.png"/>
+				<BitmapImage x:Key="{x:Static ml:CellTypeDto.Zero}" UriSource="Resources/Images/zero.png"/>
             </local:GameVM.Picturies>
 			<local:GameVM.FirstGamer>
-				<comm:Gamer UserName="Пользователь 1" Image="Resources/Images/no.png"/>
+				<vm:UserVM UserName="Пользователь 1" Image="Resources/Images/no.png"/>
 			</local:GameVM.FirstGamer>
 			<local:GameVM.SecondGamer>
-				<comm:Gamer UserName="Пользователь 2" Image="Resources/Images/yes.png"/>
+				<vm:UserVM UserName="Пользователь 2" Image="Resources/Images/yes.png"/>
 				
 			</local:GameVM.SecondGamer>
 		</local:GameVM>
@@ -32,6 +34,7 @@
     </d:UserControl.DataContext>
     <UserControl.Resources>
         <comm:DictionaryKeyToValueConverter x:Key="DictionaryKeyToValueConverter"/>
+		
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -46,7 +49,7 @@
 				    <Run.Style>
 					    <Style TargetType="Run">
 						    <Style.Triggers>
-							    <DataTrigger Binding="{Binding CurrentUser}" Value="{x:Static ml:UserType.UserSecond}">
+							    <DataTrigger Binding="{Binding FirstGamer.IsTurn}" Value="False">
 								    <Setter Property="Foreground" Value="LightGray"/>
 							    </DataTrigger>
 						    </Style.Triggers>
@@ -58,7 +61,7 @@
 				    <Run.Style>
 					    <Style TargetType="Run">
 						    <Style.Triggers>
-							    <DataTrigger Binding="{Binding CurrentUser}" Value="{x:Static ml:UserType.UserFirst}">
+							    <DataTrigger Binding="{Binding SecondGamer.IsTurn}" Value="False">
 								    <Setter Property="Foreground" Value="LightGray"/>
 							    </DataTrigger>
 						    </Style.Triggers>
@@ -68,18 +71,24 @@
 		    </TextBlock>
 		</Viewbox>
 		<!--<Grid Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Background="AliceBlue" Width="{Binding Height, RelativeSource={RelativeSource Self}, Mode=TwoWay}" Height="{Binding Width, RelativeSource={RelativeSource Self}, Mode=TwoWay}">-->
-		<Grid Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Background="AliceBlue" Width="500" Height="500">
+		<Grid Grid.Row="1"  Background="AliceBlue">
 
-            <ItemsControl ItemsSource="{Binding Cells}">
+            <ItemsControl ItemsSource="{Binding Cells}" local:AProperty.WidthToHeight="1">
                 <!--<ItemsControl.Resources>
                     <local:CellToImageLinkConverter x:Key="CellConverter"/>
                 </ItemsControl.Resources>-->
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Background="AliceBlue"
+                        <!--<UniformGrid Background="AliceBlue"
                                      Columns="{Binding ColumnsCount, Mode=OneWay}"
                                      Rows="{Binding RowsCount, Mode=OneWay}">
-                        </UniformGrid>
+                        </UniformGrid>-->
+						<Grid Background="AliceBlue"
+							        
+                                     local:AProperty.Columns="{Binding ColumnsCount, Mode=OneWay}"
+                                     local:AProperty.Rows="{Binding RowsCount, Mode=OneWay}">
+                        </Grid>
+						
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
@@ -113,6 +122,12 @@
                         <!--<Image Source="Resources/Images/cross.png"/>-->
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
+				<ItemsControl.ItemContainerStyle>
+					<Style>
+						<Setter Property="Grid.Row" Value="{Binding Row}"/>
+						<Setter Property="Grid.Column" Value="{Binding Column}"/>
+					</Style>
+				</ItemsControl.ItemContainerStyle>
             </ItemsControl>
         </Grid>
         <!--example-->
@@ -132,7 +147,9 @@
 				</dataGrid2D:Cell.Template>
 			</DataGrid>
 		</Grid>-->
+		<TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+				   Text="{Binding FirstGamer.IsTurn}"/>
 
-        <Button Grid.Row="2" Command="{Binding LoseCommand, Mode=OneWay}" >Сдаться</Button>
+		<Button Grid.Row="2" Command="{Binding LoseCommand, Mode=OneWay}" >Сдаться</Button>
     </Grid>
 </UserControl>

@@ -47,7 +47,6 @@
   <ItemGroup>
     <Compile Include="DictionaryKeyToValueConverter.cs" />
     <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="Gamer.cs" />
     <Compile Include="OnPropertyChangedClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RelayCommand.cs" />

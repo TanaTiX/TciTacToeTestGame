@@ -48,6 +48,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AProperty.cs" />
     <Compile Include="CellToImageLinkConverter.cs" />
     <Compile Include="BoolToVisibilityConverter.cs" />
     <Compile Include="DrawUC.xaml.cs">

@@ -25,39 +25,44 @@ namespace View
 
 
 
-		public Dictionary<CellContent, ImageSource> Picturies { get; }
-			= new Dictionary<CellContent, ImageSource>();
+		public Dictionary<CellTypeDto, ImageSource> Picturies { get; }
+			= new Dictionary<CellTypeDto, ImageSource>();
 
 
-		public ObservableCollection<CellDto> Cells { get; }
-			= new ObservableCollection<CellDto>();
+		public ObservableCollection<CellVM> Cells { get; }
+			= new ObservableCollection<CellVM>();
 
-		public Gamer FirstGamer { get; set; }
+		public UserVM FirstGamer { get; set; }
 
-		public Gamer SecondGamer { get; set; }
+		public UserVM SecondGamer { get; set; }
 
-
-		private static readonly CellContent[] contens = Enum.GetValues(typeof(CellContent)).Cast<CellContent>().ToArray();
 		private static readonly Random random = new Random();
 		public GameVM()
 		{
 
 			for (int row = 0; row < RowsCount; row++)
 				for (int column = 0; column < ColumnsCount; column++)
-					Cells.Add(new CellDto(row, column, contens[random.Next(contens.Length)]));
+					Cells.Add(new CellVM() {Row= row,Column= column,CellType= CellTypes[random.Next(CellTypes.Count)] });
 
 			MoveCommand = new RelayCommand
 			(
 				p =>
 				{
 					CellDto cell = (CellDto)p;
-					Cells[cell.Row * ColumnsCount + cell.Column] = new CellDto(cell.Column, cell.Row, contens[random.Next(contens.Length - 1) + 1]);
+					Cells[cell.Row * ColumnsCount + cell.Column].CellType =  CellTypes[random.Next(CellTypes.Count - 1) + 1];
 				},
-				p => p is CellDto cell && cell.CellType == CellContent.Empty
+				p => p is CellDto cell && (string.IsNullOrWhiteSpace(cell.CellType.Type) || cell.CellType.Type == "Empty")
 
 			);
 		}
 		
-		public UserType CurrentUser { get; set; }
+		public UserVM CurrentUser { get; set; }
+
+		public int LineLength { get; set; }
+
+		public ObservableCollection<CellTypeDto> CellTypes { get; }
+			= new ObservableCollection<CellTypeDto>(){ new CellTypeDto(1,"Empty"), new CellTypeDto(2,"Cross"), new CellTypeDto(3,"Zero")};
+
+		public int CurrentUserIndex { get; set; }
 	}
 }

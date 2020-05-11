@@ -1,4 +1,5 @@
 ﻿using Common;
+using ModelLibrary;
 
 namespace LibVM
 {
@@ -7,11 +8,11 @@ namespace LibVM
 		/// <summary>
 		/// 1й пользователь
 		/// </summary>
-		Gamer FirstGamer { get; }
+		UserVM FirstGamer { get; }
 		/// <summary>
 		/// 2й пользователь
 		/// </summary>
-		Gamer SecondGamer { get; }
+		UserVM SecondGamer { get; }
 
 	}
 }

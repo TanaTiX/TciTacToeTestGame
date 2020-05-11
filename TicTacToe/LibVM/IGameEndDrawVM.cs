@@ -1,4 +1,5 @@
 ﻿using Common;
+using ModelLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +18,9 @@ namespace LibVM
 		ICommand StartNewGameCommand { get; }
 
 		/// <summary>Победитель</summary>
-		Gamer FirstGamer { get; }
+		UserVM FirstGamer { get; }
 
 		/// <summary>Проигравший</summary>
-		Gamer SecondGamer { get; }
+		UserVM SecondGamer { get; }
 	}
 }

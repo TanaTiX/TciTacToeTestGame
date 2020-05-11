@@ -31,7 +31,7 @@
 					</Setter>
 				</DataTrigger>
 
-				<DataTrigger Binding="{Binding Statuse}" Value="{x:Static ml:GameStatuses.WinFirst}">
+				<DataTrigger Binding="{Binding Statuse}" Value="{x:Static ml:GameStatuses.Win}">
 					<Setter Property="Content">
 						<Setter.Value>
 							<local:GameEndUC/>
@@ -39,13 +39,13 @@
 					</Setter>
 				</DataTrigger>
 
-				<DataTrigger Binding="{Binding Statuse}" Value="{x:Static ml:GameStatuses.WinSecond}">
+				<!--<DataTrigger Binding="{Binding Statuse}" Value="{x:Static ml:GameStatuses.WinSecond}">
 					<Setter Property="Content">
 						<Setter.Value>
 							<local:GameEndUC/>
 						</Setter.Value>
 					</Setter>
-				</DataTrigger>
+				</DataTrigger>-->
 
 				<DataTrigger Binding="{Binding Statuse}" Value="{x:Static ml:GameStatuses.Cancel}">
 					<Setter Property="Content">

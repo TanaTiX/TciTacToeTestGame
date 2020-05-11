@@ -19,12 +19,15 @@ namespace LibVM
 
 		/// <summary>Колоичество колонок игрового поля</summary>
 		int ColumnsCount { get; }
+		int LineLength { get; }
 
 		/// <summary>Список ячеек игрвого поля</summary>
-		ObservableCollection<CellDto> Cells { get; }
+		ObservableCollection<CellVM> Cells { get; }
+		ObservableCollection<CellTypeDto> CellTypes { get; }
 		/// <summary>Словарь рисунков для контекста ячееек</summary>
-		Dictionary<CellContent, ImageSource> Picturies { get; }
+		Dictionary<CellTypeDto, ImageSource> Picturies { get; }
 
-		UserType CurrentUser { get; }
+		int CurrentUserIndex { get; }
+		UserVM CurrentUser { get; }
 	}
 }

@@ -5,6 +5,7 @@ using ModelLibrary;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -41,7 +42,7 @@ namespace ViewModel
 
 		//public RelayCommand ChangePieceIndexCommand { get; private set; }//удалить?
 
-		public ObservableCollection<User> Users { get; } = new ObservableCollection<User>();
+		public ObservableCollection<UserStatistic> Users { get; } = new ObservableCollection<UserStatistic>();
 
 		private ICommand _showFirstScreenCommand;
 		public ICommand ShowFirstScreenCommand => _showFirstScreenCommand ?? (_showFirstScreenCommand = new RelayCommand(ShowFirstScreenMethod));
@@ -67,38 +68,66 @@ namespace ViewModel
 			return true;
 		}
 
-		protected virtual void StartNewGameMethod(object parameter)
+		private void UpdatePictures()
 		{
 			Picturies.Clear();
-			Picturies.Add(CellContent.Cross, FirstGamer.Image);
-			Picturies.Add(CellContent.Zero, SecondGamer.Image);
-			Picturies.Add(CellContent.Empty, null);
-			
+			Picturies.Add(FirstGamer.CellType, FirstGamer.Image);
+			Picturies.Add(SecondGamer.CellType, SecondGamer.Image);
+			Picturies.Add(CellTypes[0], null);
+		}
+		protected virtual void StartNewGameMethod(object parameter)
+		{
+			UpdatePictures();
+
 			windowsChanger(typeof(IStatusesVM));
 		}
 
 		private IEnumerable<ImageSource> _piecesCollection;
 		public IEnumerable<ImageSource> PiecesCollection { get => _piecesCollection; set => SetProperty(ref _piecesCollection, value); }
-		public Gamer FirstGamer { get; } = new Gamer()
+		public UserVM FirstGamer { get; } = new UserVM()
 		{
 			UserName = "Пользователь 1"
 		};
-		public Gamer SecondGamer { get; } = new Gamer()
+		public UserVM SecondGamer { get; } = new UserVM()
 		{
 			UserName = "Пользователь 2"
 		};
 
 
-		private static readonly CellContent[] contens = Enum.GetValues(typeof(CellContent)).Cast<CellContent>().ToArray();
+		//private static readonly CellContent[] contens = Enum.GetValues(typeof(CellContent)).Cast<CellContent>().ToArray();
+		public ObservableCollection<CellTypeDto> CellTypes { get; } = new ObservableCollection<CellTypeDto>();
+
+		public MainViewModel()
+		{
+			CellTypes.CollectionChanged += CellTypes_CollectionChanged;
+		}
+
+		private void CellTypes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+		{
+			if (CellTypes.Count == 0 || CellTypes[0] != CellTypeDto.Empty)
+				CellTypes.Insert(0, CellTypeDto.Empty);
+			if (e.Action == NotifyCollectionChangedAction.Add)
+			{
+				bool rem = false;
+				foreach (CellTypeDto cell in e.NewItems.Cast<CellTypeDto>().Where(it => string.Equals(it.Type, CellTypeDto.Empty.Type, StringComparison.OrdinalIgnoreCase)))
+				{
+					if (cell != CellTypes[0])
+					rem = true;
+					CellTypes.Remove(cell);
+				}
+			}
+		}
+
 		private static readonly Random random = new Random();
 		private ICommand _moveCommand;
 		public ICommand MoveCommand => _moveCommand ?? (_moveCommand = new RelayCommand(MoveMethod, MoveCanMethod));
 		protected virtual void MoveMethod(object p)
 		{
 
-			CellDto cell = (CellDto)p;
-			Cells[cell.Row * ColumnsCount + cell.Column] = new CellDto(cell.Column, cell.Row, contens[random.Next(contens.Length - 1) + 1]);
-			var clearCells = Cells.Where(c => c.CellType == CellContent.Empty).Count();
+			CellVM cell = (CellVM)p;
+			//Cells[cell.Row * ColumnsCount + cell.Column] = new CellDto(cell.Column, cell.Row, CellTypes[random.Next(CellTypes.Count - 1) + 1]);
+			cell.CellType = CellTypes[random.Next(CellTypes.Count - 1) + 1];
+			var clearCells = Cells.Count(c => c.CellType == null);
 			if (clearCells == 0)
 			{
 				MessageBox.Show("Game over");
@@ -107,7 +136,7 @@ namespace ViewModel
 		}
 		protected virtual bool MoveCanMethod(object p)
 		{
-			return p is CellDto cell && cell.CellType == CellContent.Empty;
+			return p is CellVM cell && cell.CellType == null;
 		}
 
 		private ICommand _loseCommand;
@@ -124,29 +153,36 @@ namespace ViewModel
 
 		private int _columnsCount;
 		public int ColumnsCount { get => _columnsCount; protected set => SetProperty(ref _columnsCount, value); }
-		public ObservableCollection<CellDto> Cells { get; } = new ObservableCollection<CellDto>();
-		private void InitCollDisign()
+		public ObservableCollection<CellVM> Cells { get; } = new ObservableCollection<CellVM>();
+
+		protected CellVM[,] cellsMatrix;
+		protected void InitCollDisign()
 		{
 			Cells.Clear();
+			cellsMatrix = new CellVM[RowsCount, ColumnsCount];
 			for (int row = 0; row < RowsCount; row++)
 				for (int column = 0; column < ColumnsCount; column++)
-					Cells.Add(new CellDto(column, row, contens[random.Next(contens.Length)]));
+					Cells.Add(cellsMatrix[row, column] = new CellVM()
+					{
+						Column = column,
+						Row = row,
+						CellType = CellTypes[random.Next(CellTypes.Count - 1) + 1]
+					});
 
-			new List<User>
+			new List<UserStatistic>
 			{
-				new User(){ Name = "Иван", Total=111,  Win=56, Lose=5 },
-				new User(){ Name = "Петр", Total=31,  Win=26, Lose=5 },
-				new User(){ Name = "Сидор", Total=81,  Win=44, Lose=5 },
-				new User(){ Name = "Феофан", Total=1000,  Win=777, Lose=5 },
-				new User(){ Name = "Акакий", Total=9999,  Win=56, Lose=888 },
-				new User(){ Name = "Ivengo", Total=564,  Win=564, Lose=0 }
+				new UserStatistic(){ Name = "Иван", Total=111,  Win=56, Lose=5 },
+				new UserStatistic(){ Name = "Петр", Total=31,  Win=26, Lose=5 },
+				new UserStatistic(){ Name = "Сидор", Total=81,  Win=44, Lose=5 },
+				new UserStatistic(){ Name = "Феофан", Total=1000,  Win=777, Lose=5 },
+				new UserStatistic(){ Name = "Акакий", Total=9999,  Win=56, Lose=888 },
+				new UserStatistic(){ Name = "Ivengo", Total=564,  Win=564, Lose=0 }
 			}
 			.ForEach(it => Users.Add(it));
 
 
 		}
-		private Dictionary<CellContent, ImageSource> _pictures = new Dictionary<CellContent, ImageSource>();
-		public Dictionary<CellContent, ImageSource> Picturies { get => _pictures; }
+		public Dictionary<CellTypeDto, ImageSource> Picturies { get ; } = new Dictionary<CellTypeDto, ImageSource>();
 
 
 		private ICommand _repairGameCommand;
@@ -154,13 +190,7 @@ namespace ViewModel
 
 		protected virtual void RepairGameMethod(object parameter)
 		{
-
-
-
-			Picturies.Clear();
-			Picturies.Add(CellContent.Cross, FirstGamer.Image);
-			Picturies.Add(CellContent.Zero, SecondGamer.Image);
-			Picturies.Add(CellContent.Empty, null);
+			UpdatePictures();
 
 			windowsChanger(typeof(IStatusesVM));
 		}
@@ -194,15 +224,15 @@ namespace ViewModel
 		}//добавить реализацию
 
 		//Сначала переделал, потом прочитал твой ответ. Пока оставлю до изменения подхода.
-		private Gamer _winner;//сомневаюсь, что есть смысл выносить пользователя в отдельную переменную
-		public Gamer Winner
+		private UserVM _winner;//сомневаюсь, что есть смысл выносить пользователя в отдельную переменную
+		public UserVM Winner
 		{
 			get => _winner;
 			protected set => SetProperty(ref _winner, value);
 		}/* = FirstGamer.Clone();*///не могу создать копию победителя и проигравшего
-		private Gamer _loser;
+		private UserVM _loser;
 
-		public Gamer Loser
+		public UserVM Loser
 		{
 			get => _loser;
 			protected set => SetProperty(ref _loser, value);
@@ -216,36 +246,29 @@ namespace ViewModel
 			protected set => SetProperty(ref _statuse, value);
 		}
 
-		private UserType _currentUser = UserType.Unknown;
-		public UserType CurrentUser { get => _currentUser; protected set => SetProperty(ref _currentUser, value); }
+		private int _currentUserIndex = -1;
+		public int CurrentUserIndex { get => _currentUserIndex; protected set => SetProperty(ref _currentUserIndex, value); }
+
+		public UserVM CurrentUser => CurrentUserIndex == 0 ? FirstGamer
+			: CurrentUserIndex == 1 ? SecondGamer
+			: null;
+
+		private int _lineLength;
+		public int LineLength { get => _lineLength; protected set => SetProperty(ref _lineLength, value); }
 
 		protected override void PropertyNewValue<T>(ref T fieldProperty, T newValue, string propertyName)
 		{
 			base.PropertyNewValue(ref fieldProperty, newValue, propertyName);
-			if (propertyName == nameof(Statuse))
+			if (propertyName == nameof(CurrentUserIndex))
 			{
-				switch (Statuse)
+				OnPropertyChanged(nameof(CurrentUser));
+				if (CurrentUserIndex == 0)
 				{
-					case GameStatuses.Zero:
-						break;
-					case GameStatuses.New:
-						break;
-					case GameStatuses.Draw:
-					case GameStatuses.Game:
-						Winner = Loser = null;
-						break;
-					case GameStatuses.Win:
-						Winner = FirstGamer;
-						Loser = SecondGamer;
-						break;
-					case GameStatuses.WinSecond:
-						Winner = SecondGamer;
-						Loser = FirstGamer;
-						break;
-					case GameStatuses.Cancel:
-						break;
-					default:
-						break;
+					SecondGamer.IsTurn = !(FirstGamer.IsTurn = true);
+				}
+				else
+				{
+					SecondGamer.IsTurn = !(FirstGamer.IsTurn = false);
 				}
 			}
 

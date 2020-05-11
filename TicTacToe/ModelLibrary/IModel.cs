@@ -6,11 +6,11 @@ namespace ModelLibrary
 {
 	/// <summary>Интерфейс Модели</summary>
 	/// <remarks>Интерфей Модели игры в крестики-нолики произвольного размера поля</remarks>
-	public interface IModel : INotifyPropertyChanged
+	public interface IModel 
 	{
 		/// <summary>Собыие хода</summary>
 		/// <remarks>Происходит при измении любой ячейки</remarks>
-		event NotifyChangedCellHandler ChangedCellEvent;
+		//event NotifyChangedCellHandler ChangedCellEvent;
 		/// <summary>Событие изменеия состояния игры</summary>
 		/// <remarks>Происходит после изменения состояния</remarks>
 		event NotifyChangedStateHandler ChangedStateEvent;

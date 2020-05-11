@@ -11,7 +11,12 @@ using System.CodeDom;
 
 namespace Model
 {
-	public class ModelTicTacToe : OnPropertyChangedClass, IModel
+
+	
+
+
+
+	public class ModelTicTacToe :  IModel
 	{
 		protected int RowsCount;
 		protected int ColumnsCount;
@@ -20,18 +25,18 @@ namespace Model
 		protected UserDto[] Gamers;
 		protected ISet<CellTypeDto> Types;
 		protected int CurrentGamerId => CurrentGamer.Id;
-		protected int CurrentGamerIndex;
+		protected int CurrentGamerIndex = -1;
 		protected UserDto CurrentGamer => Gamers[CurrentGamerIndex];
 
 
 		private readonly int ShiftForCalculateCompleteLine;//сдвиг относительно проверяемой ячейки
-		public event NotifyChangedCellHandler ChangedCellEvent;
+		//public event NotifyChangedCellHandler ChangedCellEvent;
 
 		void SetCellType(CellDto cell, CellTypeDto type)
 		{
-			if (Cells[cell.Row, cell.Column].CellType == type)
+			if ( Cells[cell.Row, cell.Column] != null && Cells[cell.Row, cell.Column].CellType == type)
 				return;
-			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs("CellType",
+			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.CellType,
 				Cells[cell.Row, cell.Column] = new CellDto(Cells[cell.Row, cell.Column]?.Id ?? cell.Id, cell.Row, cell.Column, type)));
 		}
 		void SetCellType(CellDto cell)
@@ -44,14 +49,14 @@ namespace Model
 			if (IsRevenge == value)
 				return;
 			IsRevenge = value;
-			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(nameof(IsRevenge), value));
+			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.IsRevenge, value));
 		}
 		void ChangeCellsCount(int rows, int columns)
 		{
 			if (Cells == null || Cells.GetLength(0) != rows || Cells.GetLength(1) != columns)
 			{
 				Cells = new CellDto[rows, columns];
-				ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs("ChangeCellsCount", new int[] { rows, columns }));
+				ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.ChangeCellsCount, new int[] { rows, columns }));
 			}
 		}
 		void SetGameStatus(GameStatuses value, object args = null)
@@ -60,9 +65,9 @@ namespace Model
 				return;
 			GameStatus = value;
 			if (args == null)
-				ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(nameof(GameStatus), value));
+				ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.GameStatus, value));
 			else
-				ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(nameof(GameStatus), new object[] { value, args }));
+				ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.GameStatus, new object[] { value, args }));
 		}
 
 		void SetCurrentGamerIndex(int value)
@@ -72,10 +77,13 @@ namespace Model
 				return;
 
 			CurrentGamerIndex = value;
-			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(nameof(CurrentGamer), CurrentGamer));
+
+			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.CurrentGamerIndex, CurrentGamerIndex));
+			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.CurrentGamerId, CurrentGamer.Id));
+			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.CurrentGamer, CurrentGamer));
 		}
 
-
+		//нет ссылок
 		void SetChangeGamerIsTurn(int index, bool isTurn)
 		{
 			if (Gamers[index].IsTurn == isTurn)
@@ -84,7 +92,7 @@ namespace Model
 			var gamerOld = Gamers[index];
 			var gamerNew = new UserDto(gamerOld.Id, gamerOld.UserName, gamerOld.ImageIndex, gamerOld.Turn, isTurn, gamerOld.CellType);
 			Gamers[index] = gamerNew;
-			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs("ChangeGamerIsTurn", gamerOld, gamerNew));
+			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.ChangeGamerIsTurn, gamerOld, gamerNew));
 		}
 
 		void SetTypes(ISet<CellTypeDto> value)
@@ -92,7 +100,7 @@ namespace Model
 			if (Types == value)
 				return;
 			Types = value;
-			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(nameof(Types), value));
+			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.Types, value));
 		}
 		protected CellDto[,] Cells;
 
@@ -133,7 +141,7 @@ namespace Model
 
 		public bool CanMove(CellDto cell, UserDto user)
 		{
-			if (user != CurrentGamer || GameStatus != GameStatuses.Game)
+			if (user==null || CurrentGamer == null || user.UserName != CurrentGamer.UserName || GameStatus != GameStatuses.Game)
 				return false;
 
 			return Cells[cell.Row, cell.Column].CellType == null;
@@ -146,7 +154,7 @@ namespace Model
 			SetCellType(cell, CurrentGamer.CellType);
 			FinishGame(Cells[cell.Row, cell.Column]);
 			if (GameStatus == GameStatuses.Game)
-				SetCurrentGamerIndex(++CurrentGamerIndex);
+				SetCurrentGamerIndex(CurrentGamerIndex +1);
 		}
 		private void FinishGame(CellDto testCell)
 		{
@@ -237,7 +245,7 @@ namespace Model
 
 		public void GamerSurrender()
 		{
-			SetCurrentGamerIndex(++CurrentGamerIndex);
+			SetCurrentGamerIndex(CurrentGamerIndex + 1);
 			SetGameStatus(GameStatuses.Win, CurrentGamerId);
 		}
 
@@ -286,28 +294,28 @@ namespace Model
 		private void SetGamers(ISet<UserDto> value)
 		{
 			Gamers = value.OrderBy(i=>i.Turn).ToArray();
-			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(nameof(Gamers), value));
+			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.Gamers, value));
 		}
 
 		private void SetLineLength(int value)
 		{
 			if (LineLength == value) return;
 			LineLength = value;
-			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(nameof(LineLength), value));
+			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.LineLength, value));
 		}
 
 		private void SetColumnsCount(int value)
 		{
 			if (ColumnsCount == value) return;
 			ColumnsCount = value;
-			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(nameof(ColumnsCount), value));
+			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.ColumnsCount, value));
 		}
 
 		private void SetRowsCount(int value)
 		{
 			if (RowsCount == value) return;
 			RowsCount = value;
-			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(nameof(RowsCount), value));
+			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.RowsCount, value));
 		}
 
 		public void Load()

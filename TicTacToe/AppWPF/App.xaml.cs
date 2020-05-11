@@ -2,6 +2,7 @@
 using LibVM;
 using Model;
 using ModelLibrary;
+using Repo;
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
@@ -84,11 +85,17 @@ namespace GameWPF
 			window.Height = 700;
 			ChangeWindowContent(typeof(IFirstScreenVM));
 
-			Model.ModelTicTacToe.FileNameXml = "SavedGame.xml";
-			model = new Model.ModelTicTacToe(3, 3, UserType.UserFirst);
-			//MainViewModel viewModel = new MainViewModel(ChangeWindowContent);
-			MainVM viewModel = new MainVM(ChangeWindowContent, model);
+			ReposSaveGameXML repos = new ReposSaveGameXML("SavedGame.xml");
 
+			//Model.ModelTicTacToe.FileNameXml = ;
+			model = new ModelTicTacToe(repos);
+			//MainViewModel viewModel = new MainViewModel(ChangeWindowContent);
+			MainVM viewModel = new MainVM(ChangeWindowContent, model , 3, 3, 3);
+			viewModel.CellTypes.Add(new CellTypeDto(0, "Empty"));
+			viewModel.CellTypes.Add(new CellTypeDto(1, "Cross"));
+			viewModel.CellTypes.Add(new CellTypeDto(2, "Zero"));
+			viewModel.FirstGamer.CellType = viewModel.CellTypes[1];
+			viewModel.SecondGamer.CellType = viewModel.CellTypes[2];
 			ImageSource[] images =
 			{
 				(ImageSource)imageSourceConverter.ConvertFrom(new Uri("pack://application:,,,/View;component/Resources/Images/cross.png")),

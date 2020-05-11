@@ -1,5 +1,6 @@
 ﻿using Common;
 using LibVM;
+using ModelLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,12 +18,12 @@ namespace View
 
 		public ICommand ShowFirstScreenCommand { get; }
 
-		public Gamer Winner => new Gamer()
+		public UserVM Winner => new UserVM()
 		{
 			UserName = "ИмяПобедителя"
 		};
 
-		public Gamer Loser => new Gamer()
+		public UserVM Loser => new UserVM()
 		{
 			UserName = "ИмяПроигравшего"
 		};

@@ -17,7 +17,7 @@ namespace Repo
 			FileXml = fileXml ?? throw new ArgumentNullException(nameof(fileXml));
 		}
 		public ReposSaveGameXML(string filePathNameXml)
-			: this(new Uri(filePathNameXml))
+			: this(new Uri(filePathNameXml, UriKind.RelativeOrAbsolute))
 		{ }
 
 		protected readonly XmlSerializer serializer = new XmlSerializer(typeof(SavedGameXML));

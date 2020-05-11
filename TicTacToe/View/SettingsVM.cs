@@ -1,6 +1,7 @@
 ﻿using Common;
 using CommonUtils;
 using LibVM;
+using ModelLibrary;
 using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Input;
@@ -17,9 +18,9 @@ namespace View
 		public ICommand StartNewGameCommand { get; }
 
 
-		public Gamer FirstGamer { get; } = new Gamer();
+		public UserVM FirstGamer { get; } = new UserVM();
 
-		public Gamer SecondGamer { get; } = new Gamer();
+		public UserVM SecondGamer { get; } = new UserVM();
 
 		public IEnumerable<ImageSource> PiecesCollection { get => _piecesCollection; set =>SetProperty(ref _piecesCollection , value); }
 
