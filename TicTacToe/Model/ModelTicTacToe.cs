@@ -29,7 +29,7 @@ namespace Model
 		protected UserDto CurrentGamer => Gamers[CurrentGamerIndex];
 
 
-		private readonly int ShiftForCalculateCompleteLine;//сдвиг относительно проверяемой ячейки
+		//private int ShiftForCalculateCompleteLine;//сдвиг относительно проверяемой ячейки
 		//public event NotifyChangedCellHandler ChangedCellEvent;
 
 		void SetCellType(CellDto cell, CellTypeDto type)
@@ -174,12 +174,17 @@ namespace Model
 		{
 
 			if (cell.CellType == null) throw new Exception("Попытка проверки пустой ячейки");
-			return (
-				TestLine(cell, LineLength, false, true, false) ||   //vertical
+			bool horizontal = TestLine(cell, LineLength, true, false, false);
+			bool vertical = TestLine(cell, LineLength, false, true, false);
+			bool diagonalRight= TestLine(cell, LineLength, true, true, true);
+			bool diagonalLeft = TestLine(cell, LineLength, true, true, false);
+			return horizontal || vertical || diagonalLeft || diagonalRight;
+			/*return (
 				TestLine(cell, LineLength, true, false, false) ||   //horizontal
+				TestLine(cell, LineLength, false, true, false) ||   //vertical
 				TestLine(cell, LineLength, true, true, false) ||    //diagonal-1
 				TestLine(cell, LineLength, true, true, true)        //diagonal-2
-				);
+				);*/
 		}
 
 		/// <summary>Проверка на появление новой завершенной линии относительно свежедобавленного элемента</summary>
@@ -191,6 +196,9 @@ namespace Model
 		/// <returns>Возвращает true в случае появления хоть одной новой заполненной линии</returns>
 		private bool TestLine(CellDto cell, int elementsCount, bool useShiftX, bool useShiftY, bool directionForDiagonalTest)
 		{
+			int ShiftForCalculateCompleteLine = LineLength - 1;//сдвиг относительно проверяемой ячейки
+
+
 			//Utils.Log("start test line************************************", useShiftX, useShiftY, directionForDiagonalTest);
 			int shiftFromX = 0;//точка начала проверки по оси X
 			int shiftFromY = (useShiftY == true) ? cell.Row - ShiftForCalculateCompleteLine : 0;//точка начала проверки по оси Y - вычисляется сразу т.к. параметр directionForDiagonalTest не влияет на расчеты по оси Y
@@ -234,13 +242,13 @@ namespace Model
 			return countLinesComplete > 0;
 		}
 
-		private CellDto GetCellByPosiotion(int x, int y)
+		private CellDto GetCellByPosiotion(int row, int column)
 		{
-			if (x < 0 || x >= ColumnsCount || y < 0 || y >= RowsCount)
+			if (row < 0 || row >= RowsCount || column < 0 || column >= ColumnsCount)
 			{
 				return null;
 			}
-			return Cells[y, x];
+			return Cells[row, column];
 		}
 
 		public void GamerSurrender()
