@@ -33,8 +33,10 @@ namespace GameWPF
 		{
 			WindowStartupLocation = WindowStartupLocation.Manual,
 			ResizeMode = ResizeMode.NoResize,
-			Left = 1320,
-			Top = 40
+			Left = 320,
+			Top = 40,
+			Width = 600,
+			Height = 700
 		};
 
 		/// <summary>Экземпляр Первого экрана</summary>
@@ -81,8 +83,6 @@ namespace GameWPF
 			//controls.Add(typeof(IGameEndDrawVM), drawUC);
 
 			
-			window.Width = 600;
-			window.Height = 700;
 			ChangeWindowContent(typeof(IFirstScreenVM));
 
 			ReposSaveGameXML repos = new ReposSaveGameXML("SavedGame.xml");
@@ -91,9 +91,9 @@ namespace GameWPF
 			model = new ModelTicTacToe(repos);
 			//MainViewModel viewModel = new MainViewModel(ChangeWindowContent);
 			MainVM viewModel = new MainVM(ChangeWindowContent, model , 3, 3, 3);
-			viewModel.CellTypes.Add(new CellTypeDto(0, "Empty"));
-			viewModel.CellTypes.Add(new CellTypeDto(1, "Cross"));
-			viewModel.CellTypes.Add(new CellTypeDto(2, "Zero"));
+			viewModel.CellTypes.Add(CellTypeDto.Empty);
+			viewModel.CellTypes.Add(CellTypeDto.Cross);
+			viewModel.CellTypes.Add(CellTypeDto.Zero);
 			viewModel.FirstGamer.CellType = viewModel.CellTypes[1];
 			viewModel.SecondGamer.CellType = viewModel.CellTypes[2];
 			ImageSource[] images =

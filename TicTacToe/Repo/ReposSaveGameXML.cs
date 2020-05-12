@@ -17,8 +17,26 @@ namespace Repo
 			FileXml = fileXml ?? throw new ArgumentNullException(nameof(fileXml));
 		}
 		public ReposSaveGameXML(string filePathNameXml)
-			: this(new Uri(filePathNameXml, UriKind.RelativeOrAbsolute))
-		{ }
+		{
+			try
+			{
+				/// Попытка получения из строки Uri локального файла
+				FileInfo file = new FileInfo(filePathNameXml);
+				Uri uri = new Uri(file.FullName, UriKind.Absolute);
+				//Uri uri = new Uri(filePathNameXml, UriKind.RelativeOrAbsolute);
+				if (!uri.IsFile)
+					throw new ArgumentException("По пути в строке не удалось получить Uri локальнго файла", nameof(filePathNameXml));
+				FileXml = uri;
+			}
+			catch (Exception)
+			{
+				/// Если не вышло, то надо по другому 
+				/// интерпиритировать переданную строку.
+
+				throw new ArgumentException("По строке не удалось получить Uri файла", nameof(filePathNameXml));
+			}
+
+		}
 
 		protected readonly XmlSerializer serializer = new XmlSerializer(typeof(SavedGameXML));
 
@@ -29,9 +47,9 @@ namespace Repo
 			SavedGameXML game;
 			try
 			{
-				if (File.Exists(FileXml.AbsolutePath))
+				if (File.Exists(Path.GetFileName(FileXml.LocalPath)))
 				{
-					using (var file = File.OpenRead(FileXml.AbsolutePath))
+					using (var file = File.OpenRead(Path.GetFileName(FileXml.LocalPath)))
 						game = (SavedGameXML)serializer.Deserialize(file);
 					return ConvertFromXml(game);
 				}
@@ -44,7 +62,7 @@ namespace Repo
 
 		public void Save(SavedGameDto game)
 		{
-			using (var file = File.Create(FileXml.AbsolutePath))
+			using (var file = File.Create(Path.GetFileName(FileXml.LocalPath)))
 				serializer.Serialize(file, ConvertFromDto(game));
 		}
 
@@ -53,11 +71,11 @@ namespace Repo
 			if (game == null)
 				return null;
 
-			if (!(game.cellTypes?.Count > 3))
+			if (!(game.cellTypes?.Count >= 3))
 				throw new ArgumentOutOfRangeException(nameof(game) + "." + nameof(game.cellTypes), "Не может быть меньше трёх");
 
 			HashSet<CellTypeDto> types = game.cellTypes
-				.Select(xml => new CellTypeDto(xml.id, xml.value))
+				.Select(xml => CellTypeDto.Create(xml.id, xml.value))
 				.ToHashSet();
 
 			var tps = types.ToDictionary(tp => tp.Id);
@@ -68,7 +86,7 @@ namespace Repo
 				cells = new HashSet<CellDto>();
 				foreach (CellXML cell in game.cells)
 				{
-					if (types.FirstOrDefault(dto => dto.Id == cell.id) == null)
+					if (types.FirstOrDefault(dto => dto.Id == cell.typeId) == null)
 						throw new ArgumentException("Такого типа нет в списке", "cell.id");
 					cells.Add(new CellDto(cell.id, cell.row, cell.column, tps[cell.typeId]));
 				}
@@ -95,7 +113,7 @@ namespace Repo
 			if (game == null)
 				return null;
 
-			if (!(game.Types?.Count > 3))
+			if (!(game.Types?.Count >= 3))
 				throw new ArgumentOutOfRangeException(nameof(game) + "." + nameof(game.Types), "Не может быть меньше трёх");
 
 			List<CellTypeXML> types = game.Types
@@ -107,9 +125,9 @@ namespace Repo
 			List<CellXML> cells = new List<CellXML>();
 			if (game.Cells != null)
 			{
-				foreach (CellDto cell in game.Cells)
+				foreach (CellDto cell in game.Cells.Where(cll => cll?.CellType != null && cll.CellType != CellTypeDto.Empty))
 				{
-					cells.Add(new CellXML() { id = cell.Id, row = cell.Row, column = cell.Column, typeId = tps[cell.CellType.Type]});
+					cells.Add(new CellXML() { id = cell.Id, row = cell.Row, column = cell.Column, typeId = tps[cell.CellType.Type] });
 
 				}
 			}

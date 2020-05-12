@@ -34,7 +34,7 @@ namespace ViewModel
 
 			//model.OnAllPropertyChanged();
 
-
+			model.Load();
 		}
 
 		public MainVM(Action<Type> windowsChanger, IModel model, int rows, int columns, int length)
@@ -183,12 +183,14 @@ namespace ViewModel
 					break;
 				case NamesState.ChangeGamerIsTurn:
 					UserDto newUser = (UserDto)e.NewValue;
-					UserDto oldUser = (UserDto)e.OldValue;
-					UserVM newUserVM = FirstGamer, oldUserVM = SecondGamer;
-					if (FirstGamer.UserName != newUserVM.UserName)
-						(newUserVM, oldUserVM) = (oldUserVM, newUserVM);
-					newUserVM.IsTurn = true;
-					oldUserVM.IsTurn = false;
+					//UserDto oldUser = (UserDto)e.OldValue;
+					//UserVM newUserVM = FirstGamer, oldUserVM = SecondGamer;
+					if (FirstGamer.UserName == newUser.UserName)
+						FirstGamer.IsTurn = newUser.IsTurn;
+					else if (SecondGamer.UserName == newUser.UserName)
+						SecondGamer.IsTurn = newUser.IsTurn;
+					else
+						throw new ArgumentException($"Не существующее имя очередного игрока {newUser.UserName}", nameof(e)) ;
 					break;
 				default:
 					break;
@@ -277,7 +279,7 @@ namespace ViewModel
 
 
 
-			model.StartNewGame(RowsCount, ColumnsCount, LineLength, new UserDto[] { ConvertVMToDto(FirstGamer), ConvertVMToDto(SecondGamer) });
+			model.StartNewGame(RowsCount, ColumnsCount, LineLength, CellTypes.ToHashSet(), new HashSet<UserDto> { ConvertVMToDto(FirstGamer), ConvertVMToDto(SecondGamer) });
 			//UpdateCells();
 			base.StartNewGameMethod(parameter);
 			//CurrentUser = model.CurrentUser;
@@ -285,7 +287,8 @@ namespace ViewModel
 
 		protected override void RepairGameMethod(object parameter)
 		{
-			model.Load();
+			model.RepairGame();
+
 			//model.StartNewGame();
 			//UpdateCells();
 			//model.CreateGame(FirstGamer, SecondGamer);
