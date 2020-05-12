@@ -4,11 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GameWPF"
+        xmlns:viewLib="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary"
         mc:Ignorable="d"
 		xmlns:v="clr-namespace:View;assembly=View"
         Title="Window1" Height="450" Width="800">
     <Grid>
-		<Border Background="Pink" v:AProperty.WidthToHeight="1">
+		<Border Background="Pink" viewLib:AProperty.WidthToHeight="1">
 			
 		</Border>
     </Grid>
