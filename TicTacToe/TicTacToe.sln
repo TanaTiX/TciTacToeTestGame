@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibVM", "LibVM\LibVM.csproj", "{F6C85531-873B-4B4E-9F63-B78C0CF8863D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfCustomControlLibrary", "WpfCustomControlLibrary\WpfCustomControlLibrary.csproj", "{F4CA58D8-224B-4BFB-ACC2-C1AF20CD929F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{F6C85531-873B-4B4E-9F63-B78C0CF8863D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6C85531-873B-4B4E-9F63-B78C0CF8863D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6C85531-873B-4B4E-9F63-B78C0CF8863D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4CA58D8-224B-4BFB-ACC2-C1AF20CD929F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4CA58D8-224B-4BFB-ACC2-C1AF20CD929F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4CA58D8-224B-4BFB-ACC2-C1AF20CD929F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4CA58D8-224B-4BFB-ACC2-C1AF20CD929F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
