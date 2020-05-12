@@ -198,7 +198,7 @@ namespace WpfCustomControlLibrary
 
 				/// Размеры выделенной области с учётом Margin элемента
 				double widthArea = rect.Width - Element.Margin.Left - Element.Margin.Right;
-				double heightArea = rect.Height - Element.Margin.Top- Element.Margin.Bottom;
+				double heightArea = rect.Height - Element.Margin.Top - Element.Margin.Bottom;
 
 				double width = widthArea;
 				double height = width * WidthToHeight;
@@ -207,8 +207,8 @@ namespace WpfCustomControlLibrary
 					height = heightArea;
 					width = height / WidthToHeight;
 				}
-				Element.Width = width;
-				Element.Height = height;
+				Element.Width = width > 0.0 ? width : 0.0;
+				Element.Height = height > 0.0 ? height : 0.0;
 			}
 
 			/// <summary>Задание коэффициента пропорции ширины к высоте.</summary>
