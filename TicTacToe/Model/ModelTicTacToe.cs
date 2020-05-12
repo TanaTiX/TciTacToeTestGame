@@ -137,6 +137,9 @@ namespace Model
 			SetCurrentGamerIndex(gamerInd);
 			CreateGame();
 			SetGameStatus(GameStatuses.Game);
+
+			/// Установка флага начатой игры
+			SetIsRevenge(true);
 		}
 
 		public bool CanMove(CellDto cell, UserDto user)
@@ -154,7 +157,10 @@ namespace Model
 			SetCellType(cell, CurrentGamer.CellType);
 			FinishGame(Cells[cell.Row, cell.Column]);
 			if (GameStatus == GameStatuses.Game)
-				SetCurrentGamerIndex(CurrentGamerIndex +1);
+				SetCurrentGamerIndex(CurrentGamerIndex + 1);
+			else
+				/// Сброс флага начатой игры
+				SetIsRevenge(false);
 		}
 		private void FinishGame(CellDto testCell)
 		{
@@ -255,11 +261,14 @@ namespace Model
 		{
 			SetCurrentGamerIndex(CurrentGamerIndex + 1);
 			SetGameStatus(GameStatuses.Win, CurrentGamerId);
+			SetIsRevenge(false);
 		}
 
 		protected bool IsRevenge;
 		public void Save()
 		{
+			/// Проверка флага начатой игры
+			if (IsRevenge)
 			repos.Save(new SavedGameDto
 			(
 				Gamers.ToHashSet(),
@@ -297,6 +306,10 @@ namespace Model
 			int gamerInd = Gamers.TakeWhile(gmr => !gmr.IsTurn).Count();
 			SetCurrentGamerIndex(gamerInd);
 			SetGameStatus(GameStatuses.Game);
+
+
+			/// Удаление сохранённой игры
+			RemoveSavedFile();
 		}
 
 		private void SetGamers(ISet<UserDto> value)
