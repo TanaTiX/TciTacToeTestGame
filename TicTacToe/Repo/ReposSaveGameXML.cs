@@ -44,7 +44,11 @@ namespace Repo
 
 		public void Save(SavedGameDto game)
 		{
-			using (var file = File.Create(FileXml.AbsolutePath))
+			if (File.Exists(FileXml.OriginalString))
+			{
+				File.Delete(FileXml.OriginalString);
+			}
+			using (var file = File.Create(FileXml.OriginalString))
 				serializer.Serialize(file, ConvertFromDto(game));
 		}
 
@@ -95,7 +99,7 @@ namespace Repo
 			if (game == null)
 				return null;
 
-			if (!(game.Types?.Count > 3))
+			if (!(game.Types != null && game.Types.Count > 3))
 				throw new ArgumentOutOfRangeException(nameof(game) + "." + nameof(game.Types), "Не может быть меньше трёх");
 
 			List<CellTypeXML> types = game.Types

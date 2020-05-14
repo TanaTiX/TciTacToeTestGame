@@ -12,11 +12,11 @@ using System.CodeDom;
 namespace Model
 {
 
-	
 
 
 
-	public class ModelTicTacToe :  IModel
+
+	public class ModelTicTacToe : IModel
 	{
 		protected int RowsCount;
 		protected int ColumnsCount;
@@ -34,7 +34,7 @@ namespace Model
 
 		void SetCellType(CellDto cell, CellTypeDto type)
 		{
-			if ( Cells[cell.Row, cell.Column] != null && Cells[cell.Row, cell.Column].CellType == type)
+			if (Cells[cell.Row, cell.Column] != null && Cells[cell.Row, cell.Column].CellType == type)
 				return;
 			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.CellType,
 				Cells[cell.Row, cell.Column] = new CellDto(Cells[cell.Row, cell.Column]?.Id ?? cell.Id, cell.Row, cell.Column, type)));
@@ -141,7 +141,7 @@ namespace Model
 
 		public bool CanMove(CellDto cell, UserDto user)
 		{
-			if (user==null || CurrentGamer == null || user.UserName != CurrentGamer.UserName || GameStatus != GameStatuses.Game)
+			if (user == null || CurrentGamer == null || user.UserName != CurrentGamer.UserName || GameStatus != GameStatuses.Game)
 				return false;
 
 			return Cells[cell.Row, cell.Column].CellType == null;
@@ -154,7 +154,7 @@ namespace Model
 			SetCellType(cell, CurrentGamer.CellType);
 			FinishGame(Cells[cell.Row, cell.Column]);
 			if (GameStatus == GameStatuses.Game)
-				SetCurrentGamerIndex(CurrentGamerIndex +1);
+				SetCurrentGamerIndex(CurrentGamerIndex + 1);
 		}
 		private void FinishGame(CellDto testCell)
 		{
@@ -176,7 +176,7 @@ namespace Model
 			if (cell.CellType == null) throw new Exception("Попытка проверки пустой ячейки");
 			bool horizontal = TestLine(cell, LineLength, true, false, false);
 			bool vertical = TestLine(cell, LineLength, false, true, false);
-			bool diagonalRight= TestLine(cell, LineLength, true, true, true);
+			bool diagonalRight = TestLine(cell, LineLength, true, true, true);
 			bool diagonalLeft = TestLine(cell, LineLength, true, true, false);
 			return horizontal || vertical || diagonalLeft || diagonalRight;
 			/*return (
@@ -260,16 +260,19 @@ namespace Model
 		protected bool IsRevenge;
 		public void Save()
 		{
-			repos.Save(new SavedGameDto
-			(
-				Gamers.ToHashSet(),
-				Cells.Cast<CellDto>().Where(cl => cl.CellType != null).ToHashSet(),
-				Types,
-				RowsCount,
-				ColumnsCount,
-				LineLength
-			));
-
+			Console.WriteLine(Cells.Cast<CellDto>().Any(c => c.CellType != CellTypeDto.Empty || c.CellType != null));
+			if (GameStatus == GameStatuses.Game && Cells.Cast<CellDto>().Any(c => /*c.CellType != CellTypeDto.Empty || */c.CellType != null))
+			{
+				repos.Save(new SavedGameDto
+				(
+					Gamers.ToHashSet(),
+					Cells.Cast<CellDto>().Where(cl => cl.CellType != null).ToHashSet(),
+					Types,
+					RowsCount,
+					ColumnsCount,
+					LineLength
+				));
+			}
 		}
 		private void RemoveSavedFile()
 		{
@@ -282,11 +285,11 @@ namespace Model
 			if (!IsRevenge || savedGame == null)
 				return;
 
-			
+
 			SetRowsCount(savedGame.RowsCount);
 			SetColumnsCount(savedGame.ColumnsCount);
 			SetLineLength(savedGame.LengthLineForWin);
-			
+
 			SetTypes(savedGame.Types);
 			SetGamers(savedGame.Users);
 			ChangeCellsCount(RowsCount, ColumnsCount);
@@ -301,7 +304,7 @@ namespace Model
 
 		private void SetGamers(ISet<UserDto> value)
 		{
-			Gamers = value.OrderBy(i=>i.Turn).ToArray();
+			Gamers = value.OrderBy(i => i.Turn).ToArray();
 			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.Gamers, value));
 		}
 
