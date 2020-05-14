@@ -48,7 +48,6 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AProperty.cs" />
     <Compile Include="CellToImageLinkConverter.cs" />
     <Compile Include="BoolToVisibilityConverter.cs" />
     <Compile Include="DrawUC.xaml.cs">
@@ -130,6 +129,10 @@
     <ProjectReference Include="..\ViewModel\ViewModel.csproj">
       <Project>{9e41bcfc-f7b3-41c9-9050-a81dba5cd9a0}</Project>
       <Name>ViewModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WpfCustomControlLibrary\WpfCustomControlLibrary.csproj">
+      <Project>{4279cc55-d12c-4dc5-a63f-850ecfaba46a}</Project>
+      <Name>WpfCustomControlLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

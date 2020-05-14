@@ -4,19 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{ADE3A67D-9BCF-4C56-8486-9F3B7BE37A87}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <RootNamespace>GameWPF</RootNamespace>
-    <AssemblyName>GameWPF</AssemblyName>
+    <ProjectGuid>{4279CC55-D12C-4DC5-A63F-850ECFABA46A}</ProjectGuid>
+    <OutputType>library</OutputType>
+    <RootNamespace>WpfCustomControlLibrary</RootNamespace>
+    <AssemblyName>WpfCustomControlLibrary</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -26,7 +24,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -51,16 +48,13 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
+    <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
+    </Page>
+    <Compile Include="AProperty.cs" />
+    <Compile Include="CustomControl1.cs">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Window1.xaml.cs">
-      <DependentUpon>Window1.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -85,49 +79,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{33ED3377-DCEC-4334-9BB9-6D35BD6102D7}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LibVM\LibVM.csproj">
-      <Project>{f6c85531-873b-4b4e-9f63-b78c0cf8863d}</Project>
-      <Name>LibVM</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ModelLibrary\ModelLibrary.csproj">
-      <Project>{E66A3B93-4774-4F21-A7D2-5BE8959D87E0}</Project>
-      <Name>ModelLibrary</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Model\Model.csproj">
-      <Project>{7f2766af-ef15-4c64-adf3-e9d244f5b1a8}</Project>
-      <Name>Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Repo\Repo.csproj">
-      <Project>{235AC355-1B40-4E4D-9C64-49616020F4C6}</Project>
-      <Name>Repo</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ViewModel\ViewModel.csproj">
-      <Project>{9E41BCFC-F7B3-41C9-9050-A81DBA5CD9A0}</Project>
-      <Name>ViewModel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\View\View.csproj">
-      <Project>{4594E831-A72C-4569-A0AD-BE8460F450DD}</Project>
-      <Name>View</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WpfCustomControlLibrary\WpfCustomControlLibrary.csproj">
-      <Project>{4279cc55-d12c-4dc5-a63f-850ecfaba46a}</Project>
-      <Name>WpfCustomControlLibrary</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="Window1.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

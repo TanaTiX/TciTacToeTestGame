@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GameWPF"
         mc:Ignorable="d"
-		xmlns:v="clr-namespace:View;assembly=View"
+		xmlns:viewLib="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary"
         Title="Window1" Height="450" Width="800">
     <Grid>
-		<Border Background="Pink" v:AProperty.WidthToHeight="1">
+		<Border Background="Pink" viewLib:AProperty.WidthToHeight="1">
 			
 		</Border>
     </Grid>
