@@ -42,26 +42,26 @@ namespace View
 
 			for (int row = 0; row < RowsCount; row++)
 				for (int column = 0; column < ColumnsCount; column++)
-					Cells.Add(new CellVM() {Row= row,Column= column,CellType= CellTypes[random.Next(CellTypes.Count)] });
+					Cells.Add(new CellVM() { Row = row, Column = column, CellType = CellTypes[random.Next(CellTypes.Count)] });
 
 			MoveCommand = new RelayCommand
 			(
 				p =>
 				{
 					CellDto cell = (CellDto)p;
-					Cells[cell.Row * ColumnsCount + cell.Column].CellType =  CellTypes[random.Next(CellTypes.Count - 1) + 1];
+					Cells[cell.Row * ColumnsCount + cell.Column].CellType = CellTypes[random.Next(CellTypes.Count - 1) + 1];
 				},
 				p => p is CellDto cell && (string.IsNullOrWhiteSpace(cell.CellType.Type) || cell.CellType.Type == "Empty")
 
 			);
 		}
-		
+
 		public UserVM CurrentUser { get; set; }
 
 		public int LineLength { get; set; }
 
 		public ObservableCollection<CellTypeDto> CellTypes { get; }
-			= new ObservableCollection<CellTypeDto>(){ new CellTypeDto(1,"Empty"), new CellTypeDto(2,"Cross"), new CellTypeDto(3,"Zero")};
+			= new ObservableCollection<CellTypeDto>() { CellTypeDto.Empty, CellTypeDto.Cross, CellTypeDto.Zero };
 
 		public int CurrentUserIndex { get; set; }
 	}

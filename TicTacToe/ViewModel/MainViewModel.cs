@@ -86,37 +86,41 @@ namespace ViewModel
 		public IEnumerable<ImageSource> PiecesCollection { get => _piecesCollection; set => SetProperty(ref _piecesCollection, value); }
 		public UserVM FirstGamer { get; } = new UserVM()
 		{
-			UserName = "Пользователь 1"
+			UserName = "Пользователь 1",
+			Id=1,
+			Turn=7
 		};
 		public UserVM SecondGamer { get; } = new UserVM()
 		{
-			UserName = "Пользователь 2"
+			UserName = "Пользователь 2",
+			Id=2,
+			Turn=15
 		};
 
 
 		//private static readonly CellContent[] contens = Enum.GetValues(typeof(CellContent)).Cast<CellContent>().ToArray();
 		public ObservableCollection<CellTypeDto> CellTypes { get; } = new ObservableCollection<CellTypeDto>();
 
-		public MainViewModel()
-		{
-			CellTypes.CollectionChanged += CellTypes_CollectionChanged;
-		}
+		//public MainViewModel()
+		//{
+		//	CellTypes.CollectionChanged += CellTypes_CollectionChanged;
+		//}
 
-		private void CellTypes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-		{
-			if (CellTypes.Count == 0 || CellTypes[0] != CellTypeDto.Empty)
-				CellTypes.Insert(0, CellTypeDto.Empty);
-			if (e.Action == NotifyCollectionChangedAction.Add)
-			{
-				bool rem = false;
-				foreach (CellTypeDto cell in e.NewItems.Cast<CellTypeDto>().Where(it => string.Equals(it.Type, CellTypeDto.Empty.Type, StringComparison.OrdinalIgnoreCase)))
-				{
-					if (cell != CellTypes[0])
-					rem = true;
-					CellTypes.Remove(cell);
-				}
-			}
-		}
+		//private void CellTypes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+		//{
+		//	if (CellTypes.Count == 0 || CellTypes[0] != CellTypeDto.Empty)
+		//		CellTypes.Insert(0, CellTypeDto.Empty);
+		//	if (e.Action == NotifyCollectionChangedAction.Add)
+		//	{
+		//		bool rem = false;
+		//		foreach (CellTypeDto cell in e.NewItems.Cast<CellTypeDto>().Where(it => string.Equals(it.Type, CellTypeDto.Empty.Type, StringComparison.OrdinalIgnoreCase)))
+		//		{
+		//			if (cell != CellTypes[0])
+		//			rem = true;
+		//			CellTypes.Remove(cell);
+		//		}
+		//	}
+		//}
 
 		private static readonly Random random = new Random();
 		private ICommand _moveCommand;
@@ -262,14 +266,14 @@ namespace ViewModel
 			if (propertyName == nameof(CurrentUserIndex))
 			{
 				OnPropertyChanged(nameof(CurrentUser));
-				if (CurrentUserIndex == 0)
-				{
-					SecondGamer.IsTurn = !(FirstGamer.IsTurn = true);
-				}
-				else
-				{
-					SecondGamer.IsTurn = !(FirstGamer.IsTurn = false);
-				}
+				//if (CurrentUserIndex == 0)
+				//{
+				//	SecondGamer.IsTurn = !(FirstGamer.IsTurn = true);
+				//}
+				//else
+				//{
+				//	SecondGamer.IsTurn = !(FirstGamer.IsTurn = false);
+				//}
 			}
 
 			if (propertyName == nameof(IsRevenge))

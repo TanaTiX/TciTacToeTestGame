@@ -11,11 +11,6 @@ using System.CodeDom;
 
 namespace Model
 {
-
-
-
-
-
 	public class ModelTicTacToe : IModel
 	{
 		protected int RowsCount;
@@ -75,6 +70,8 @@ namespace Model
 			value %= Gamers.Length;
 			if (CurrentGamerIndex == value)
 				return;
+			if (CurrentGamerIndex >= 0)
+				SetChangeGamerIsTurn(CurrentGamerIndex, true);
 
 			CurrentGamerIndex = value;
 
@@ -132,7 +129,7 @@ namespace Model
 			RowsCount = (int)args[0];
 			ColumnsCount = (int)args[1];
 			LineLength = (int)args[2];
-			Gamers = ((IEnumerable<UserDto>)args[3]).OrderBy(gmr => gmr.Turn).ToArray();
+			Gamers = ((ISet<UserDto>)args[4]).OrderBy(gmr => gmr.Turn).ToArray();
 			int gamerInd = Gamers.TakeWhile(gmr => !gmr.IsTurn).Count();
 			SetCurrentGamerIndex(gamerInd);
 			CreateGame();
@@ -144,7 +141,7 @@ namespace Model
 			if (user == null || CurrentGamer == null || user.UserName != CurrentGamer.UserName || GameStatus != GameStatuses.Game)
 				return false;
 
-			return Cells[cell.Row, cell.Column].CellType == null;
+			return Cells[cell.Row, cell.Column]?.CellType == null;
 		}
 
 		public void Move(CellDto cell, UserDto user)
@@ -164,7 +161,7 @@ namespace Model
 				SetGameStatus(GameStatuses.Win, CurrentGamerId);
 				return;
 			}
-			if (!Cells.Cast<CellDto>().Any(cl => cl.CellType == null))
+			if (!Cells.Cast<CellDto>().Any(cl => cl?.CellType == null))
 			{
 				SetGameStatus(GameStatuses.Draw);
 			}
@@ -260,18 +257,19 @@ namespace Model
 		protected bool IsRevenge;
 		public void Save()
 		{
-			Console.WriteLine(Cells.Cast<CellDto>().Any(c => c.CellType != CellTypeDto.Empty || c.CellType != null));
-			if (GameStatus == GameStatuses.Game && Cells.Cast<CellDto>().Any(c => /*c.CellType != CellTypeDto.Empty || */c.CellType != null))
 			{
-				repos.Save(new SavedGameDto
-				(
-					Gamers.ToHashSet(),
-					Cells.Cast<CellDto>().Where(cl => cl.CellType != null).ToHashSet(),
-					Types,
-					RowsCount,
-					ColumnsCount,
-					LineLength
-				));
+				/// Проверка флага начатой игры
+				if (IsRevenge)
+						repos.Save(new SavedGameDto
+						(
+							Gamers.ToHashSet(),
+							Cells.Cast<CellDto>().Where(cl => cl?.CellType != CellTypeDto.Empty).ToHashSet(), Types,
+							RowsCount,
+							ColumnsCount,
+							LineLength
+						));
+
+
 			}
 		}
 		private void RemoveSavedFile()

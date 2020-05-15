@@ -32,7 +32,7 @@ namespace GameWPF
 		private readonly Window window = new Window()
 		{
 			WindowStartupLocation = WindowStartupLocation.Manual,
-			ResizeMode = ResizeMode.NoResize,
+			//ResizeMode = ResizeMode.NoResize,
 			Left = 1320,
 			Top = 40
 		};
@@ -91,9 +91,12 @@ namespace GameWPF
 			model = new ModelTicTacToe(repos);
 			//MainViewModel viewModel = new MainViewModel(ChangeWindowContent);
 			MainVM viewModel = new MainVM(ChangeWindowContent, model , 3, 3, 3);
-			viewModel.CellTypes.Add(new CellTypeDto(0, "Empty"));
-			viewModel.CellTypes.Add(new CellTypeDto(1, "Cross"));
-			viewModel.CellTypes.Add(new CellTypeDto(2, "Zero"));
+			viewModel.CellTypes.Add(CellTypeDto.Empty);
+			viewModel.CellTypes.Add(CellTypeDto.Cross);
+			viewModel.CellTypes.Add(CellTypeDto.Zero);
+			//viewModel.CellTypes.Add(new CellTypeDto(0, "Empty"));
+			//viewModel.CellTypes.Add(new CellTypeDto(1, "Cross"));
+			//viewModel.CellTypes.Add(new CellTypeDto(2, "Zero"));
 			viewModel.FirstGamer.CellType = viewModel.CellTypes[1];
 			viewModel.SecondGamer.CellType = viewModel.CellTypes[2];
 			ImageSource[] images =
