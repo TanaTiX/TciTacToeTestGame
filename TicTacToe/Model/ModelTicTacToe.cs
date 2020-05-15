@@ -60,9 +60,21 @@ namespace Model
 				return;
 			GameStatus = value;
 			if (args == null)
+			{
 				ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.GameStatus, value));
+			}
 			else
+			{
+				if (GameStatus == GameStatuses.Win || GameStatus == GameStatuses.Draw)
+				{
+					if (GameStatus == GameStatuses.Win)
+						RepoStatistic.SaveStatistic(Gamers, CurrentGamerId == Gamers[0].Id, CurrentGamerId == Gamers[1].Id);// SaveStatistic();
+					else
+						RepoStatistic.SaveStatistic(Gamers, false, false);
+
+				}
 				ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.GameStatus, new object[] { value, args }));
+			}
 		}
 
 		void SetCurrentGamerIndex(int value)
@@ -103,15 +115,17 @@ namespace Model
 
 		protected int CurrentUserID;
 
-		protected IReposSaveGame repos;
-		protected SavedGameDto savedGame;
+		protected IReposSaveGame ReposGame;
+		protected IReposStatistic RepoStatistic;
+		protected SavedGameDto SavedGame;
 		/// <summary>Конструктор модели</summary>
 		/// <param name="rowsCount">Колиичество строк</param>
 		/// <param name="columnsCount">Количество колонок</param>
 		/// <param name="lineLength">Минимальная длина линии из однородных элементов, необходимая для учета ее завершенности</param>
-		public ModelTicTacToe(IReposSaveGame repos)
+		public ModelTicTacToe(IReposSaveGame reposGame, IReposStatistic reposStatistic)
 		{
-			this.repos = repos;
+			ReposGame = reposGame;
+			RepoStatistic = reposStatistic;
 		}
 
 		public void CreateGame()
@@ -259,39 +273,39 @@ namespace Model
 		{
 			{
 				/// Проверка флага начатой игры
-				if (IsRevenge)
-						repos.Save(new SavedGameDto
-						(
-							Gamers.ToHashSet(),
-							Cells.Cast<CellDto>().Where(cl => cl?.CellType != CellTypeDto.Empty).ToHashSet(), Types,
-							RowsCount,
-							ColumnsCount,
-							LineLength
-						));
+				if (GameStatus == GameStatuses.Game)
+					ReposGame.Save(new SavedGameDto
+					(
+						Gamers.ToHashSet(),
+						Cells.Cast<CellDto>().Where(cl => cl?.CellType != CellTypeDto.Empty).ToHashSet(), Types,
+						RowsCount,
+						ColumnsCount,
+						LineLength
+					));
 
 
 			}
 		}
 		private void RemoveSavedFile()
 		{
-			repos.RemoveSavedGame();
+			ReposGame.RemoveSavedGame();
 			SetIsRevenge(false);
 		}
 
 		public void RepairGame()
 		{
-			if (!IsRevenge || savedGame == null)
+			if (!IsRevenge || SavedGame == null)
 				return;
 
 
-			SetRowsCount(savedGame.RowsCount);
-			SetColumnsCount(savedGame.ColumnsCount);
-			SetLineLength(savedGame.LengthLineForWin);
+			SetRowsCount(SavedGame.RowsCount);
+			SetColumnsCount(SavedGame.ColumnsCount);
+			SetLineLength(SavedGame.LengthLineForWin);
 
-			SetTypes(savedGame.Types);
-			SetGamers(savedGame.Users);
+			SetTypes(SavedGame.Types);
+			SetGamers(SavedGame.Users);
 			ChangeCellsCount(RowsCount, ColumnsCount);
-			foreach (CellDto cell in savedGame.Cells)
+			foreach (CellDto cell in SavedGame.Cells)
 			{
 				SetCellType(cell);
 			}
@@ -329,9 +343,33 @@ namespace Model
 
 		public void Load()
 		{
-			savedGame = repos.Load();
-			SetIsRevenge(savedGame != null);
+			SavedGame = ReposGame.Load();
+			SetIsRevenge(SavedGame != null);
 		}
+
+		//private void SaveStatistic()
+		//{
+		//	UserDto winner, loser, user1, user2;
+		//	if(GameStatus == GameStatuses.Win)
+		//	{
+		//		if(CurrentGamerId == Gamers[0].Id)
+		//		{
+		//			winner = Gamers[0];
+		//			loser = Gamers[1];
+		//		}
+		//		else
+		//		{
+		//			winner = Gamers[1];
+		//			loser = Gamers[0];
+		//		}
+		//	}
+		//	else
+		//	{
+		//		user1 = Gamers[0];
+		//		user2 = Gamers[1];
+		//	}
+
+		//}
 	}
 
 

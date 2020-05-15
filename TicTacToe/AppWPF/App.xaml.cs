@@ -85,10 +85,11 @@ namespace GameWPF
 			window.Height = 700;
 			ChangeWindowContent(typeof(IFirstScreenVM));
 
-			ReposSaveGameXML repos = new ReposSaveGameXML("SavedGame.xml");
+			IReposSaveGame reposGame = new ReposSaveGameXML("SavedGame.xml");
+			IReposStatistic reposStatistic = new RepoStatistic("Statistic.xml");
 
 			//Model.ModelTicTacToe.FileNameXml = ;
-			model = new ModelTicTacToe(repos);
+			model = new ModelTicTacToe(reposGame, reposStatistic);
 			//MainViewModel viewModel = new MainViewModel(ChangeWindowContent);
 			MainVM viewModel = new MainVM(ChangeWindowContent, model , 3, 3, 3);
 			viewModel.CellTypes.Add(CellTypeDto.Empty);

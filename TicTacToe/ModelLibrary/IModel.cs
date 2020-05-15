@@ -66,5 +66,6 @@ namespace ModelLibrary
 		////void StartNewGame(UserType type);
 		/// <summary>Текщий игрок сдался</summary>
 		void GamerSurrender();
+		//void SaveStatistic();
 	}
 }

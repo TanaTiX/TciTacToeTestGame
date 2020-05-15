@@ -42,7 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IReposSaveGame.cs" />
+    <Compile Include="IRepoStatistic.cs" />
     <Compile Include="ReposSaveGameXML.cs" />
+    <Compile Include="RepoStatistic.cs" />
     <Compile Include="XMLParsedClasses.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
