@@ -15,24 +15,24 @@
              d:DesignHeight="700" d:DesignWidth="600">
 
 
-    <!--<d:UserControl.DataContext>-->
-		
-        <!--<local:GameVM >-->
-            <!--<local:GameVM.Picturies>
+	<!--<d:UserControl.DataContext>-->
+
+		<!--<local:GameVM >
+			<local:GameVM.Picturies>
 				<x:Null      x:Key="{x:Static ml:CellTypeDto.Empty}"/>
 				<BitmapImage x:Key="{x:Static ml:CellTypeDto.Cross}" UriSource="Resources/Images/cross.png"/>
 				<BitmapImage x:Key="{x:Static ml:CellTypeDto.Zero}" UriSource="Resources/Images/zero.png"/>
             </local:GameVM.Picturies>
-			<!--<local:GameVM.FirstGamer>
+			<local:GameVM.FirstGamer>
 				<vm:UserVM UserName="Пользователь 1" Image="Resources/Images/no.png"/>
 			</local:GameVM.FirstGamer>
 			<local:GameVM.SecondGamer>
 				<vm:UserVM UserName="Пользователь 2" Image="Resources/Images/yes.png"/>
 				
-			</local:GameVM.SecondGamer>-->
-		</local:GameVM>
-		
-    <!--</d:UserControl.DataContext>-->
+			</local:GameVM.SecondGamer>
+		</local:GameVM>-->
+
+	<!--</d:UserControl.DataContext>-->
     <UserControl.Resources>
         <comm:DictionaryKeyToValueConverter x:Key="DictionaryKeyToValueConverter"/>
 		

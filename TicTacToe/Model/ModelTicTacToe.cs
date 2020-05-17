@@ -286,17 +286,7 @@ namespace Model
 		protected bool IsRevenge;
 		public void Save()
 		{
-			/// Проверка флага начатой игры
 			if (IsRevenge)
-				repos.Save(new SavedGameDto
-				(
-					Gamers.ToHashSet(),
-					Cells.Cast<CellDto>().Where(cl => cl?.CellType != CellTypeDto.Empty).ToHashSet(),
-					Types,
-					RowsCount,
-					ColumnsCount,
-					LineLength
-				));
 			{
 				/// Проверка флага начатой игры
 				if (GameStatus == GameStatuses.Game)
@@ -324,12 +314,12 @@ namespace Model
 				return;
 
 
-			SetRowsCount(savedGame.RowsCount);
-			SetColumnsCount(savedGame.ColumnsCount);
-			SetLineLength(savedGame.LengthLineForWin);
+			SetRowsCount(SavedGame.RowsCount);
+			SetColumnsCount(SavedGame.ColumnsCount);
+			SetLineLength(SavedGame.LengthLineForWin);
 
-			SetTypes(savedGame.Types);
-			SetGamers(savedGame.Users);
+			SetTypes(SavedGame.Types);
+			SetGamers(SavedGame.Users);
 			ChangeCellsCount(RowsCount, ColumnsCount);
 			foreach (CellDto cell in SavedGame.Cells)
 			{

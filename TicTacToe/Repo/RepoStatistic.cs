@@ -43,7 +43,7 @@ namespace Repo
 
 		public void SaveStatistic(UserDto[] gamers, bool isFirstWin, bool isSecondWin)
 		{
-			throw new NotImplementedException();
+			//throw new NotImplementedException();
 		}
 	}
 }

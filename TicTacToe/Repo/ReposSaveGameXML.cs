@@ -36,29 +36,7 @@ namespace Repo
 				throw new ArgumentException("По строке не удалось получить Uri файла", nameof(filePathSaveNameXml));
 			}
 		}
-		public ReposSaveGameXML(string filePathNameXml)
-		{
-			try
-			{
-				/// Попытка получения из строки Uri локального файла
-				FileInfo file = new FileInfo(filePathNameXml);
-				Uri uri = new Uri(file.FullName, UriKind.Absolute);
-				//Uri uri = new Uri(filePathNameXml, UriKind.RelativeOrAbsolute);
-				if (!uri.IsFile)
-					throw new ArgumentException("По пути в строке не удалось получить Uri локальнго файла", nameof(filePathNameXml));
-				FileXml = uri;
-			}
-			catch (Exception)
-			{
-				/// Если не вышло, то надо по другому 
-				/// интерпиритировать переданную строку.
 
-				throw new ArgumentException("По строке не удалось получить Uri файла", nameof(filePathNameXml));
-			}
-
-		}
-=======
->>>>>>> master
 
 		protected readonly XmlSerializer serializer = new XmlSerializer(typeof(SavedGameXML));
 
@@ -69,15 +47,10 @@ namespace Repo
 			SavedGameXML game;
 			try
 			{
-<<<<<<< HEAD
-				if (File.Exists(Path.GetFileName(FileXml.LocalPath)))
-				{
-					using (var file = File.OpenRead(Path.GetFileName(FileXml.LocalPath)))
-=======
+
 				if (File.Exists(Path.GetFileName(FileSaveXml.LocalPath)))
 				{
 					using (var file = File.OpenRead(Path.GetFileName(FileSaveXml.LocalPath)))
->>>>>>> master
 						game = (SavedGameXML)serializer.Deserialize(file);
 					return ConvertFromXml(game);
 				}
@@ -90,7 +63,6 @@ namespace Repo
 
 		public void Save(SavedGameDto game)
 		{
-			using (var file = File.Create(Path.GetFileName(FileXml.LocalPath)))
 			//if (File.Exists(FileXml.OriginalString))
 			//{
 			//	File.Delete(FileXml.OriginalString);
