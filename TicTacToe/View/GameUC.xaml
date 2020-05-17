@@ -6,7 +6,6 @@
              xmlns:local="clr-namespace:View"
 			 xmlns:comm="clr-namespace:Common;assembly=Common"
 			 xmlns:model="ModelLibrary"
-			 xmlns:dataGrid2D="http://gu.se/DataGrid2D"
 			 xmlns:viewLib="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary"
 			 xmlns:vm="clr-namespace:LibVM;assembly=LibVM"
 			 xmlns:ml="clr-namespace:ModelLibrary;assembly=ModelLibrary"
@@ -24,14 +23,14 @@
 				<BitmapImage x:Key="{x:Static ml:CellTypeDto.Cross}" UriSource="Resources/Images/cross.png"/>
 				<BitmapImage x:Key="{x:Static ml:CellTypeDto.Zero}" UriSource="Resources/Images/zero.png"/>
             </local:GameVM.Picturies>
-			<local:GameVM.FirstGamer>
+			<!--<local:GameVM.FirstGamer>
 				<vm:UserVM UserName="Пользователь 1" Image="Resources/Images/no.png"/>
 			</local:GameVM.FirstGamer>
 			<local:GameVM.SecondGamer>
 				<vm:UserVM UserName="Пользователь 2" Image="Resources/Images/yes.png"/>
 				
 			</local:GameVM.SecondGamer>-->
-		<!--</local:GameVM>-->
+		</local:GameVM>
 		
     <!--</d:UserControl.DataContext>-->
     <UserControl.Resources>
@@ -75,7 +74,7 @@
 		<!--<Grid Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Background="AliceBlue" Width="{Binding Height, RelativeSource={RelativeSource Self}, Mode=TwoWay}" Height="{Binding Width, RelativeSource={RelativeSource Self}, Mode=TwoWay}">-->
 		<Grid Grid.Row="1"  Background="AliceBlue">
 
-			<ItemsControl ItemsSource="{Binding Cells}" viewLib:AProperty.WidthToHeight="1">
+            <ItemsControl ItemsSource="{Binding Cells}" viewLib:AProperty.WidthToHeight="1" Margin="10">
                 <!--<ItemsControl.Resources>
                     <local:CellToImageLinkConverter x:Key="CellConverter"/>
                 </ItemsControl.Resources>-->
@@ -86,6 +85,7 @@
                                      Rows="{Binding RowsCount, Mode=OneWay}">
                         </UniformGrid>-->
 						<Grid Background="AliceBlue"
+							        
                                      viewLib:AProperty.Columns="{Binding ColumnsCount, Mode=OneWay}"
                                      viewLib:AProperty.Rows="{Binding RowsCount, Mode=OneWay}">
                         </Grid>

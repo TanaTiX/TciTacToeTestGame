@@ -61,7 +61,7 @@ namespace View
 		public int LineLength { get; set; }
 
 		public ObservableCollection<CellTypeDto> CellTypes { get; }
-			= new ObservableCollection<CellTypeDto>() { CellTypeDto.Empty, CellTypeDto.Cross, CellTypeDto.Zero };
+			= new ObservableCollection<CellTypeDto>(){CellTypeDto.Empty, CellTypeDto.Cross,CellTypeDto.Zero};
 
 		public int CurrentUserIndex { get; set; }
 	}

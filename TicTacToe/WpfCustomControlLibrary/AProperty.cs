@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -212,7 +208,7 @@ namespace WpfCustomControlLibrary
 					width = height / WidthToHeight;
 				}
 				Element.Width = width > 0.0 ? width : 0.0;
-				Element.Height = height; Element.Height = height > 0.0 ? height : 0.0;
+				Element.Height = height > 0.0 ? height : 0.0;
 			}
 
 			/// <summary>Задание коэффициента пропорции ширины к высоте.</summary>
@@ -224,5 +220,6 @@ namespace WpfCustomControlLibrary
 			}
 
 		}
+
 	}
 }

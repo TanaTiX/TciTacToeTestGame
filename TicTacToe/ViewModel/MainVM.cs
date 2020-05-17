@@ -190,7 +190,7 @@ namespace ViewModel
 					else if (SecondGamer.UserName == newUser.UserName)
 						SecondGamer.IsTurn = newUser.IsTurn;
 					else
-						throw new ArgumentException($"Не существующее имя очередного игрока {newUser.UserName}", nameof(e));
+						throw new ArgumentException($"Не существующее имя очередного игрока {newUser.UserName}", nameof(e)) ;
 					break;
 				default:
 					break;

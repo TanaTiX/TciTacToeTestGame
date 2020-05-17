@@ -10,12 +10,11 @@ namespace LibVM
 {
 	public class CellVM : OnPropertyChangedClass
 	{
-		private CellTypeDto cellType;
+		private CellTypeDto _cellType;
 		private int _column;
 		private int _row;
 		private int _id;
-		private string name;
-		private CellTypeDto _cellType;
+
 		public CellTypeDto CellType { get => _cellType; set => SetProperty(ref _cellType, value); }
 		public int Column { get => _column; set => SetProperty(ref _column, value); }
 		public int Row { get => _row; set => SetProperty(ref _row, value); }

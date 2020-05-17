@@ -119,7 +119,7 @@
       <Name>View</Name>
     </ProjectReference>
     <ProjectReference Include="..\WpfCustomControlLibrary\WpfCustomControlLibrary.csproj">
-      <Project>{4279cc55-d12c-4dc5-a63f-850ecfaba46a}</Project>
+      <Project>{f4ca58d8-224b-4bfb-acc2-c1af20cd929f}</Project>
       <Name>WpfCustomControlLibrary</Name>
     </ProjectReference>
   </ItemGroup>

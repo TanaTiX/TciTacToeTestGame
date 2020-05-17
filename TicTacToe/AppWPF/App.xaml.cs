@@ -32,9 +32,11 @@ namespace GameWPF
 		private readonly Window window = new Window()
 		{
 			WindowStartupLocation = WindowStartupLocation.Manual,
-			//ResizeMode = ResizeMode.NoResize,
-			Left = 1320,
-			Top = 40
+			ResizeMode = ResizeMode.NoResize,
+			Left = 320,
+			Top = 40,
+			Width = 600,
+			Height = 700
 		};
 
 		/// <summary>Экземпляр Первого экрана</summary>
@@ -81,8 +83,6 @@ namespace GameWPF
 			//controls.Add(typeof(IGameEndDrawVM), drawUC);
 
 			
-			window.Width = 600;
-			window.Height = 700;
 			ChangeWindowContent(typeof(IFirstScreenVM));
 
 			IReposSaveGame reposGame = new ReposSaveGameXML("SavedGame.xml");
@@ -95,9 +95,6 @@ namespace GameWPF
 			viewModel.CellTypes.Add(CellTypeDto.Empty);
 			viewModel.CellTypes.Add(CellTypeDto.Cross);
 			viewModel.CellTypes.Add(CellTypeDto.Zero);
-			//viewModel.CellTypes.Add(new CellTypeDto(0, "Empty"));
-			//viewModel.CellTypes.Add(new CellTypeDto(1, "Cross"));
-			//viewModel.CellTypes.Add(new CellTypeDto(2, "Zero"));
 			viewModel.FirstGamer.CellType = viewModel.CellTypes[1];
 			viewModel.SecondGamer.CellType = viewModel.CellTypes[2];
 			ImageSource[] images =

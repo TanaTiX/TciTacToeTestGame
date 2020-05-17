@@ -11,6 +11,11 @@ using System.CodeDom;
 
 namespace Model
 {
+
+
+
+
+
 	public class ModelTicTacToe : IModel
 	{
 		protected int RowsCount;
@@ -84,12 +89,14 @@ namespace Model
 				return;
 			if (CurrentGamerIndex >= 0)
 				SetChangeGamerIsTurn(CurrentGamerIndex, true);
-
 			CurrentGamerIndex = value;
+			if (CurrentGamerIndex >= 0)
+				SetChangeGamerIsTurn(CurrentGamerIndex, true);
 
 			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.CurrentGamerIndex, CurrentGamerIndex));
 			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.CurrentGamerId, CurrentGamer.Id));
 			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.CurrentGamer, CurrentGamer));
+
 		}
 
 		//нет ссылок
@@ -143,11 +150,15 @@ namespace Model
 			RowsCount = (int)args[0];
 			ColumnsCount = (int)args[1];
 			LineLength = (int)args[2];
+			Types = (ISet<CellTypeDto>)args[3];
 			Gamers = ((ISet<UserDto>)args[4]).OrderBy(gmr => gmr.Turn).ToArray();
 			int gamerInd = Gamers.TakeWhile(gmr => !gmr.IsTurn).Count();
 			SetCurrentGamerIndex(gamerInd);
 			CreateGame();
 			SetGameStatus(GameStatuses.Game);
+
+			/// Установка флага начатой игры
+			SetIsRevenge(true);
 		}
 
 		public bool CanMove(CellDto cell, UserDto user)
@@ -166,6 +177,9 @@ namespace Model
 			FinishGame(Cells[cell.Row, cell.Column]);
 			if (GameStatus == GameStatuses.Game)
 				SetCurrentGamerIndex(CurrentGamerIndex + 1);
+			else
+				/// Сброс флага начатой игры
+				SetIsRevenge(false);
 		}
 		private void FinishGame(CellDto testCell)
 		{
@@ -266,11 +280,23 @@ namespace Model
 		{
 			SetCurrentGamerIndex(CurrentGamerIndex + 1);
 			SetGameStatus(GameStatuses.Win, CurrentGamerId);
+			SetIsRevenge(false);
 		}
 
 		protected bool IsRevenge;
 		public void Save()
 		{
+			/// Проверка флага начатой игры
+			if (IsRevenge)
+				repos.Save(new SavedGameDto
+				(
+					Gamers.ToHashSet(),
+					Cells.Cast<CellDto>().Where(cl => cl?.CellType != CellTypeDto.Empty).ToHashSet(),
+					Types,
+					RowsCount,
+					ColumnsCount,
+					LineLength
+				));
 			{
 				/// Проверка флага начатой игры
 				if (GameStatus == GameStatuses.Game)
@@ -298,12 +324,12 @@ namespace Model
 				return;
 
 
-			SetRowsCount(SavedGame.RowsCount);
-			SetColumnsCount(SavedGame.ColumnsCount);
-			SetLineLength(SavedGame.LengthLineForWin);
+			SetRowsCount(savedGame.RowsCount);
+			SetColumnsCount(savedGame.ColumnsCount);
+			SetLineLength(savedGame.LengthLineForWin);
 
-			SetTypes(SavedGame.Types);
-			SetGamers(SavedGame.Users);
+			SetTypes(savedGame.Types);
+			SetGamers(savedGame.Users);
 			ChangeCellsCount(RowsCount, ColumnsCount);
 			foreach (CellDto cell in SavedGame.Cells)
 			{
@@ -312,6 +338,10 @@ namespace Model
 			int gamerInd = Gamers.TakeWhile(gmr => !gmr.IsTurn).Count();
 			SetCurrentGamerIndex(gamerInd);
 			SetGameStatus(GameStatuses.Game);
+
+
+			/// Удаление сохранённой игры
+			RemoveSavedFile();
 		}
 
 		private void SetGamers(ISet<UserDto> value)

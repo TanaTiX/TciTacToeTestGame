@@ -87,7 +87,7 @@ namespace ViewModel
 		public UserVM FirstGamer { get; } = new UserVM()
 		{
 			UserName = "Пользователь 1",
-			Id=1,
+			Id = 1,
 			Turn=7
 		};
 		public UserVM SecondGamer { get; } = new UserVM()
@@ -266,6 +266,7 @@ namespace ViewModel
 			if (propertyName == nameof(CurrentUserIndex))
 			{
 				OnPropertyChanged(nameof(CurrentUser));
+				// Это логика МОДЕЛИ !!!!
 				//if (CurrentUserIndex == 0)
 				//{
 				//	SecondGamer.IsTurn = !(FirstGamer.IsTurn = true);
