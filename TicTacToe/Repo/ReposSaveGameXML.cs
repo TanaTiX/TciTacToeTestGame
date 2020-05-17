@@ -10,11 +10,31 @@ namespace Repo
 	public class ReposSaveGameXML : IReposSaveGame
 	{
 		/// <summary>URI файла с данными</summary>
-		public Uri FileXml { get; }
+		public Uri FileSaveXml { get; }
 
-		public ReposSaveGameXML(Uri fileXml)
+		public ReposSaveGameXML(Uri saveXML)
 		{
-			FileXml = fileXml ?? throw new ArgumentNullException(nameof(fileXml));
+			FileSaveXml = saveXML ?? throw new ArgumentNullException(nameof(saveXML));
+		}
+		public ReposSaveGameXML(string filePathSaveNameXml)
+			//: this(new Uri(filePathNameXml, UriKind.RelativeOrAbsolute))
+		{
+			try
+			{
+				/// Попытка получения из строки Uri локального файла сохранения
+				FileInfo fileSave = new FileInfo(filePathSaveNameXml);
+				Uri uriSave = new Uri(fileSave.FullName, UriKind.Absolute);
+				//Uri uri = new Uri(filePathNameXml, UriKind.RelativeOrAbsolute);
+				if (!uriSave.IsFile)
+					throw new ArgumentException("По пути в строке не удалось получить Uri локальнго файла", nameof(filePathSaveNameXml));
+				FileSaveXml = uriSave;
+			}
+			catch (Exception)
+			{
+				/// Если не вышло, то надо по другому 
+				/// интерпиритировать переданную строку.
+				throw new ArgumentException("По строке не удалось получить Uri файла", nameof(filePathSaveNameXml));
+			}
 		}
 		public ReposSaveGameXML(string filePathNameXml)
 		{
@@ -37,6 +57,8 @@ namespace Repo
 			}
 
 		}
+=======
+>>>>>>> master
 
 		protected readonly XmlSerializer serializer = new XmlSerializer(typeof(SavedGameXML));
 
@@ -47,9 +69,15 @@ namespace Repo
 			SavedGameXML game;
 			try
 			{
+<<<<<<< HEAD
 				if (File.Exists(Path.GetFileName(FileXml.LocalPath)))
 				{
 					using (var file = File.OpenRead(Path.GetFileName(FileXml.LocalPath)))
+=======
+				if (File.Exists(Path.GetFileName(FileSaveXml.LocalPath)))
+				{
+					using (var file = File.OpenRead(Path.GetFileName(FileSaveXml.LocalPath)))
+>>>>>>> master
 						game = (SavedGameXML)serializer.Deserialize(file);
 					return ConvertFromXml(game);
 				}
@@ -63,6 +91,11 @@ namespace Repo
 		public void Save(SavedGameDto game)
 		{
 			using (var file = File.Create(Path.GetFileName(FileXml.LocalPath)))
+			//if (File.Exists(FileXml.OriginalString))
+			//{
+			//	File.Delete(FileXml.OriginalString);
+			//}
+			using (var file = File.Create(Path.GetFileName(FileSaveXml.LocalPath)))
 				serializer.Serialize(file, ConvertFromDto(game));
 		}
 
@@ -113,7 +146,8 @@ namespace Repo
 			if (game == null)
 				return null;
 
-			if (!(game.Types?.Count >= 3))
+			//if (!(game.Types?.Count >= 3))
+			if (!(game.Types != null && game.Types.Count >= 3))
 				throw new ArgumentOutOfRangeException(nameof(game) + "." + nameof(game.Types), "Не может быть меньше трёх");
 
 			List<CellTypeXML> types = game.Types
@@ -165,11 +199,11 @@ namespace Repo
 
 		public void RemoveSavedGame()
 		{
-			if (File.Exists(FileXml.AbsolutePath))
+			if (File.Exists(FileSaveXml.AbsolutePath))
 			{
 				try
 				{
-					File.Delete(FileXml.AbsolutePath);
+					File.Delete(FileSaveXml.AbsolutePath);
 				}
 				catch (Exception ex)
 				{

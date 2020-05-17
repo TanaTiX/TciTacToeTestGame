@@ -44,5 +44,6 @@ namespace ModelLibrary
 		
 		/// <summary>Текщий игрок сдался</summary>
 		void GamerSurrender();
+		//void SaveStatistic();
 	}
 }

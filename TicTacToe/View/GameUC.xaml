@@ -9,15 +9,16 @@
 			 xmlns:viewLib="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary"
 			 xmlns:vm="clr-namespace:LibVM;assembly=LibVM"
 			 xmlns:ml="clr-namespace:ModelLibrary;assembly=ModelLibrary"
+			 
              mc:Ignorable="d"
 			 Background="AliceBlue"
              d:DesignHeight="700" d:DesignWidth="600">
 
 
-    <d:UserControl.DataContext>
+    <!--<d:UserControl.DataContext>-->
 		
-        <local:GameVM >
-            <local:GameVM.Picturies>
+        <!--<local:GameVM >-->
+            <!--<local:GameVM.Picturies>
 				<x:Null      x:Key="{x:Static ml:CellTypeDto.Empty}"/>
 				<BitmapImage x:Key="{x:Static ml:CellTypeDto.Cross}" UriSource="Resources/Images/cross.png"/>
 				<BitmapImage x:Key="{x:Static ml:CellTypeDto.Zero}" UriSource="Resources/Images/zero.png"/>
@@ -31,7 +32,7 @@
 			</local:GameVM.SecondGamer>-->
 		</local:GameVM>
 		
-    </d:UserControl.DataContext>
+    <!--</d:UserControl.DataContext>-->
     <UserControl.Resources>
         <comm:DictionaryKeyToValueConverter x:Key="DictionaryKeyToValueConverter"/>
 		
