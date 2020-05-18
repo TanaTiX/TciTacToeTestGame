@@ -388,7 +388,7 @@ namespace Model
 
 		public void Save()
 		{
-			if (IsGameSaved)
+			//if (IsGameSaved)
 			{
 				/// Проверка флага начатой игры
 				if (GameStatus == GameStatuses.Game)
