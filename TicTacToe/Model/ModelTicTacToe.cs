@@ -18,39 +18,76 @@ namespace Model
 
 	public class ModelTicTacToe : IModel
 	{
+		/// <summary>Количество строк поля</summary>
 		protected int RowsCount;
+		/// <summary>Количество колонок поля</summary>
 		protected int ColumnsCount;
+		/// <summary>Количество идущих подряд ячеек с одним контентом,
+		/// достаточное для выигрыша.</summary>
 		protected int LineLength;
+		/// <summary>Состояние игры.</summary>
 		protected GameStatuses GameStatus;
+		/// <summary>Зарегистрированные игроки на текущую игру.</summary>
 		protected UserDto[] Gamers;
+		/// <summary>Допустимы типы для контента ячейки.</summary>
 		protected ISet<CellTypeDto> Types;
+		/// <summary>Id текущего игрока - того кто должен сделать ход.</summary>
 		protected int CurrentGamerId => CurrentGamer.Id;
+		/// <summary>Индекс текущего игрока - того кто должен сделать ход.</summary>
 		protected int CurrentGamerIndex = -1;
+		/// <summary>Текущий игрок - тот чья очередь делать ход.</summary>
 		protected UserDto CurrentGamer => Gamers[CurrentGamerIndex];
 
 
 		//private int ShiftForCalculateCompleteLine;//сдвиг относительно проверяемой ячейки
 		//public event NotifyChangedCellHandler ChangedCellEvent;
 
+		/// <summary>Изменение типа содержания заданной ячейки</summary>
+		/// <param name="cell">Заданная ячейка</param>
+		/// <param name="type">Новый тип содержания</param>
 		void SetCellType(CellDto cell, CellTypeDto type)
 		{
+			// Если текущий тип равен присваиваемому, то ничего не делается.
+			// Можно написать сокращённо:
+			//if (Cells[cell.Row, cell.Column]?.CellType == type)
 			if (Cells[cell.Row, cell.Column] != null && Cells[cell.Row, cell.Column].CellType == type)
 				return;
+
+			// В противном случае создаётся новый экземпляр ячейки с новым значением контента.
+			// Если ячейка заполнена, то Id берётся из неё. Если не заполнена, то из переданного
+			// параметра cell. После присвоения ячейке нового экземпляра, создаётся событие 
+			// с передачей нового содержания ячейки.
 			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.CellType,
 				Cells[cell.Row, cell.Column] = new CellDto(Cells[cell.Row, cell.Column]?.Id ?? cell.Id, cell.Row, cell.Column, type)));
 		}
+
+		/// <summary>Изменение типа содержания заданной ячейки с передачей нового
+		/// типа в свойстве параметра cell</summary>
+		/// <param name="cell">Заданная ячейка</param>
 		void SetCellType(CellDto cell)
 			=> SetCellType(cell, cell.CellType);
 
+		/// <summary>Событие происходящее при любых изменениях в сотонии Модели.</summary>
 		public event NotifyChangedStateHandler ChangedStateEvent;
 
+		/// <summary>Изменение состояния флага наличия сохранённой игры.
+		/// Название не удачно - желательно поменять.</summary>
+		/// <param name="value"><see langword="true"/> - есть сохранённая игра.</param>
 		void SetIsRevenge(bool value)
 		{
+			// Проверка отличия нового значения от текущего
 			if (IsRevenge == value)
 				return;
+
+			// Присваивание нового значение и создание события с новым значением.
 			IsRevenge = value;
 			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.IsRevenge, value));
 		}
+
+		/// <summary>Пересоздание массива ячеек поля игры.</summary>
+		/// <param name="rows">Количество строк поля</param>
+		/// <param name="columns">Количество колонок поля</param>
+		/// <remarks>Пересоздание происходит, если одно из новых значений не совпадает с текущим.</remarks>
 		void ChangeCellsCount(int rows, int columns)
 		{
 			if (Cells == null || Cells.GetLength(0) != rows || Cells.GetLength(1) != columns)
@@ -59,17 +96,29 @@ namespace Model
 				ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.ChangeCellsCount, new int[] { rows, columns }));
 			}
 		}
+
+		/// <summary>Изменение состояния игры.</summary>
+		/// <param name="value">Новое состояние игры.</param>
+		/// <param name="args">Дополнительные аргументы, если надо.</param>
 		void SetGameStatus(GameStatuses value, object args = null)
 		{
+			// Сравнение с текущим состоянием.
 			if (GameStatus == value)
 				return;
+
+			// Присваивание нового значения состояния.
 			GameStatus = value;
+
+			// Создание события с разными параметрами в зависимости от переданного значения args.
+			// Если args пустое, то в событие передаётся только новое состояние игры.
+			// Иначе - передаётся массив из двух элементов: новое состояние игры и параметр args.
 			if (args == null)
 			{
 				ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.GameStatus, value));
 			}
 			else
 			{
+				// Если новое состояние это победа или ничья, то обновляется статистика.
 				if (GameStatus == GameStatuses.Win || GameStatus == GameStatuses.Draw)
 				{
 					if (GameStatus == GameStatuses.Win)
@@ -82,49 +131,94 @@ namespace Model
 			}
 		}
 
+		/// <summary>Изменение индекса текущего игрока.</summary>
+		/// <param name="value">Новый индекс.</param>
 		void SetCurrentGamerIndex(int value)
 		{
+			// Индекс нормализуется по длинне массива Игроков текущей игры.
 			value %= Gamers.Length;
+
+			// Проверка индекса на равенство текущему индексу.
 			if (CurrentGamerIndex == value)
 				return;
+
+			// Если текущий индекс больше нуля, то сбрасывается флаг очереди хода 
+			// у игрока с эти индексом.
 			if (CurrentGamerIndex >= 0)
-				SetChangeGamerIsTurn(CurrentGamerIndex, true);
+				// Здесь была ошибка: нужен сброс флаг.
+				//SetChangeGamerIsTurn(CurrentGamerIndex, true);
+				SetChangeGamerIsTurn(CurrentGamerIndex, false);
+
+			// Изменение интекса текущего игрока.
 			CurrentGamerIndex = value;
+
+			// Если установленный индекс больше нуля, то устанавливается флаг очереди хода 
+			// у игрока с эти индексом.
 			if (CurrentGamerIndex >= 0)
 				SetChangeGamerIsTurn(CurrentGamerIndex, true);
 
+			// Создание событий для для извежения об измении: CurrentGamerIndex, CurrentGamerId и CurrentGamer
+			// В VM не совсем правильная обработка этих событий.
+			// Из старой версии там частично остался функционал Модели.
 			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.CurrentGamerIndex, CurrentGamerIndex));
 			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.CurrentGamerId, CurrentGamer.Id));
 			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.CurrentGamer, CurrentGamer));
 
 		}
 
-		//нет ссылок
+		/// <summary>Изменение флага очереди игры у заданного игрока.
+		/// Метод вызывается только из метода SetCurrentGamerIndex.</summary>
+		/// <param name="index">Индекс игрока у которого надо изменить флаг.</param>
+		/// <param name="isTurn">Новое значение флага.</param>
 		void SetChangeGamerIsTurn(int index, bool isTurn)
 		{
+			// Если флаг имеет такое же значение, то выход.
 			if (Gamers[index].IsTurn == isTurn)
 				return;
 
+			// Посылка старого и нового значений сделана для примера реализции подобного.
+			// В данном случае по существу это не нужно.
+			// В VM обрабатывается только новое значение.
+			//
+			// Запоминается старое значение -  целиком состояние игрока, так как это неизменяемый тип.
+			// Создаётся новое значени целиком игрока с новым состоянием флага.
+			// Запоминается новое значение под тем же индексом, тем самы достигается изменение только флага.
+			// Остальные значения остаются прежними.
+			// 
+			// Создаётся событие с отправкой старого и нового значений.
 			var gamerOld = Gamers[index];
 			var gamerNew = new UserDto(gamerOld.Id, gamerOld.UserName, gamerOld.ImageIndex, gamerOld.Turn, isTurn, gamerOld.CellType);
 			Gamers[index] = gamerNew;
 			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.ChangeGamerIsTurn, gamerOld, gamerNew));
 		}
 
+		/// <summary>Установка допустимых типов для новой игры.</summary>
+		/// <param name="value">Допустимые типы. Id должны быть уникальными.</param>
 		void SetTypes(ISet<CellTypeDto> value)
 		{
+			// Если коллекция таже самая, то выход.
 			if (Types == value)
 				return;
 			Types = value;
 			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.Types, value));
 		}
+
+		/// <summary>Массив ячеек поля игры.</summary>
 		protected CellDto[,] Cells;
 
+		/// <summary>Id текущего игрока.</summary>
 		protected int CurrentUserID;
 
+		/// <summary>Ссылка на Репозитрий данных игры.</summary>
 		protected IReposSaveGame ReposGame;
+
+		/// <summary>Ссылка на Репозитрий статистики игр.</summary>
 		protected IReposStatistic RepoStatistic;
+
+		/// <summary>Поле для хранения данных загруженной игры.
+		/// Если загруженной игры не было, то - <see langword="null"/>.</summary>
 		protected SavedGameDto SavedGame;
+
 		/// <summary>Конструктор модели</summary>
 		/// <param name="rowsCount">Колиичество строк</param>
 		/// <param name="columnsCount">Количество колонок</param>
@@ -135,6 +229,7 @@ namespace Model
 			RepoStatistic = reposStatistic;
 		}
 
+		/// <summary>Инициализация поля игры при создании новой игры.</summary>
 		public void CreateGame()
 		{
 			ChangeCellsCount(RowsCount, ColumnsCount);
@@ -181,6 +276,7 @@ namespace Model
 				/// Сброс флага начатой игры
 				SetIsRevenge(false);
 		}
+
 		private void FinishGame(CellDto testCell)
 		{
 			bool isWin = WinCheck(testCell);
@@ -283,7 +379,13 @@ namespace Model
 			SetIsRevenge(false);
 		}
 
+		/// <summary>Поле флага наличия игры для продолжения.<para/>
+		/// Здесь у нас какая-то путаница.
+		/// Как по названию, так и по логике.<para/>
+		/// Надо точно определиться с логикой, когда этот флаг должен быть установлен, а когда сброшен.<para/>
+		/// И, исходя из логики, задать ему правильное название.</summary>
 		protected bool IsRevenge;
+
 		public void Save()
 		{
 			if (IsRevenge)
@@ -302,6 +404,8 @@ namespace Model
 
 			}
 		}
+
+		/// <summary>Вызов метода Репозитория, удаляющего сохранённые данные игры.</summary>
 		private void RemoveSavedFile()
 		{
 			ReposGame.RemoveSavedGame();
@@ -334,12 +438,16 @@ namespace Model
 			RemoveSavedFile();
 		}
 
+		/// <summary>Регистрация списка игроков для новой игры.</summary>
+		/// <param name="value">Множество игроков. Id должны быть уникальными.</param>
 		private void SetGamers(ISet<UserDto> value)
 		{
 			Gamers = value.OrderBy(i => i.Turn).ToArray();
 			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.Gamers, value));
 		}
 
+		/// <summary>Изменение выигрышной длины. Задаётся при создании новой игры.</summary>
+		/// <param name="value">Длина непрерывной последовательности одного типа.</param>
 		private void SetLineLength(int value)
 		{
 			if (LineLength == value) return;
@@ -347,6 +455,8 @@ namespace Model
 			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.LineLength, value));
 		}
 
+		/// <summary>Количество колонок поля игры. Задаётся при создании новой игры.</summary>
+		/// <param name="value">Количество колонок.</param>
 		private void SetColumnsCount(int value)
 		{
 			if (ColumnsCount == value) return;
@@ -354,6 +464,8 @@ namespace Model
 			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.ColumnsCount, value));
 		}
 
+		/// <summary>Количество строк поля игры. Задаётся при создании новой игры.</summary>
+		/// <param name="value">Количество строк.</param>
 		private void SetRowsCount(int value)
 		{
 			if (RowsCount == value) return;
