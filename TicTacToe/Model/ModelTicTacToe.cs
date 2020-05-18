@@ -253,7 +253,7 @@ namespace Model
 			SetGameStatus(GameStatuses.Game);
 
 			/// Установка флага начатой игры
-			SetIsGameSaved(true);
+			//SetIsGameSaved(true);
 		}
 
 		public bool CanMove(CellDto cell, UserDto user)
@@ -272,9 +272,9 @@ namespace Model
 			FinishGame(Cells[cell.Row, cell.Column]);
 			if (GameStatus == GameStatuses.Game)
 				SetCurrentGamerIndex(CurrentGamerIndex + 1);
-			else
-				/// Сброс флага начатой игры
-				SetIsGameSaved(false);
+			//else
+			//	/// Сброс флага начатой игры
+			//	SetIsGameSaved(false);
 		}
 
 		private void FinishGame(CellDto testCell)
@@ -376,7 +376,7 @@ namespace Model
 		{
 			SetCurrentGamerIndex(CurrentGamerIndex + 1);
 			SetGameStatus(GameStatuses.Win, CurrentGamerId);
-			SetIsGameSaved(false);
+			//SetIsGameSaved(false);
 		}
 
 		/// <summary>Поле флага наличия игры для продолжения.<para/>
@@ -476,6 +476,7 @@ namespace Model
 		public void Load()
 		{
 			SavedGame = ReposGame.Load();
+
 			SetIsGameSaved(SavedGame != null);
 		}
 
