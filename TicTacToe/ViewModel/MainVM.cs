@@ -256,6 +256,16 @@ namespace ViewModel
 		{
 			if (p is CellVM cell)
 			{
+				//if (FirstGamer.IsTurn)
+				//{
+				//	FirstGamer.IsTurn = false;
+				//	SecondGamer.IsTurn = true;
+				//}
+				//if (SecondGamer.IsTurn)
+				//{
+				//	SecondGamer.IsTurn = false;
+				//	FirstGamer.IsTurn = true;
+				//}
 				model.Move(ConvertVMToDto(cell), ConvertVMToDto(CurrentUser));
 				//CurrentUser = model.CurrentUser;
 			}

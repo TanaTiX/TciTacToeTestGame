@@ -148,7 +148,10 @@ namespace Repo
 			}
 
 			if (!(game.Users?.Count > 0))
+			{
 				throw new ArgumentOutOfRangeException(nameof(game) + "." + nameof(game.Users), "Не может быть меньше одного");
+			}
+
 			List<UserXML> users = game.Users
 					.Select(dto => new UserXML() { id = dto.Id, Name = dto.UserName, ImageIndex = dto.ImageIndex, turn = dto.Turn, typeId = tps[dto.CellType.Type] })
 					.ToList();

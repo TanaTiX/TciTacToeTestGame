@@ -290,11 +290,6 @@ namespace Model
 			{
 				/// Проверка флага начатой игры
 				if (GameStatus == GameStatuses.Game)
-				{
-					if(CurrentGamer.Id == Gamers[1].Id)
-					{
-						(Gamers[0], Gamers[1]) = (Gamers[1], Gamers[0]);
-					}
 					ReposGame.Save(new SavedGameDto
 					(
 						Gamers.ToHashSet(),
@@ -303,7 +298,8 @@ namespace Model
 						ColumnsCount,
 						LineLength
 					));
-				}
+
+
 			}
 		}
 		private void RemoveSavedFile()

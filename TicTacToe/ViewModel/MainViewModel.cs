@@ -253,13 +253,37 @@ namespace ViewModel
 		private int _currentUserIndex = -1;
 		public int CurrentUserIndex { get => _currentUserIndex; protected set => SetProperty(ref _currentUserIndex, value); }
 
-		public UserVM CurrentUser => CurrentUserIndex == 0 ? FirstGamer
-			: CurrentUserIndex == 1 ? SecondGamer
-			: null;
+		//public UserVM CurrentUser => CurrentUserIndex == 0 ? FirstGamer
+		//	: CurrentUserIndex == 1 ? SecondGamer
+		//	: null;
+		private UserVM _currentUser;
+
+		public UserVM CurrentUser
+		{
+			get {
+				if(_currentUserIndex == 0)
+				{
+					_currentUser = FirstGamer;
+					FirstGamer.IsTurn = true;
+					SecondGamer.IsTurn = false;
+				}
+				else
+				{
+					if(_currentUserIndex == 1)
+					{
+						_currentUser = SecondGamer;
+						FirstGamer.IsTurn = false;
+						SecondGamer.IsTurn = true;
+					}
+				}
+				return _currentUser;
+			}
+		}
 
 		private int _lineLength;
 		public int LineLength { get => _lineLength; protected set => SetProperty(ref _lineLength, value); }
 
+		
 		protected override void PropertyNewValue<T>(ref T fieldProperty, T newValue, string propertyName)
 		{
 			base.PropertyNewValue(ref fieldProperty, newValue, propertyName);
