@@ -73,14 +73,14 @@ namespace Model
 		/// <summary>Изменение состояния флага наличия сохранённой игры.
 		/// Название не удачно - желательно поменять.</summary>
 		/// <param name="value"><see langword="true"/> - есть сохранённая игра.</param>
-		void SetIsRevenge(bool value)
+		void SetIsGameSaved(bool value)
 		{
 			// Проверка отличия нового значения от текущего
-			if (IsRevenge == value)
+			if (IsGameSaved == value)
 				return;
 
 			// Присваивание нового значение и создание события с новым значением.
-			IsRevenge = value;
+			IsGameSaved = value;
 			ChangedStateEvent?.Invoke(this, new ChangedStateHandlerArgs(NamesState.IsRevenge, value));
 		}
 
@@ -253,7 +253,7 @@ namespace Model
 			SetGameStatus(GameStatuses.Game);
 
 			/// Установка флага начатой игры
-			SetIsRevenge(true);
+			SetIsGameSaved(true);
 		}
 
 		public bool CanMove(CellDto cell, UserDto user)
@@ -274,7 +274,7 @@ namespace Model
 				SetCurrentGamerIndex(CurrentGamerIndex + 1);
 			else
 				/// Сброс флага начатой игры
-				SetIsRevenge(false);
+				SetIsGameSaved(false);
 		}
 
 		private void FinishGame(CellDto testCell)
@@ -376,7 +376,7 @@ namespace Model
 		{
 			SetCurrentGamerIndex(CurrentGamerIndex + 1);
 			SetGameStatus(GameStatuses.Win, CurrentGamerId);
-			SetIsRevenge(false);
+			SetIsGameSaved(false);
 		}
 
 		/// <summary>Поле флага наличия игры для продолжения.<para/>
@@ -384,11 +384,11 @@ namespace Model
 		/// Как по названию, так и по логике.<para/>
 		/// Надо точно определиться с логикой, когда этот флаг должен быть установлен, а когда сброшен.<para/>
 		/// И, исходя из логики, задать ему правильное название.</summary>
-		protected bool IsRevenge;
+		protected bool IsGameSaved;
 
 		public void Save()
 		{
-			if (IsRevenge)
+			if (IsGameSaved)
 			{
 				/// Проверка флага начатой игры
 				if (GameStatus == GameStatuses.Game)
@@ -409,12 +409,12 @@ namespace Model
 		private void RemoveSavedFile()
 		{
 			ReposGame.RemoveSavedGame();
-			SetIsRevenge(false);
+			SetIsGameSaved(false);
 		}
 
 		public void RepairGame()
 		{
-			if (!IsRevenge || SavedGame == null)
+			if (!IsGameSaved || SavedGame == null)
 				return;
 
 
@@ -476,7 +476,7 @@ namespace Model
 		public void Load()
 		{
 			SavedGame = ReposGame.Load();
-			SetIsRevenge(SavedGame != null);
+			SetIsGameSaved(SavedGame != null);
 		}
 
 		//private void SaveStatistic()
