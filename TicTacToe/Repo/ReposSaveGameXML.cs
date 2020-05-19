@@ -76,31 +76,31 @@ namespace Repo
 			if (game == null)
 				return null;
 
-			if (!(game.cellTypes?.Count >= 3))
-				throw new ArgumentOutOfRangeException(nameof(game) + "." + nameof(game.cellTypes), "Не может быть меньше трёх");
+			if (!(game.CellTypes?.Count >= 3))
+				throw new ArgumentOutOfRangeException(nameof(game) + "." + nameof(game.CellTypes), "Не может быть меньше трёх");
 
-			HashSet<CellTypeDto> types = game.cellTypes
-				.Select(xml => CellTypeDto.Create(xml.id, xml.value))
+			HashSet<CellTypeDto> types = game.CellTypes
+				.Select(xml => CellTypeDto.Create(xml.Id, xml.Value))
 				.ToHashSet();
 
 			var tps = types.ToDictionary(tp => tp.Id);
 
 			HashSet<CellDto> cells = null;
-			if (game.cells != null)
+			if (game.Cells != null)
 			{
 				cells = new HashSet<CellDto>();
-				foreach (CellXML cell in game.cells)
+				foreach (CellXML cell in game.Cells)
 				{
-					if (types.FirstOrDefault(dto => dto.Id == cell.typeId) == null)
+					if (types.FirstOrDefault(dto => dto.Id == cell.TypeId) == null)
 						throw new ArgumentException("Такого типа нет в списке", "cell.id");
-					cells.Add(new CellDto(cell.id, cell.row, cell.column, tps[cell.typeId]));
+					cells.Add(new CellDto(cell.Id, cell.Row, cell.Column, tps[cell.TypeId]));
 				}
 			}
 
-			if (!(game.users?.Count > 0))
-				throw new ArgumentOutOfRangeException(nameof(game) + "." + nameof(game.users), "Не может быть меньше одного");
-			HashSet<UserDto> users = game.users
-					.Select(xml => new UserDto(xml.id, xml.Name, xml.ImageIndex, xml.turn, xml.id == game.currentUser.userId, tps[xml.typeId]))
+			if (!(game.Users?.Count > 0))
+				throw new ArgumentOutOfRangeException(nameof(game) + "." + nameof(game.Users), "Не может быть меньше одного");
+			HashSet<UserDto> users = game.Users
+					.Select(xml => new UserDto(xml.Id, xml.Name, xml.ImageIndex, xml.Turn, xml.Id == game.CurrentUser.UserId, tps[xml.TypeId]))
 					.ToHashSet();
 
 			return new SavedGameDto
@@ -108,9 +108,9 @@ namespace Repo
 				users,
 				cells,
 				types,
-				game.game.rows,
-				game.game.columns,
-				game.game.lengthToWin
+				game.Game.Rows,
+				game.Game.Columns,
+				game.Game.LengthToWin
 			);
 		}
 		protected static SavedGameXML ConvertFromDto(SavedGameDto game)
@@ -123,17 +123,17 @@ namespace Repo
 				throw new ArgumentOutOfRangeException(nameof(game) + "." + nameof(game.Types), "Не может быть меньше трёх");
 
 			List<CellTypeXML> types = game.Types
-				.Select(dto => new CellTypeXML() { id = dto.Id, value = dto.Type })
+				.Select(dto => new CellTypeXML() { Id = dto.Id, Value = dto.Type })
 				.ToList();
 
-			var tps = types.ToDictionary(tp => tp.value, tp => tp.id);
+			var tps = types.ToDictionary(tp => tp.Value, tp => tp.Id);
 
 			List<CellXML> cells = new List<CellXML>();
 			if (game.Cells != null)
 			{
 				foreach (CellDto cell in game.Cells.Where(cll => cll?.CellType != null && cll.CellType != CellTypeDto.Empty))
 				{
-					cells.Add(new CellXML() { id = cell.Id, row = cell.Row, column = cell.Column, typeId = tps[cell.CellType.Type] });
+					cells.Add(new CellXML() { Id = cell.Id, Row = cell.Row, Column = cell.Column, TypeId = tps[cell.CellType.Type] });
 
 				}
 			}
@@ -153,20 +153,20 @@ namespace Repo
 			}
 
 			List<UserXML> users = game.Users
-					.Select(dto => new UserXML() { id = dto.Id, Name = dto.UserName, ImageIndex = dto.ImageIndex, turn = dto.Turn, typeId = tps[dto.CellType.Type] })
+					.Select(dto => new UserXML() { Id = dto.Id, Name = dto.UserName, ImageIndex = dto.ImageIndex, Turn = dto.Turn, TypeId = tps[dto.CellType.Type] })
 					.ToList();
 
 			return new SavedGameXML()
 			{
-				users = users,
-				cells = cells,
-				cellTypes = types,
-				currentUser = new CurrentUserXML() { userId = turnId },
-				game = new GameSettings()
+				Users = users,
+				Cells = cells,
+				CellTypes = types,
+				CurrentUser = new CurrentUserXML() { UserId = turnId },
+				Game = new GameSettings()
 				{
-					rows = game.RowsCount,
-					columns = game.ColumnsCount,
-					lengthToWin = game.LengthLineForWin
+					Rows = game.RowsCount,
+					Columns = game.ColumnsCount,
+					LengthToWin = game.LengthLineForWin
 				}
 			};
 

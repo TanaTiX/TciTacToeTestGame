@@ -52,6 +52,7 @@
     <Compile Include="IStatisticVM.cs" />
     <Compile Include="IStatusesVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserStatisticVM.cs" />
     <Compile Include="UserVM.cs" />
   </ItemGroup>
   <ItemGroup>

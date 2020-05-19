@@ -52,7 +52,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SavedGameDto.cs" />
     <Compile Include="UserDto.cs" />
+    <Compile Include="UsersStatisticDto.cs" />
     <Compile Include="UserStatistic.cs" />
+    <Compile Include="UserStatisticDto.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">

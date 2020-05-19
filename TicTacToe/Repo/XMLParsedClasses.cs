@@ -20,22 +20,22 @@ namespace Repo
 
 		/// <remarks/>
 		[XmlElement("user")]
-		public List<UserXML> users { get; set; }
+		public List<UserXML> Users { get; set; }
 
 		/// <remarks/>
 		[XmlElement("currentUser")]
-		public CurrentUserXML currentUser { get; set; }
+		public CurrentUserXML CurrentUser { get; set; }
 
 		/// <remarks/>
 		[XmlElement("cell")]
-		public List<CellXML> cells { get; set; }
+		public List<CellXML> Cells { get; set; }
 
 		/// <remarks/>
 		[XmlElement("cellType")]
-		public List<CellTypeXML> cellTypes { get; set; }
+		public List<CellTypeXML> CellTypes { get; set; }
 
 		/// <remarks/>
-		public GameSettings game { get; set; }
+		public GameSettings Game { get; set; }
 	}
 
 	/// <remarks/>
@@ -47,11 +47,11 @@ namespace Repo
 
 		/// <remarks/>
 		[XmlAttribute()]
-		public int id { get; set; }
+		public int Id { get; set; }
 
 		/// <remarks/>
 		[XmlAttribute()]
-		public int turn { get; set; }
+		public int Turn { get; set; }
 
 		/// <remarks/>
 		[XmlAttribute()]
@@ -62,7 +62,7 @@ namespace Repo
 		public int ImageIndex { get; set; }
 		/// <remarks/>
 		[XmlAttribute()]
-		public int typeId { get; set; }
+		public int TypeId { get; set; }
 
 	}
 
@@ -75,7 +75,7 @@ namespace Repo
 
 		/// <remarks/>
 		[XmlAttribute()]
-		public int userId { get; set; }
+		public int UserId { get; set; }
 	}
 
 	/// <remarks/>
@@ -87,19 +87,19 @@ namespace Repo
 
 		/// <remarks/>
 		[XmlAttribute()]
-		public int id { get; set; }
+		public int Id { get; set; }
 
 		/// <remarks/>
 		[XmlAttribute()]
-		public int typeId { get; set; }
+		public int TypeId { get; set; }
 
 		/// <remarks/>
 		[XmlAttribute()]
-		public int column { get; set; }
+		public int Column { get; set; }
 
 		/// <remarks/>
 		[XmlAttribute()]
-		public int row { get; set; }
+		public int Row { get; set; }
 	}
 
 	/// <remarks/>
@@ -111,11 +111,11 @@ namespace Repo
 
 		/// <remarks/>
 		[XmlAttribute()]
-		public int id { get; set; }
+		public int Id { get; set; }
 
 		/// <remarks/>
 		[XmlAttribute()]
-		public string value { get; set; }
+		public string Value { get; set; }
 	}
 
 	/// <remarks/>
@@ -127,15 +127,15 @@ namespace Repo
 
 		/// <remarks/>
 		[XmlAttribute()]
-		public int columns { get; set; }
+		public int Columns { get; set; }
 
 		/// <remarks/>
 		[XmlAttribute()]
-		public int rows { get; set; }
+		public int Rows { get; set; }
 
 		/// <remarks/>
 		[XmlAttribute()]
-		public int lengthToWin { get; set; }
+		public int LengthToWin { get; set; }
 	}
 
 
