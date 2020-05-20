@@ -102,12 +102,9 @@ namespace Repo
 
 		public void SaveStatistic(UserDto[] gamers, bool isFirstWin, bool isSecondWin)
 		{
-			//throw new NotImplementedException();
 			UsersStatisticDto statistic = LoadStatistic();
 			UserDto first = gamers[0];
 			UserDto second = gamers[1];
-			//UserStatisticDto firstDto;
-			//UserStatisticDto secondDto;
 			if (isFirstWin || isSecondWin)
 			{
 
@@ -115,78 +112,24 @@ namespace Repo
 				{
 					UpdateValue(statistic.UsersStatistic, first.UserName, 1, 0, 0);
 					UpdateValue(statistic.UsersStatistic, second.UserName, 0, 1, 0);
-					/*if(statistic.UsersStatistic.TryGetValue(first.UserName, out _))
-					{
-						statistic.UsersStatistic[first.UserName] = UserStatisticDto.Create
-							(
-							first.UserName,
-							statistic.UsersStatistic[first.UserName].Win + 1,
-							statistic.UsersStatistic[first.UserName].Lose,
-							statistic.UsersStatistic[first.UserName].Draw
-						);
-					}
-					else
-					{
-						statistic.UsersStatistic[first.UserName] = UserStatisticDto.Create
-							(
-							first.UserName,
-							1,
-							0,
-							0
-						);
-					}*/
-
-					//firstDto = statistic.UsersStatistic.FirstOrDefault(u => u.Name == first.UserName);
-					//secondDto = statistic.UsersStatistic.FirstOrDefault(u => u.Name == second.UserName);
 				}
 				else
 				{
 					UpdateValue(statistic.UsersStatistic, second.UserName, 1, 0, 0);
 					UpdateValue(statistic.UsersStatistic, first.UserName, 0, 1, 0);
-					//firstDto = statistic.UsersStatistic.FirstOrDefault(u => u.Name == second.UserName);
-					//secondDto = statistic.UsersStatistic.FirstOrDefault(u => u.Name == first.UserName);
 				}
-				/*if (firstDto == null)
-				{
-					//firstDto = UserStatisticDto.Create(gamers[0].UserName, isFirstWin ? 1 : 0, isFirstWin ? 0 : 1, 0);
-				}
-				if(secondDto == null)
-				{
-					//secondDto = UserStatisticDto.Create(gamers[1].UserName, isFirstWin ? 0 : 1, isFirstWin ? 1 : 0, 0);
-				}*/
-				//firstDto = UserStatisticDto.Create(firstDto.Name, firstDto.Win + 1, firstDto.Lose, firstDto.Draw);
-				//secondDto = UserStatisticDto.Create(secondDto.Name, secondDto.Win, secondDto.Lose + 1, secondDto.Draw);
 			}
 			else
 			{
 				UpdateValue(statistic.UsersStatistic, second.UserName, 0, 0, 1);
 				UpdateValue(statistic.UsersStatistic, first.UserName, 0, 0, 1);
-				//firstDto = statistic.UsersStatistic.FirstOrDefault(u => u.Name == first.UserName);
-				//secondDto = statistic.UsersStatistic.FirstOrDefault(u => u.Name == second.UserName);
-				//if (firstDto == null)
-				//{
-				//	firstDto = UserStatisticDto.Create(gamers[0].UserName, 0, 0, 0);
-				//}
-				//if (secondDto == null)
-				//{
-				//	secondDto = UserStatisticDto.Create(gamers[1].UserName, 0, 0, 0);
-				//}
-				//UserStatisticDto firstXML = UserStatisticDto.Create(firstDto.Name, firstDto.Win, firstDto.Lose, firstDto.Draw + 1);
-				//UserStatisticDto secondXML = UserStatisticDto.Create(secondDto.Name, secondDto.Win, secondDto.Lose, secondDto.Draw + 1);
-
-
 			}
 			
 			StatisticGame statisticGame = new StatisticGame();
-			UserStatisticDto[] arr = statistic.UsersStatistic.Values.ToArray();
-			statisticGame.List = arr.Select(u => new StatisticGameUser() { Name = u.Name, Win = u.Win, Lose = u.Lose, Draw = u.Draw }).ToArray();
-			//statistic.UsersStatistic
-			//statistic.UsersStatistic.Add(firstDto);
-			//statistic.UsersStatistic.Add(secondDto);
-			//statisticGame.List = statistic;
-
-			//using (var file = File.Create(Path.GetFileName(FileStatisticXml.LocalPath)))
-			//	serializer.Serialize(file, statisticGame);
+			statisticGame.List = statistic.UsersStatistic.Values.Select(u => new StatisticGameUser() { Name = u.Name, Win = u.Win, Lose = u.Lose, Draw = u.Draw }).ToArray();
+			
+			using (var file = File.Create(Path.GetFileName(FileStatisticXml.LocalPath)))
+				serializer.Serialize(file, statisticGame);
 		}
 
 	}
