@@ -8,9 +8,13 @@ namespace ModelLibrary
 {
 	public class UsersStatisticDto
 	{
-		internal string Name;
-		private List<UserStatisticDto> _usersStatistic = new List<UserStatisticDto>();
+		public UsersStatisticDto(Dictionary<string, UserStatisticDto> statistic)
+		{
+			_usersStatistic = statistic;
+		}
+		//internal string Name;
+		private Dictionary<string, UserStatisticDto> _usersStatistic;
 
-		public List<UserStatisticDto> UsersStatistic { get => _usersStatistic; set => _usersStatistic = value; }
+		public Dictionary<string, UserStatisticDto> UsersStatistic { get => _usersStatistic; }
 	}
 }

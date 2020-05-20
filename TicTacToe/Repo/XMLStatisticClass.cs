@@ -36,11 +36,11 @@
 
 		private string nameField;
 
-		private byte winField;
+		private int winField;
 
-		private byte loseField;
+		private int loseField;
 
-		private byte drawField;
+		private int drawField;
 
 		/// <remarks/>
 		[System.Xml.Serialization.XmlAttributeAttribute()]
@@ -58,7 +58,7 @@
 
 		/// <remarks/>
 		[System.Xml.Serialization.XmlAttributeAttribute()]
-		public byte Win
+		public int Win
 		{
 			get
 			{
@@ -72,7 +72,7 @@
 
 		/// <remarks/>
 		[System.Xml.Serialization.XmlAttributeAttribute()]
-		public byte Lose
+		public int Lose
 		{
 			get
 			{
@@ -86,7 +86,7 @@
 
 		/// <remarks/>
 		[System.Xml.Serialization.XmlAttributeAttribute()]
-		public byte Draw
+		public int Draw
 		{
 			get
 			{

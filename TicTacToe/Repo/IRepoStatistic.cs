@@ -6,7 +6,7 @@ namespace Repo
 {
 	public interface IReposStatistic
 	{
-		SavedGameDto LoadStatistic();
+		UsersStatisticDto LoadStatistic();
 		void SaveStatistic(UserDto[] gamers, bool isFirstWin, bool isSecondWin);
 	}
 }
