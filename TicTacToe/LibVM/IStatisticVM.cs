@@ -12,5 +12,7 @@ namespace LibVM
 		/// <summary>Вернуться на 1ю панель</summary>
 		ICommand ShowFirstScreenCommand { get; }
 
+		void LoadStatistic();
+
 	}
 }

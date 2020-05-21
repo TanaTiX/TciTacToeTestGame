@@ -6,6 +6,7 @@ using Repo;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime;
@@ -17,6 +18,8 @@ namespace ViewModel
 	public class MainVM : MainViewModel
 	{
 		protected IModel model;
+		private readonly IStatisticVM StatisticVM;
+
 		public MainVM(Action<Type> windowsChanger, IModel model)
 			: base(windowsChanger, false)
 		{
@@ -37,12 +40,13 @@ namespace ViewModel
 			model.Load();
 		}
 
-		public MainVM(Action<Type> windowsChanger, IModel model, int rows, int columns, int length)
+		public MainVM(Action<Type> windowsChanger, IModel model, int rows, int columns, int length, IStatisticVM statisticVM)
 			: this(windowsChanger, model)
 		{
 			RowsCount = rows;
 			ColumnsCount = columns;
 			LineLength = length;
+			this.StatisticVM = statisticVM;
 		}
 
 		private static void CopyPropertiesToVM(UserDto user, UserVM userVM)
@@ -275,8 +279,15 @@ namespace ViewModel
 		{
 			//необходимо ерализовать в моделе
 			base.ShowStatisticMethod(parameter);
+			/*UserStatistic[] users =*/
+			model.LoadStatistic().UsersStatistic.Values.Select(u => new UserStatistic() { Name = u.Name, Win = u.Win, Lose = u.Lose, Draw = u.Draw }).OrderByDescending(x => x.Win/(x.Win + x.Lose+x.Draw)).ToList()
+			//model.LoadStatistic().UsersStatistic.Values.Select(u => new UserStatistic() { Name = u.Name, Win = u.Win, Lose = u.Lose, Draw = u.Draw }).OrderBy(x => (x.Win / (x.Win + x.Lose + x.Draw))).ToList()
+				.ForEach(user => Users.Add(user));
+			//Users = new ObservableCollection<UserStatistic>(users);
 		}
-
+		//private ObservableCollection<UserStatistic> _users = null;
+		public ObservableCollection<UserStatistic> Users { get; }
+			= new ObservableCollection<UserStatistic>();
 
 		protected override void StartNewGameMethod(object parameter)
 		{
@@ -341,6 +352,8 @@ namespace ViewModel
 				model.CurrentUser = UserType.UserSecond;
 			}*/
 		}
+		
+
 
 	}
 }

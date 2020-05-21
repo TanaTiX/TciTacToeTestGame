@@ -2,6 +2,7 @@
 using LibVM;
 using Model;
 using ModelLibrary;
+using Repo;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -46,6 +47,16 @@ namespace ViewModel
 
 		private ICommand _showFirstScreenCommand;
 		public ICommand ShowFirstScreenCommand => _showFirstScreenCommand ?? (_showFirstScreenCommand = new RelayCommand(ShowFirstScreenMethod));
+
+		//private ICommand _loadStatistic;
+		//public ICommand LoadStatistic => _loadStatistic ?? (_loadStatistic = new RelayCommand(LoadStatisticMethod));
+
+		public void LoadStatistic()
+		{
+			
+			//MessageBox.Show("show statistic");
+			//model.lo
+		}
 
 		private void ShowFirstScreenMethod(object parameter)
 		{
@@ -175,7 +186,7 @@ namespace ViewModel
 
 			new List<UserStatistic>
 			{
-				new UserStatistic(){ Name = "Иван", Draw=111,  Win=56, Lose=5 },
+				new UserStatistic(){ Name = "Иванzzz", Draw=111,  Win=56, Lose=5 },
 				new UserStatistic(){ Name = "Петр", Draw=31,  Win=26, Lose=5 },
 				new UserStatistic(){ Name = "Сидор", Draw=81,  Win=44, Lose=5 },
 				new UserStatistic(){ Name = "Феофан", Draw=1000,  Win=777, Lose=5 },

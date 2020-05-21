@@ -480,29 +480,10 @@ namespace Model
 			SetIsGameSaved(SavedGame != null);
 		}
 
-		//private void SaveStatistic()
-		//{
-		//	UserDto winner, loser, user1, user2;
-		//	if(GameStatus == GameStatuses.Win)
-		//	{
-		//		if(CurrentGamerId == Gamers[0].Id)
-		//		{
-		//			winner = Gamers[0];
-		//			loser = Gamers[1];
-		//		}
-		//		else
-		//		{
-		//			winner = Gamers[1];
-		//			loser = Gamers[0];
-		//		}
-		//	}
-		//	else
-		//	{
-		//		user1 = Gamers[0];
-		//		user2 = Gamers[1];
-		//	}
-
-		//}
+		public UsersStatisticDto LoadStatistic()
+		{
+			return RepoStatistic.LoadStatistic();
+		}
 	}
 
 

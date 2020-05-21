@@ -126,6 +126,10 @@
       <Project>{e66a3b93-4774-4f21-a7d2-5be8959d87e0}</Project>
       <Name>ModelLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Repo\Repo.csproj">
+      <Project>{235AC355-1B40-4E4D-9C64-49616020F4C6}</Project>
+      <Name>Repo</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ViewModel\ViewModel.csproj">
       <Project>{9e41bcfc-f7b3-41c9-9050-a81dba5cd9a0}</Project>
       <Name>ViewModel</Name>

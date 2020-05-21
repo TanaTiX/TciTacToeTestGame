@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LibVM;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,11 @@ namespace View
 		public StatisticUC()
 		{
 			InitializeComponent();
+		}
+
+		private void OnLoaded(object sender, RoutedEventArgs e)
+		{
+			((IStatisticVM)DataContext).LoadStatistic();
 		}
 	}
 }

@@ -91,7 +91,8 @@ namespace GameWPF
 			//Model.ModelTicTacToe.FileNameXml = ;
 			model = new ModelTicTacToe(reposGame, reposStatistic);
 			//MainViewModel viewModel = new MainViewModel(ChangeWindowContent);
-			MainVM viewModel = new MainVM(ChangeWindowContent, model , 3, 3, 3);
+			StatisticVM statisticVM = new StatisticVM(ChangeWindowContent, reposStatistic);
+			MainVM viewModel = new MainVM(ChangeWindowContent, model , 3, 3, 3, statisticVM);
 			viewModel.CellTypes.Add(CellTypeDto.Empty);
 			viewModel.CellTypes.Add(CellTypeDto.Cross);
 			viewModel.CellTypes.Add(CellTypeDto.Zero);
